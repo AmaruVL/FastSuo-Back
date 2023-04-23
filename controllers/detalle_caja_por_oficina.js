@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 var PdfPrinter = require("pdfmake");
 const models = require("../models");
 const moment = require("moment");
-import utils from "../services/utils";
+const utils = require("../services/utils")
 const Op = Sequelize.Op;
 var filename = module.filename.split("/").slice(-1);
 

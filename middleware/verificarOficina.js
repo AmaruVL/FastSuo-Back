@@ -1,5 +1,5 @@
 const models = require("../models");
-import utils from "../services/utils";
+const utils = require("../services/utils")
 var filename = module.filename.split("/").slice(-1);
 
 exports.verificarOfOrigen = () => {

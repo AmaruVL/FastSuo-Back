@@ -2,7 +2,7 @@ const Excel = require("exceljs");
 const Sequelize = require("sequelize");
 const models = require("../models");
 const moment = require("moment");
-import utils from "../services/utils";
+// import utils from "../services/utils";
 const Op = Sequelize.Op;
 var filename = module.filename.split("/").slice(-1);
 

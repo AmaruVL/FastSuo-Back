@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const models = require("../models");
 var bcrypt = require("bcryptjs");
-import utils from "../services/utils";
+const utils = require("../services/utils")
 var filename = module.filename.split("/").slice(-1);
 
 exports.crear = (req, res) => {

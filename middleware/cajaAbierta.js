@@ -1,4 +1,4 @@
-import utils from "../services/utils";
+const utils = require("../services/utils")
 const moment = require("moment");
 var filename = module.filename.split("/").slice(-1);
 

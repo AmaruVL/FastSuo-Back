@@ -3,7 +3,7 @@ var PdfPrinter = require("pdfmake");
 
 const models = require("../models");
 const moment = require("moment");
-import utils from "../services/utils";
+const utils = require("../services/utils")
 const Op = Sequelize.Op;
 var filename = module.filename.split("/").slice(-1);
 const imagesvg = '<svg width="162" height="100" viewBox="0 0 162 100" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0)"><path d="M101.864 39.6142C101.797 40.6218 101.82 41.6335 101.933 42.637C102.957 51.2487 107.385 57.6387 115.586 61.3762C117.216 62.1254 118.667 62.7627 118.24 59.7658C117.472 54.392 118.505 49.1647 120.117 44.101C121.815 38.6163 122.466 32.8567 122.038 27.1271C120.681 15.8371 107.428 6.40719 104.441 5.59768C103.033 5.21877 100.823 4.46954 100.038 5.14987C98.5362 6.45025 100.141 8.29317 100.687 9.82607C102.044 13.6583 102.47 19.2129 102.76 22.5026C102.837 23.4397 102.837 24.3816 102.76 25.3187L101.864 39.6142Z" fill="#F38F2E"/>'+

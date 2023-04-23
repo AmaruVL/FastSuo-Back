@@ -1,19 +1,22 @@
 const express = require("express");
-const reportesOrdenPago = require("./controllers/reportesOrdenPago");
+// const reportesOrdenPago = require("./controllers/reportesOrdenPago");
 
 require("dotenv").config();
 const http = require("http");
 const socketIo = require("socket.io");
-const redis = require("redis");
 const bluebird = require("bluebird");
-const socketioRedis = require("socket.io-redis");
+// const socketioRedis = require("socket.io-redis");
+// const redis = require("redis");
+const { createClient } = require("redis");
+const { createAdapter } = require("@socket.io/redis-adapter");
+
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const env = process.env.NODE_ENV || "development";
 const winston = require("./config/winston");
 const cuenta_usuario = require("./controllers/cuenta_usuario");
-const transferencia = require("./controllers/migrarTransferencia");
+// const transferencia = require("./controllers/migrarTransferencia");
 const autenticacion = require("./middleware/autenticacion");
 const requestIp = require("request-ip");
 require("tls").DEFAULT_MIN_VERSION = "TLSv1";
@@ -21,8 +24,8 @@ require("tls").DEFAULT_MIN_VERSION = "TLSv1";
 const rutas = require("./rutas");
 var app = express();
 
-bluebird.promisifyAll(redis.RedisClient.prototype);
-bluebird.promisifyAll(redis.Multi.prototype);
+// bluebird.promisifyAll(redis.RedisClient.prototype);
+// bluebird.promisifyAll(redis.Multi.prototype);
 
 //RUTA DE API DEL WEB SERVICE PARA LAS PAGINAS DE MONEY EXPRESS Y JUÑUY
 app.use("/api",rutas)

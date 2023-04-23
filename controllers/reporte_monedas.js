@@ -1,6 +1,6 @@
 const Excel = require("exceljs");
 const models = require("../models");
-import utils from "../services/utils";
+const utils = require("../services/utils")
 var filename = module.filename.split("/").slice(-1);
 
 exports.excel = (req, res) => {

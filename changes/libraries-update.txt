@@ -1,0 +1,51 @@
+* -> Librerías con varios breaking changes
+LIBRERIAS ACTUALIZADAS
+  * axios -> Realizar peticiones http
+  bcryptjs -> Encriptar contraseña
+  bluebird -> Herramientas para trabajar con promesas
+  body-parser
+  cors -> Otorgar permisos de rutas externas
+  dotenv -> Trabajar con variables de entornos
+  exceljs -> Generar excel
+  express
+  jsonwebtoken -> Trabajar co JWT
+  mkdirp -> Operaciones en directorios
+  moment -> Manipular fechas
+  morgan -> Logger
+  multer -> Para subir archivos
+  node-device-detector -> Obtener informacion del dispositivo
+  nodemon -> Ejecución con hot reload
+  object-hash
+  p-queue -> Concurrecia query
+  pdfmake -> Hacer pdfs
+  pg, pg-restore -> Driver for postgres db [npm install --save pg pg-hstore]
+  * redis -> BD en memoria ram
+  request-ip -> Obtener direccion IP de la solicitud [npm i request-ip --save]
+  * sequelize -> ORM [npm install --save sequelize]
+  * socket.io -> Sockets (cambios en tiempo real)
+  winston -> Logger
+  winston-daily-rotate-file
+
+ 
+LIBRERIAS OBSOLETAS
+  * socket.io-redis -> renombrado a @socket.io/redis-adapter [npm i @socket.io/redis-adapter redis]
+
+LIBRERIAS NO AGREGADAS (O POR VERSE)
+  mysql2
+  react
+  react-dom
+  react-scripts
+  sequelize-cli
+  uws
+
+  --devDependencies
+  @babel/core
+  @babel/polyfill
+  @babel/preset-env
+  @babel/register
+  chai
+  chai-http
+  mocha
+  typescript
+  webpack
+  webpack-cli
