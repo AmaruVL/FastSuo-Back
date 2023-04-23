@@ -1,10 +1,10 @@
 const Sequelize = require("sequelize");
 const models = require("../models");
 const utils = require("../services/utils");
-import oficina from "../controllers/oficina";
-const moment = require("moment");
-const Op = Sequelize.Op;
-const fs = require("fs");
+// import oficina from "../controllers/oficina";
+// const moment = require("moment");
+// const Op = Sequelize.Op;
+// const fs = require("fs");
 var filename = module.filename.split("/").slice(-1);
 
 exports.girosUsuario = (req, res) => {

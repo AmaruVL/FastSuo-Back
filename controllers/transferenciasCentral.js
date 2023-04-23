@@ -1,10 +1,10 @@
 const Sequelize = require("sequelize");
 const models = require("../models");
 const utils = require("../services/utils");
-import oficina from "../controllers/oficina";
+// import oficina from "../controllers/oficina";
+// const fs = require("fs");
 const moment = require("moment");
 const Op = Sequelize.Op;
-const fs = require("fs");
 var filename = module.filename.split("/").slice(-1);
 
 //////////////////////////////////////////////////////////////

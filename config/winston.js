@@ -1,8 +1,6 @@
 const moment = require('moment');
 const winston = require("winston");
 require('winston-daily-rotate-file');
-// import "winston-daily-rotate-file";
-// import moment from "moment";
 
 const { combine, timestamp, label, prettyPrint, printf, errors } = winston.format;
 

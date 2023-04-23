@@ -1,7 +1,6 @@
 const Sequelize = require("sequelize");
 // import services from "../services/utils";
 const services = require('../services/utils')
-// import moment from "moment";
 const moment = require('moment')
 const models = require("../models");
 const DeviceDetector = require("node-device-detector");

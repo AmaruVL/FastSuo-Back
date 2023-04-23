@@ -1,12 +1,11 @@
 const jwt = require("jsonwebtoken");
-// import moment from "moment";
 const moment = require("moment")
 const key = require("../config/key");
 const models = require("../models");
 const axios = require('axios')
 // import models from "../models";
 // import axios from "axios";
-const config = require("../config/config");
+// const config = require("../config/config");
 exports.decodeToken = (token, callback) => {
   jwt.verify(token, key.tokenKey, function(err, decoded) {
     if (!err) {
