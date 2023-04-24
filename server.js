@@ -4,11 +4,9 @@ const express = require("express");
 require("dotenv").config();
 const http = require("http");
 const socketIo = require("socket.io");
-const bluebird = require("bluebird");
-// const socketioRedis = require("socket.io-redis");
-// const redis = require("redis");
-const redis = require("redis");
 const { createAdapter } = require("@socket.io/redis-adapter");
+const bluebird = require("bluebird");
+const redis = require("redis");
 
 const cors = require("cors");
 const morgan = require("morgan");
@@ -16,7 +14,6 @@ const bodyParser = require("body-parser");
 const env = process.env.NODE_ENV || "development";
 const winston = require("./config/winston");
 const cuenta_usuario = require("./controllers/cuenta_usuario");
-// const transferencia = require("./controllers/migrarTransferencia");
 const autenticacion = require("./middleware/autenticacion");
 const requestIp = require("request-ip");
 require("tls").DEFAULT_MIN_VERSION = "TLSv1";
@@ -106,7 +103,9 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   upgradeTimeout: 30000
 });
-io.adapter(socketioRedis({ host: "localhost", port: 6379 }));
+
+const subClient = client.duplicate()
+io.adapter(createAdapter(client, subClient))
 
 io.on("connection", function(socket) {
   socket.on("disconnect", function() {});
@@ -118,9 +117,9 @@ app.use(function(err, req, res, next) {
 });
 
 server.listen(process.env.PORT || 8000, function() {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log("API en: https://%s:%s", host, port);
+  const host = server.address().address;
+  const port = server.address().port;
+  console.log(`API en: https://${host}:${port}`);
 });
 
 app.set("socketio", io);

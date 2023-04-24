@@ -14,8 +14,9 @@ LIBRERIAS ACTUALIZADAS
   morgan -> Logger
   multer -> Para subir archivos
   node-device-detector -> Obtener informacion del dispositivo
-  nodemon -> Ejecución con hot reload
+  nodemon -> Reiniciar ejecución al guardar cambios
   object-hash
+  path -> Herramientas para trabajar con directorios
   p-queue -> Concurrecia query
   pdfmake -> Hacer pdfs
   pg, pg-restore -> Driver for postgres db [npm install --save pg pg-hstore]
@@ -25,6 +26,7 @@ LIBRERIAS ACTUALIZADAS
   * socket.io -> Sockets (cambios en tiempo real)
   winston -> Logger
   winston-daily-rotate-file
+
 
  
 LIBRERIAS OBSOLETAS
