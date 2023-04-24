@@ -7,7 +7,7 @@ const socketIo = require("socket.io");
 const bluebird = require("bluebird");
 // const socketioRedis = require("socket.io-redis");
 // const redis = require("redis");
-const { createClient } = require("redis");
+const redis = require("redis");
 const { createAdapter } = require("@socket.io/redis-adapter");
 
 const cors = require("cors");
@@ -84,14 +84,20 @@ app.use(autenticacion());
 app.use("/", rutas);
 
 //redis
-var client = redis.createClient(process.env.REDIS_URL);
+const client = redis.createClient(process.env.REDIS_URL);
 const redis_database = process.env.REDIS_DATABASE || 0;
-client.on("connect", function() {
-  client.select(redis_database, () => {
-    console.log("Servidor REDIS conectado !");
-    app.set("redis", client);
-  });
-});
+
+client.connect()
+  .then(async ()=>{
+    await client.select(redis_database)
+    console.log("Servidor REDIS conectado!")
+    await client.disconnect()
+    app.set('redis', client)
+  })
+  .catch(err => {
+    console.error(err)
+    console.log("Error al conectarse a REDIS")
+  })
 
 //=============== INICIAR EL SERVIDOR  ======================
 // Crear el servidor
