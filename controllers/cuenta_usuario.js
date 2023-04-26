@@ -1,13 +1,14 @@
 const Sequelize = require("sequelize");
-import services from "../services/utils";
-import moment from "moment";
+// import services from "../services/utils";
+const services = require('../services/utils')
+const moment = require('moment')
 const models = require("../models");
 const DeviceDetector = require("node-device-detector");
 const DEVICE_TYPE = require("node-device-detector/parser/const/device-type");
 var bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const key = require("../config/key");
-import utils from "../services/utils";
+const utils = require('../services/utils')
 const Op = Sequelize.Op;
 var filename = module.filename.split("/").slice(-1);
 exports.crear = (req, res) => {

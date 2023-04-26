@@ -1,5 +1,8 @@
 "use strict";
-module.exports = (sequelize, DataTypes) => {
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database')
+
+const crearModel = (sequelize, DataTypes) => {
 	const empresa = sequelize.define(
 		"empresa", {
 			empresa_codigo: {
@@ -66,3 +69,5 @@ module.exports = (sequelize, DataTypes) => {
 	};
 	return empresa;
 };
+
+module.exports = crearModel(sequelize, DataTypes)

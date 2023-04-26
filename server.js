@@ -1,19 +1,19 @@
 const express = require("express");
-const reportesOrdenPago = require("./controllers/reportesOrdenPago");
+// const reportesOrdenPago = require("./controllers/reportesOrdenPago");
 
 require("dotenv").config();
 const http = require("http");
 const socketIo = require("socket.io");
-const redis = require("redis");
+const { createAdapter } = require("@socket.io/redis-adapter");
 const bluebird = require("bluebird");
-const socketioRedis = require("socket.io-redis");
+const redis = require("redis");
+
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const env = process.env.NODE_ENV || "development";
 const winston = require("./config/winston");
 const cuenta_usuario = require("./controllers/cuenta_usuario");
-const transferencia = require("./controllers/migrarTransferencia");
 const autenticacion = require("./middleware/autenticacion");
 const requestIp = require("request-ip");
 require("tls").DEFAULT_MIN_VERSION = "TLSv1";
@@ -21,8 +21,8 @@ require("tls").DEFAULT_MIN_VERSION = "TLSv1";
 const rutas = require("./rutas");
 var app = express();
 
-bluebird.promisifyAll(redis.RedisClient.prototype);
-bluebird.promisifyAll(redis.Multi.prototype);
+// bluebird.promisifyAll(redis.RedisClient.prototype);
+// bluebird.promisifyAll(redis.Multi.prototype);
 
 //RUTA DE API DEL WEB SERVICE PARA LAS PAGINAS DE MONEY EXPRESS Y JUÑUY
 app.use("/api",rutas)
@@ -81,14 +81,20 @@ app.use(autenticacion());
 app.use("/", rutas);
 
 //redis
-var client = redis.createClient(process.env.REDIS_URL);
+const client = redis.createClient(process.env.REDIS_URL);
 const redis_database = process.env.REDIS_DATABASE || 0;
-client.on("connect", function() {
-  client.select(redis_database, () => {
-    console.log("Servidor REDIS conectado !");
-    app.set("redis", client);
-  });
-});
+
+client.connect()
+  .then(async ()=>{
+    await client.select(redis_database)
+    console.log("Servidor REDIS conectado!")
+    await client.disconnect()
+    app.set('redis', client)
+  })
+  .catch(err => {
+    console.error(err)
+    console.log("Error al conectarse a REDIS")
+  })
 
 //=============== INICIAR EL SERVIDOR  ======================
 // Crear el servidor
@@ -97,7 +103,9 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   upgradeTimeout: 30000
 });
-io.adapter(socketioRedis({ host: "localhost", port: 6379 }));
+
+const subClient = client.duplicate()
+io.adapter(createAdapter(client, subClient))
 
 io.on("connection", function(socket) {
   socket.on("disconnect", function() {});
@@ -109,9 +117,9 @@ app.use(function(err, req, res, next) {
 });
 
 server.listen(process.env.PORT || 8000, function() {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log("API en: https://%s:%s", host, port);
+  const host = server.address().address;
+  const port = server.address().port;
+  console.log(`API en: https://${host}:${port}`);
 });
 
 app.set("socketio", io);

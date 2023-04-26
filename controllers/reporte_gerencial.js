@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 var PdfPrinter = require("pdfmake");
-import utils from "../services/utils";
+// import utils from "../services/utils";
 const models = require("../models");
 const moment = require("moment");
 const Op = Sequelize.Op;

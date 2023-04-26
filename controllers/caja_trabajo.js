@@ -1,4 +1,4 @@
-import utils from "../services/utils";
+const utils = require("../services/utils")
 const Sequelize = require("sequelize");
 const models = require("../models");
 const Op = Sequelize.Op;

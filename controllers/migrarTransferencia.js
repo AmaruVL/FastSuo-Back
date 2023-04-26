@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const models = require("../models");
-import utils from "../services/utils";
-import oficina from "../controllers/oficina";
+// import utils from "../services/utils";
+// import oficina from "../controllers/oficina";
 const moment = require("moment");
 const Op = Sequelize.Op;
 const fs = require("fs");

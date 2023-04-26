@@ -2,7 +2,9 @@ const Sequelize = require("sequelize");
 const models = require("../models");
 const moment = require("moment");
 const utils = require("../services/utils");
-import services from "../services/utils";
+const services = require("../services/utils")
+// import services from "../services/utils";
+// const services = require("")
 const Op = Sequelize.Op;
 
 var filename = module.filename.split("/").slice(-1);
