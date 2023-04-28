@@ -81,20 +81,21 @@ app.use(autenticacion());
 app.use("/", rutas);
 
 //redis
-const client = redis.createClient(process.env.REDIS_URL);
+const client = redis.createClient({
+  url: process.env.REDIS_URL || 'redis://localhost:6379',
+  legacyMode: true
+});
 const redis_database = process.env.REDIS_DATABASE || 0;
-
 client.connect()
   .then(async ()=>{
     await client.select(redis_database)
     console.log("Servidor REDIS conectado!")
-    await client.disconnect()
     app.set('redis', client)
+    // await client.disconnect()
   })
-  .catch(err => {
-    console.error(err)
-    console.log("Error al conectarse a REDIS")
-  })
+client.on("error", (err) => {
+  console.log('Error al conectarse a REDIS', err.message);
+});
 
 //=============== INICIAR EL SERVIDOR  ======================
 // Crear el servidor
@@ -104,7 +105,7 @@ const io = socketIo(server, {
   upgradeTimeout: 30000
 });
 
-const subClient = client.duplicate()
+const subClient = redis.createClient(process.env.REDIS_URL)
 io.adapter(createAdapter(client, subClient))
 
 io.on("connection", function(socket) {
