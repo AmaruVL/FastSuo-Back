@@ -26,8 +26,6 @@ fs.readdirSync(__dirname)
     db[modelName] = model
   });
 
-console.log(db['caja'].associate)
-
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
