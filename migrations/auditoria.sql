@@ -324,10 +324,6 @@ $body$;
  AFTER INSERT OR UPDATE OR DELETE ON menu_acceso
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
- CREATE TRIGGER auditoria_tabla_moneda_cierre
- AFTER INSERT OR UPDATE OR DELETE ON moneda_cierre
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
  CREATE TRIGGER auditoria_tabla_moneda_denominacion
  AFTER INSERT OR UPDATE OR DELETE ON moneda_denominacion
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();

@@ -411,16 +411,6 @@ CREATE TABLE IF NOT EXISTS "moneda_denominacion"(
     PRIMARY KEY("id")
 ); 
 
-CREATE TABLE IF NOT EXISTS "moneda_cierre"(
-    "id" INT REFERENCES moneda_denominacion (id),
-    "fecha_trabajo" DATE,
-    "caja_codigo" VARCHAR(7),
-    "cantidad" INTEGER,
-    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    FOREIGN KEY ("fecha_trabajo","caja_codigo") REFERENCES "caja_trabajo" ("fecha_trabajo","caja_codigo")
-);
-
 CREATE TABLE IF NOT EXISTS "notificacion"(
     "id" SERIAL,
     "fecha_registro" TIMESTAMP WITH TIME ZONE,

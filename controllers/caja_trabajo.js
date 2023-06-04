@@ -108,32 +108,7 @@ exports.cerrarCaja = (req, res) => {
                             }
 
                             const listaMonedas = req.body.listaMonedas;
-                            if (listaMonedas) {
-                              var listaMonedasCierre = listaMonedas.map(moneda => {
-                                return models.moneda_cierre.create({
-                                  id: moneda.id,
-                                  fecha_trabajo: fecha,
-                                  caja_codigo: cajaTrabajo.caja_codigo,
-                                  cantidad: moneda.cantidad
-                                });
-                              });
-
-                              Promise.all(listaMonedasCierre)
-                                .then(respmonedas => {
-                                  socket.emit(cajaTrabajo.caja_codigo + "cerrada", {
-                                    mensaje: "Caja cerrada por usuario " + tokenDecodificado.id
-                                  });
-                                  res.json(resp);
-                                })
-                                .catch(err => {
-                                  logger.log("error", {
-                                    ubicacion: filename,
-                                    token: token,
-                                    message: { mensaje: err.message, tracestack: err.stack }
-                                  });
-                                  res.status(409).send(err);
-                                });
-                            } else {
+                            if (!listaMonedas) {
                               socket.emit(cajaTrabajo.caja_codigo + "cerrada", {
                                 mensaje: "Caja cerrada por usuario " + tokenDecodificado.id
                               });
