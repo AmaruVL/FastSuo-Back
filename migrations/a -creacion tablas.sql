@@ -405,31 +405,6 @@ CREATE TABLE IF NOT EXISTS "transferencia"(
         ) REFERENCES "operacion_caja" ("documento_codigo","documento_serie","nro_operacion")
 ); 
 
-CREATE TABLE IF NOT EXISTS "st_check"(
-    "St_documento_codigo" VARCHAR(4) NOT NULL,
-    "St_documento_serie" INTEGER NOT NULL,
-    "nro_Solicitud" INTEGER NOT NULL,
-    "check" BOOLEAN,
-    "dt_origen" DECIMAL(7, 2),
-    "dt_origen_comision" DECIMAL(7, 2),
-    "dt_destino" DECIMAL(7, 2),
-    "dt_destino_comision" DECIMAL(7, 2),
-    "usuario_check" VARCHAR(20) REFERENCES "cuenta_usuario"("usuario"),
-    "check_fecha_hora" TIMESTAMP WITH TIME ZONE,
-    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    PRIMARY KEY(
-        "St_documento_codigo",
-        "St_documento_serie",
-        "nro_Solicitud"
-    ),
-    FOREIGN KEY (
-        "St_documento_codigo",
-        "St_documento_serie",
-        "nro_Solicitud"
-        ) REFERENCES "transferencia" ("St_documento_codigo","St_documento_serie","nro_Solicitud")
-);
-
 CREATE TABLE IF NOT EXISTS "configuracion"(
     "clave" VARCHAR(50) NOT NULL,
     "valor" VARCHAR(250) NOT NULL,

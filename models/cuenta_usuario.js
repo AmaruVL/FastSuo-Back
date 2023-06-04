@@ -143,10 +143,6 @@ const crearModel = (sequelize, DataTypes) => {
       foreignKey: "usuario_cierre",
       sourceKey: "usuario"
     });
-    cuenta_usuario.hasMany(models.st_check, {
-      foreignKey: "usuario_check",
-      sourceKey: "usuario"
-    });
     cuenta_usuario.hasMany(models.operacion_caja, {
       foreignKey: "usuario",
       sourceKey: "usuario"

@@ -352,10 +352,6 @@ $body$;
  AFTER INSERT OR UPDATE OR DELETE ON recibo_interno
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
- CREATE TRIGGER auditoria_tabla_st_check
- AFTER INSERT OR UPDATE OR DELETE ON st_check
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
  CREATE TRIGGER auditoria_tabla_transferencia
  AFTER INSERT OR UPDATE OR DELETE ON transferencia
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
