@@ -480,37 +480,6 @@ CREATE TABLE IF NOT EXISTS "cuenta_corriente"(
     FOREIGN KEY ("oficina_codigo_src") REFERENCES "oficina" ("oficina_codigo")
 );
 
-CREATE TABLE IF NOT EXISTS "operacion_cuenta"(
-    "documento_codigo"  VARCHAR(4) NOT NULL,
-    "documento_serie" INTEGER NOT NULL,
-    "nro_operacion" INTEGER NOT NULL,
-    "recibo_tipo" VARCHAR(45),
-    "codigo_insumo" VARCHAR(50),
-    "razon_social" VARCHAR(250),
-    "importe"  DECIMAL(10, 3),
-    "comision" DECIMAL(7, 3),
-    "moneda" INTEGER,
-    "id_cuenta_tercera" VARCHAR(20),
-    "entidad_codigo" VARCHAR(12),
-    "cuenta_codigo" VARCHAR(8),
-    "cuenta_nro_operacion" VARCHAR(20),
-    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    PRIMARY KEY(
-        "documento_codigo",
-        "documento_serie",
-        "nro_operacion"
-    ),
-    FOREIGN KEY (
-        "documento_codigo",
-        "documento_serie",
-        "nro_operacion"
-        ) REFERENCES "operacion_caja" ("documento_codigo","documento_serie","nro_operacion"),
-    FOREIGN KEY ("id_cuenta_tercera") REFERENCES "cuenta_corriente" ("id_cuenta"),
-    FOREIGN KEY ("entidad_codigo") REFERENCES "entidad_financiera_servicios" ("entidad_codigo"),
-    FOREIGN KEY ("cuenta_codigo") REFERENCES "cuenta" ("cuenta_codigo")
-);
-
 CREATE TABLE IF NOT EXISTS "notificacion"(
     "id" SERIAL,
     "fecha_registro" TIMESTAMP WITH TIME ZONE,

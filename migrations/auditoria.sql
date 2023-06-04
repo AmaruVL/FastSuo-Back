@@ -348,10 +348,6 @@ $body$;
  AFTER INSERT OR UPDATE OR DELETE ON operacion_caja
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
- CREATE TRIGGER auditoria_tabla_operacion_cuenta
- AFTER INSERT OR UPDATE OR DELETE ON operacion_cuenta
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
  CREATE TRIGGER auditoria_tabla_perfil
  AFTER INSERT OR UPDATE OR DELETE ON perfil
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
