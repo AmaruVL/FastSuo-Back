@@ -44,16 +44,7 @@ const crearModel = (sequelize, DataTypes) => {
       freezeTableName: true
     }
   );
-
-  notificacion.associate = function(models) {
-    // associations can be defined here
-    notificacion.belongsToMany(models.cuenta_usuario, {
-      through: models.usuario_notificacion,
-      as: "ListaNotificacion",
-      foreignKey: "id_usuario",
-      otherKey: "id_notificacion"
-    });
-  };
+  
   return notificacion;
 };
 

@@ -436,17 +436,6 @@ CREATE TABLE IF NOT EXISTS "notificacion"(
     FOREIGN KEY ("usuario_registro") REFERENCES "cuenta_usuario" ("usuario")
 );
 
-CREATE TABLE IF NOT EXISTS "usuario_notificacion"(
-    "id_usuario" VARCHAR(20),
-    "id_notificacion" INTEGER,
-    "leido" BOOLEAN,
-    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    FOREIGN KEY ("id_usuario") REFERENCES "cuenta_usuario" ("usuario"),
-    FOREIGN KEY ("id_notificacion") REFERENCES "notificacion" ("id"),
-    CONSTRAINT usuario_notificacion_id_unique UNIQUE ("id_usuario", "id_notificacion")
-);
-
 CREATE TABLE IF NOT EXISTS "centro_poblado"(
     "id_centro_poblado" SERIAL,
     "nombre_centro_poblado" VARCHAR(255),
