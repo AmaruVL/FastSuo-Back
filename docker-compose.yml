@@ -7,15 +7,15 @@ services:
      - "6379:6379"
 
   postgres:
-    image: postgres:12-alpine
+    image: postgres
     restart: always
     ports: 
       - "5432:5432"
     environment:
       - DATABASE_HOST=127.0.0.1
-      - POSTGRES_USER=root
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=dbfastsuo2022
+      - POSTGRES_DB=dbfastsuo2023
 
   pgadmin:
     image: dpage/pgadmin4
