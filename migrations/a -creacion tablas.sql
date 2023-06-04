@@ -111,22 +111,6 @@ CREATE TABLE IF NOT EXISTS "comision"(
     PRIMARY KEY("id_comision")
 ); 
 
-CREATE TABLE IF NOT EXISTS "contrato"(
-    "contrato_fecha_inicio" DATE,
-    "contrato_fecha_fin" DATE,
-    "credito_maximo" DECIMAL(8, 2),
-    "dt_directo" DECIMAL(8, 3),
-    "dt_afiliado" DECIMAL(8, 3),
-    "dt_tercero" DECIMAL(8, 3),
-    "nro_contrato" INTEGER NOT NULL,
-    "monto_alerta" DECIMAL(8, 3),
-    "oficina_codigo" VARCHAR(12) NOT NULL REFERENCES "oficina"("oficina_codigo"),
-    "contrato_estado" VARCHAR(12),
-    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    PRIMARY KEY("nro_contrato", "oficina_codigo")
-); 
-
 CREATE TABLE IF NOT EXISTS "documento"(
     "documento_codigo" VARCHAR(4) NOT NULL,
     "documento_descripcion" VARCHAR(35),

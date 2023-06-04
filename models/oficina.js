@@ -77,10 +77,6 @@ const crearModel = (sequelize, DataTypes) => {
       foreignKey: "oficina_codigo",
       constraints: false
     });
-    oficina.hasMany(models.contrato, {
-      foreignKey: "oficina_codigo",
-      constraints: false
-    });
     oficina.hasMany(models.comision, {
       as: "comisiones",
       foreignKey: "oficina_codigo",
