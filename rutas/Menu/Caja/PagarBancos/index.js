@@ -2,7 +2,6 @@ const rutas_trasferencias = require("express").Router();
 const transferencia = require("../../../../controllers/transferencia");
 const oficina = require("../../../../controllers/oficina");
 const cliente = require("../../../../controllers/cliente_proveedor");
-const entidadesfinancieras = require("../../../../controllers/entidad_financiera_servicios");
 const validar = require("../../../../middleware/validar");
 const documentoserie = require("../../../../controllers/documento_serie");
 const verificarPerfil = require("../../../../middleware/verificarPerfil");
@@ -11,7 +10,6 @@ const verificarUsuarioAuthPago = require("../../../../middleware/verificarUsuari
 //NIVEL >= 1
 rutas_trasferencias.use(verificarPerfil(1));
 rutas_trasferencias.get("/buscar/:query/:fechaInicio/:fechaFin/:codigo_banco/:estado", transferencia.buscarBancos); //guardaTransferencias
-rutas_trasferencias.get("/entidadesfinancieras/listar", entidadesfinancieras.listarBancos); //guardaTransferencias
 //NIVEL >= 3
 rutas_trasferencias.use(verificarPerfil(3));
 rutas_trasferencias.get("/documentoserie", documentoserie.listarActivos); //guardaTransferencias

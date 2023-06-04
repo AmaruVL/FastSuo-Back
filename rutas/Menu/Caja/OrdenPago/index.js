@@ -2,7 +2,6 @@ const rutas_trasferencias = require("express").Router();
 const transferencia = require("../../../../controllers/transferencia");
 const oficina = require("../../../../controllers/oficina");
 const cliente = require("../../../../controllers/cliente_proveedor");
-const entidadbancaria = require("../../../../controllers/entidad_financiera_servicios");
 const validar = require("../../../../middleware/validar");
 const documentoserie = require("../../../../controllers/documento_serie");
 const verificarPerfil = require("../../../../middleware/verificarPerfil");

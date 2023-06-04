@@ -290,17 +290,6 @@ CREATE TABLE IF NOT EXISTS "recibo_interno"(
 
 ); 
 
-CREATE TABLE IF NOT EXISTS "entidad_financiera_servicios"(
-    "entidad_codigo" VARCHAR(12) NOT NULL,
-    "entidad_razon_social" VARCHAR(35),
-    "entidad_tipo" VARCHAR(12),
-    "comision" BOOLEAN,
-    "cuenta_codigo" VARCHAR(8),
-    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    PRIMARY KEY("entidad_codigo")
-); 
-
 CREATE TABLE IF NOT EXISTS "habilitacion"(
     "origen_docu_codigo" VARCHAR(4) NOT NULL,
     "origen_docu_serie" INTEGER NOT NULL,
@@ -359,7 +348,6 @@ CREATE TABLE IF NOT EXISTS "transferencia"(
     "comision_dt" DECIMAL(7, 3),
     "comision_banco" DECIMAL(7, 3),
     "gastos_administrativos" DECIMAL(7, 3),
-    "deposito_entidad_codigo" VARCHAR(12) REFERENCES "entidad_financiera_servicios"("entidad_codigo"),
     "beneficiario_nro_celular" VARCHAR(12),
     "solicitante_nro_celular" VARCHAR(12),
     "deposito_tipo" VARCHAR(30),

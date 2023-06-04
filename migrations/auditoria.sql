@@ -312,10 +312,6 @@ $body$;
  AFTER INSERT OR UPDATE OR DELETE ON empresa
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
- CREATE TRIGGER auditoria_tabla_entidad_financiera_servicios
- AFTER INSERT OR UPDATE OR DELETE ON entidad_financiera_servicios
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
  CREATE TRIGGER auditoria_tabla_habilitacion
  AFTER INSERT OR UPDATE OR DELETE ON habilitacion
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();

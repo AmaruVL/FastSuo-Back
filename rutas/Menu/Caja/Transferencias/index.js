@@ -5,7 +5,6 @@ const oficina = require("../../../../controllers/oficina");
 const comision = require("../../../../controllers/comision");
 const documentoserie = require("../../../../controllers/documento_serie");
 const cliente = require("../../../../controllers/cliente_proveedor");
-const entidadbancaria = require("../../../../controllers/entidad_financiera_servicios");
 const verificarPerfil = require("../../../../middleware/verificarPerfil");
 const verificarOficina = require("../../../../middleware/verificarOficina");
 const verificarDT = require("../../../../middleware/verificarDT");
@@ -22,7 +21,6 @@ rutas_trasferencias.get("/nrosiguienteoperacion/:documento_codigo/:documento_ser
 rutas_trasferencias.get("/oficina/listar/activas", oficina.listarOficinasActivas); //listarOficinas
 rutas_trasferencias.get("/comision/listar", comision.listar); //listarOficinas
 rutas_trasferencias.get("/cliente/:id_cliente", cliente.buscar); //buscar cliente
-rutas_trasferencias.get("/entidadbancaria", entidadbancaria.listar); //listar Entidad Bancaria
 rutas_trasferencias.get("/documentoserie", documentoserie.listarActivos); //listar Entidad Bancaria
 rutas_trasferencias.put("/cliente/:id_cliente", cliente.actualizar); //actualiza datos del cliente
 

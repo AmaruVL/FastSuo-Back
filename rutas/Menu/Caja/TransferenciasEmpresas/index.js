@@ -6,7 +6,6 @@ const oficina = require("../../../../controllers/oficina");
 const documentoserie = require("../../../../controllers/documento_serie");
 const cliente = require("../../../../controllers/cliente_proveedor");
 const comision = require("../../../../controllers/comision");
-const entidadbancaria = require("../../../../controllers/entidad_financiera_servicios");
 const verificarPerfil = require("../../../../middleware/verificarPerfil");
 const verificarOficina = require("../../../../middleware/verificarOficina");
 const verificarDT = require("../../../../middleware/verificarDT");
@@ -25,7 +24,6 @@ rutas_trasferencias.get("/nrosiguienteoperacion/:oficina_codigo", transferencia.
 rutas_trasferencias.get("/oficina/listar/empresas", oficina.listarOficinasEmpresa);
 rutas_trasferencias.get("/comision/listar", comision.listar);
 rutas_trasferencias.get("/cliente/:id_cliente", cliente.buscar); //buscar cliente
-rutas_trasferencias.get("/entidadbancaria", entidadbancaria.listar); //listar Entidad Bancaria
 rutas_trasferencias.get("/documentoserie", documentoserie.listarActivos); //listar Entidad Bancaria
 rutas_trasferencias.put("/cliente/:id_cliente", cliente.actualizar); //actualiza datos del cliente
 rutas_trasferencias.put("/autorizarpago", [verificarUsuarioAuthPago.verificar()], transferencia.autorizarPago); //actualiza datos del cliente

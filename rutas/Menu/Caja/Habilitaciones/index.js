@@ -3,7 +3,6 @@ const trasferencia = require("../../../../controllers/transferencia");
 const oficina = require("../../../../controllers/oficina");
 const caja = require("../../../../controllers/caja");
 const cliente = require("../../../../controllers/cliente_proveedor");
-const entidadbancaria = require("../../../../controllers/entidad_financiera_servicios");
 const habilitacion = require("../../../../controllers/habilitacion");
 const documentoserie = require("../../../../controllers/documento_serie");
 const verificarPerfil = require("../../../../middleware/verificarPerfil");
@@ -29,6 +28,5 @@ rutas_trasferencias.post("/anular", habilitacion.anular); //guardaTransferencias
 rutas_trasferencias.post("/anularamortizacion", habilitacion.anularAmortizacion); //guardaTransferencias
 
 //rutas_trasferencias.get("/cliente/:valorBusqueda", cliente.buscar); //buscar cliente
-//rutas_trasferencias.get("/entidadbancaria", entidadbancaria.listar); //listar Entidad Bancaria
 
 module.exports = rutas_trasferencias;

@@ -2,7 +2,6 @@ const rutas_trasferencias = require("express").Router();
 
 const oficina = require("../../../../controllers/oficina");
 const documentoserie = require("../../../../controllers/documento_serie");
-const entidadbancaria = require("../../../../controllers/entidad_financiera_servicios");
 const verificarPerfil = require("../../../../middleware/verificarPerfil");
 const verificarOficina = require("../../../../middleware/verificarOficina");
 const verificarDT = require("../../../../middleware/verificarDT");
