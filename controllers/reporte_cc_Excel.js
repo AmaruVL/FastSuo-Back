@@ -38,8 +38,7 @@ exports.excel = async (req, res) => {
             .locale("es")
             .format("DD/MM/Y HH:mm:ss"),
           importe_ingreso: parseFloat(fila.importe_ingreso),
-          importe_egreso: parseFloat(fila.importe_egreso),
-          comision: parseFloat(fila.comision)
+          importe_egreso: parseFloat(fila.importe_egreso)
         });
       });
 

@@ -98,19 +98,6 @@ CREATE TABLE IF NOT EXISTS "cuenta_usuario"(
     PRIMARY KEY("usuario")
 ); 
 
-
-CREATE TABLE IF NOT EXISTS "comision"(
-    "id_comision" SERIAL,
-    "monto_minimo" DECIMAL(8, 2),
-    "monto_maximo" DECIMAL(8, 2),
-    "comision" DECIMAL(8, 3),
-    "tipo_comision" VARCHAR(10),
-    "oficina_codigo" VARCHAR(12) NOT NULL REFERENCES "oficina"("oficina_codigo"),
-    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    PRIMARY KEY("id_comision")
-); 
-
 CREATE TABLE IF NOT EXISTS "documento"(
     "documento_codigo" VARCHAR(4) NOT NULL,
     "documento_descripcion" VARCHAR(35),

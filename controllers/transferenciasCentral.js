@@ -2023,37 +2023,6 @@ exports.cambiooficinacentropoblado = (req, res) => {
   });
 };
 
-function calcularMaxDT(cod_oficinaA, cod_oficinaB, importe) {
-  return new Promise((resolve, reject) => {
-    models.sequelize
-      .query(
-        `SELECT max("comision") as "comision", "tipo_comision" ` +
-          `FROM "comision" ` +
-          `WHERE ("oficina_codigo" = :oficina2 OR "oficina_codigo" = :oficina1) ` +
-          `AND :importe BETWEEN "monto_minimo"  AND "monto_maximo" ` +
-          `GROUP BY "tipo_comision" ` +
-          `ORDER BY "comision" DESC ` +
-          `LIMIT 1;`,
-        {
-          replacements: {
-            importe: importe,
-            oficina1: cod_oficinaA,
-            oficina2: cod_oficinaB
-          },
-          type: models.sequelize.QueryTypes.SELECT
-        }
-      )
-      .then(maxComision => {
-        maxComision = maxComision[0];
-        if (maxComision.tipo_comision == "PORCENTAJE") {
-          resolve(Math.round((parseFloat(maxComision.comision) / 100) * importe * 10) / 10);
-        } else {
-          resolve(parseFloat(maxComision.comision));
-        }
-      });
-  });
-}
-
 function getCajaRedis(redis, caja_codigo, usuario_codigo) {
   return new Promise(async (resolve, reject) => {
     let cajaRedis = await redis.getAsync(caja_codigo);

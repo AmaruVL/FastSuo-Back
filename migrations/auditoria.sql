@@ -280,10 +280,6 @@ $body$;
  AFTER INSERT OR UPDATE OR DELETE ON cliente_proveedor
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
- CREATE TRIGGER auditoria_tabla_comision
- AFTER INSERT OR UPDATE OR DELETE ON comision
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
  CREATE TRIGGER auditoria_tabla_configuracion
  AFTER INSERT OR UPDATE OR DELETE ON configuracion
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
