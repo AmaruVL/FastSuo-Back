@@ -296,10 +296,6 @@ $body$;
  AFTER INSERT OR UPDATE OR DELETE ON cuenta
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
- CREATE TRIGGER auditoria_tabla_cuenta_corriente
- AFTER INSERT OR UPDATE OR DELETE ON cuenta_corriente
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
  CREATE TRIGGER auditoria_tabla_cuenta_usuario
  AFTER INSERT OR UPDATE OR DELETE ON cuenta_usuario
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();

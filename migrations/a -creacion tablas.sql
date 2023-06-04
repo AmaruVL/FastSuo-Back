@@ -458,28 +458,6 @@ CREATE TABLE IF NOT EXISTS "moneda_cierre"(
     FOREIGN KEY ("fecha_trabajo","caja_codigo") REFERENCES "caja_trabajo" ("fecha_trabajo","caja_codigo")
 );
 
-CREATE TABLE IF NOT EXISTS "cuenta_corriente"(
-    "id_cuenta"  VARCHAR(20) NOT NULL,
-    "entidad_codigo" VARCHAR(12),
-    "id_cliente" VARCHAR(12),
-    "tipo_cta" VARCHAR(45),
-    "tipo_cta_bancaria" VARCHAR(45),
-    "tasa_interes_mensual" DECIMAL(6,3),
-    "cta_observacion" VARCHAR(250),
-    "estado_registro" BOOLEAN,
-    "oficina_codigo_src" VARCHAR(12),
-    "es_servicio" BOOLEAN,
-    "credito_maximo_soles" DECIMAL(8,2),
-    "credito_maximo_dolares" DECIMAL(8,2),
-    "credito_maximo_otros" DECIMAL(8,2),
-    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
-    PRIMARY KEY("id_cuenta"),
-    FOREIGN KEY ("entidad_codigo") REFERENCES "entidad_financiera_servicios" ("entidad_codigo"),
-    FOREIGN KEY ("id_cliente") REFERENCES "cliente_proveedor" ("id_cliente"),
-    FOREIGN KEY ("oficina_codigo_src") REFERENCES "oficina" ("oficina_codigo")
-);
-
 CREATE TABLE IF NOT EXISTS "notificacion"(
     "id" SERIAL,
     "fecha_registro" TIMESTAMP WITH TIME ZONE,

@@ -11,7 +11,6 @@ const cuentaServiciosCentral = require("./CuentaServiciosCentral");
 const cuentaServicios = require("./CuentaServicios");
 const cuentas = require("./Cuentas");
 const cuenta_contables = require("./cuentasContables");
-const cuenta_corriente = require("./CuentasCorrientes");
 const saldoGiros = require("./SaldosGiros");
 const banco = require("./Bancos");
 //-----
@@ -52,7 +51,6 @@ rutas.use("/cuentas", cuentas);
 rutas.use("/resumensaldosgiros", saldoGiros);
 rutas.use("/girosbancos", banco);
 rutas.use("/cuentascontables", cuenta_contables);
-rutas.use("/oficinacuentacorriente", cuenta_corriente);
 
 //-----
 rutas.use("/resumendiario", resDiario);
