@@ -2,7 +2,7 @@ const rutas = require("express").Router();
 
 const caja_dia = require("./CajaDia");
 const central = require("./Central");
-const mensualTransferencias = require("./MensualTransferencias");
+// const mensualTransferencias = require("./MensualTransferencias");
 const ordenesPago = require("./OrdenPago");
 const resumen = require("./Resumen_Saldos");
 const recaudados = require("./GirosRecaudados");
@@ -38,7 +38,7 @@ const horas_trabajadas = require("./Horas_Trabajadas")
 
 rutas.use("/cajadia", caja_dia);
 rutas.use("/central", central);
-rutas.use("/resumenmensual", mensualTransferencias);
+// rutas.use("/resumenmensual", mensualTransferencias);
 rutas.use("/reporteops", ordenesPago);
 rutas.use("/recibidoscaja", ordenesPago);
 rutas.use("/resumensaldos", resumen);

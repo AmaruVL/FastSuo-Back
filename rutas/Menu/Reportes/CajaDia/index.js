@@ -3,7 +3,6 @@ const rutas_reportes = require("express").Router();
 const reportes = require("../../../../controllers/reportes");
 const reporte_monedas = require("../../../../controllers/reporte_monedas");
 const caja_trabajo = require("../../../../controllers/caja_trabajo");
-const transferencias = require("../../../../controllers/transferencia");
 const cajas = require("../../../../controllers/caja");
 
 rutas_reportes.get("/saldos_fecha", caja_trabajo.obtenerSaldosFecha);
