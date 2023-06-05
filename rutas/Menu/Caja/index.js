@@ -13,10 +13,10 @@ const logBody = require("../../../middleware/logBody");
 //agregue desde aqui tipo conexion
 const tipoCone = require("../../../middleware/tipoConexion");
 
-const transferencias = require("./Transferencias");
+// const transferencias = require("./Transferencias");
 const pagoServicios = require("./PagoServicios");
 const egresoCuentaServicios = require("./EgresoCuentaServicios");
-const transferenciasCentral = require("./TransferenciasCentral");
+// // const transferenciasCentral = require("./TransferenciasCentral");
 const ordenpago = require("./OrdenPago");
 const pagarBancos = require("./PagarBancos");
 const subirfotos = require("./SubirFotos");
@@ -49,10 +49,10 @@ rutas.use(cajaAbierta());
 rutas.get("/habilitacioneslistar/listar", habilitacion.listar);
 rutas.get("/oficina/listar/activas", oficina.listarOficinasActivas);
 //SUBRUTAS
-rutas.use("/transferencias", transferencias);
+// // rutas.use("/transferencias", transferencias);
 rutas.use("/pagoservicios", pagoServicios);
 rutas.use("/egresocuentaservicios", egresoCuentaServicios);
-rutas.use("/transferenciascentral", transferenciasCentral);
+// // rutas.use("/transferenciascentral", transferenciasCentral);
 rutas.use("/ordenpago", ordenpago);
 rutas.use("/pagarbancos", pagarBancos);
 rutas.use("/subirfotos", subirfotos);

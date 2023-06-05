@@ -123,18 +123,6 @@ const crearModel = (sequelize, DataTypes) => {
       foreignKey: "caja_codigo",
       targetKey: "caja_codigo"
     });
-    cuenta_usuario.hasMany(models.transferencia, {
-      foreignKey: "autorizacion_usuario",
-      sourceKey: "usuario"
-    });
-    cuenta_usuario.hasMany(models.transferencia, {
-      foreignKey: "anulacion_usuario",
-      sourceKey: "usuario"
-    });
-    cuenta_usuario.hasMany(models.transferencia, {
-      foreignKey: "op_usuario",
-      sourceKey: "usuario"
-    });
     cuenta_usuario.hasMany(models.caja_trabajo, {
       foreignKey: "usuario_apertura",
       sourceKey: "usuario"

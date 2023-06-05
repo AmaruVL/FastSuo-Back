@@ -51,14 +51,6 @@ const crearModel = (sequelize, DataTypes) => {
 	cliente_proveedor.removeAttribute("id");
 	cliente_proveedor.associate = function (models) {
 		// associations can be defined here
-		cliente_proveedor.hasMany(models.transferencia, {
-			foreignKey: "beneficiario_id_cliente",
-			sourceKey: "id_cliente"
-		});
-		cliente_proveedor.hasMany(models.transferencia, {
-			foreignKey: "solicitante_id_cliente",
-			sourceKey: "id_cliente"
-		});
 		cliente_proveedor.hasMany(models.operacion_caja, {
 			foreignKey: "id_cliente",
 			sourceKey: "id_cliente"

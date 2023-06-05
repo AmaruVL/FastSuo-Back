@@ -33,10 +33,6 @@ const crearModel = (sequelize, DataTypes) => {
       foreignKey: "id_centro_poblado",
       constraints: false
     });
-    centro_poblado.hasMany(models.transferencia, {
-      foreignKey: "id_centro_poblado_destino",
-      constraints: false
-    });
   };
   return centro_poblado;
 };
