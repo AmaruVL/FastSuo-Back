@@ -8,6 +8,7 @@ rutas_reportes.get("/listar_usuarios", usuarios.listar);
 rutas_reportes.get("/bancos/:id_banco/:oficina_origen/:in_usuario/:opcion/:estado/:tipo/:fechai/:fechaf", reporteBanco.bancos);
 
 //---PDF
-rutas_reportes.get("/pdfbancos/:id_banco/:oficina_origen/:in_usuario/:opcion/:estado/:tipo/:fechai/:fechaf", reporteBanco.listargirosBanco)
+// rutas_reportes.get("/pdfbancos/:id_banco/:oficina_origen/:in_usuario/:opcion/:estado/:tipo/:fechai/:fechaf", reporteBanco.listargirosBanco);
+
 
 module.exports = rutas_reportes;

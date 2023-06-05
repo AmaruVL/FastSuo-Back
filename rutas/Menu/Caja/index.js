@@ -17,24 +17,24 @@ const tipoCone = require("../../../middleware/tipoConexion");
 const pagoServicios = require("./PagoServicios");
 const egresoCuentaServicios = require("./EgresoCuentaServicios");
 // // const transferenciasCentral = require("./TransferenciasCentral");
-const ordenpago = require("./OrdenPago");
-const pagarBancos = require("./PagarBancos");
-const subirfotos = require("./SubirFotos");
-const verificarfotos = require("./VerificarFoto");
-const autorizaroperaciones = require("./AutorizarOperaciones");
-const habilitaciones = require("./Habilitaciones");
+// const ordenpago = require("./OrdenPago");
+// const pagarBancos = require("./PagarBancos");
+// const subirfotos = require("./SubirFotos");
+// const verificarfotos = require("./VerificarFoto");
+// const autorizaroperaciones = require("./AutorizarOperaciones");
+// const habilitaciones = require("./Habilitaciones");
 const cuentaCorrienteCliente = require("./CuentaCorrienteCliente");
 const tipocambio = require("./TipoCambio");
 const materiales = require("./Material")
 const recibointerno = require("./ReciboInterno");
 const extornar = require("./Extorno");
 const extornarCentral = require("./ExtornoCentral");
-const operacionesCaja = require("./OperacionesCaja");
-const abrirCerrarCajas = require("./AbrirCerrarCajas");
-const cerrarcaja = require("./CerrarCaja");
+// const operacionesCaja = require("./OperacionesCaja");
+// const abrirCerrarCajas = require("./AbrirCerrarCajas")
+// const cerrarcaja = require("./CerrarCaja");
 
 //
-rutas.post("/logincaja",cuenta_usuario.validarCaja);
+// rutas.post("/logincaja",cuenta_usuario.validarCaja);
 rutas.post("/logincaja/cerrarcaja", caja_trabajo.cerrarCaja);
 rutas.get("/logincaja/monedadenominacion/listar", moneda_denominacion.listar);
 rutas.post("/logincaja/verificarsaldos", caja_trabajo.verificarSaldos);
@@ -53,21 +53,21 @@ rutas.get("/oficina/listar/activas", oficina.listarOficinasActivas);
 rutas.use("/pagoservicios", pagoServicios);
 rutas.use("/egresocuentaservicios", egresoCuentaServicios);
 // // rutas.use("/transferenciascentral", transferenciasCentral);
-rutas.use("/ordenpago", ordenpago);
-rutas.use("/pagarbancos", pagarBancos);
-rutas.use("/subirfotos", subirfotos);
-rutas.use("/verificarfotos", verificarfotos);
-rutas.use("/autorizaroperaciones", autorizaroperaciones);
-rutas.use("/habilitaciones", habilitaciones);
+// rutas.use("/ordenpago", ordenpago);
+// rutas.use("/pagarbancos", pagarBancos);
+// rutas.use("/subirfotos", subirfotos);
+// rutas.use("/verificarfotos", verificarfotos);
+// rutas.use("/autorizaroperaciones", autorizaroperaciones);
+// rutas.use("/habilitaciones", habilitaciones);
 rutas.use("/cuentacorrientecliente", cuentaCorrienteCliente);
 rutas.use("/tipocambio", tipocambio);
 rutas.use("/materiales", materiales);
 rutas.use("/recibointerno", recibointerno);
 //rutas.use("/extornar", extornar);
 //rutas.use("/extornarcentral", extornarCentral);
-rutas.use("/abrircerrarcajas", abrirCerrarCajas);
-rutas.use("/operacionescaja", operacionesCaja);
-rutas.use("/cerrarcaja", cerrarcaja);
+// rutas.use("/abrircerrarcajas", abrirCerrarCajas)
+// rutas.use("/operacionescaja", operacionesCaja);
+// rutas.use("/cerrarcaja", cerrarcaja);
 
 //RUTAS DIRECTAS
 

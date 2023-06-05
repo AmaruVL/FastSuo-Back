@@ -1,6 +1,6 @@
 const rutas_reportes = require("express").Router();
 
-const reportes = require("../../../../controllers/reportes");
+// const reportes = require("../../../../controllers/reportes");
 const caja_trabajo = require("../../../../controllers/caja_trabajo");
 const empresas = require("../../../../controllers/empresa");
 const oficinas = require("../../../../controllers/oficina");
