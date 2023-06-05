@@ -1,5 +1,4 @@
 const rutas = require("express").Router();
-const comision = require("../../../controllers/comision");
 const oficina = require("../../../controllers/oficina");
 
 const cajaAbierta = require("../../../middleware/cajaAbierta");
@@ -48,7 +47,6 @@ rutas.use(cajaAbierta());
 
 //obtiene las habilitaciones para una caja en especifico
 rutas.get("/habilitacioneslistar/listar", habilitacion.listar);
-rutas.get("/comision/listar", comision.listar);
 rutas.get("/oficina/listar/activas", oficina.listarOficinasActivas);
 //SUBRUTAS
 // // rutas.use("/transferencias", transferencias);
