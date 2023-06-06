@@ -13,3 +13,4 @@ logs/*
 .log
 dist
 dist/*
+.vscode/
