@@ -19,7 +19,7 @@ sub_rutas.get("/oficina/listar", [verificarPerfil(1)], oficina.listar);
 sub_rutas.get("/buscaroficinas/:oficina_nombre", [verificarPerfil(1)], oficina.buscarNombre);
 sub_rutas.get("/oficina/buscar/:oficina_codigo", [verificarPerfil(2)], oficina.buscar);
 sub_rutas.get("/oficina/buscar/:oficina_codigo/caja", [verificarPerfil(1)], caja.listarPor);
-sub_rutas.post("/oficina/", [verificarPerfil(3)], oficina.crear);
+// sub_rutas.post("/oficina/", [verificarPerfil(3)], oficina.crear);
 sub_rutas.get("/oficina/listar/activas", [verificarPerfil(3)], oficina.listarOficinasActivas);
 sub_rutas.put("/oficina/actualizar/:oficina_codigo", [verificarPerfil(4)], oficina.actualizar);
 sub_rutas.put("/oficina/desactivar/:oficina_codigo", [verificarPerfil(5)], oficina.desactivar);
