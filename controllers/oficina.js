@@ -4,66 +4,6 @@ const Op = Sequelize.Op;
 var filename = module.filename.split("/").slice(-1);
 const utils = require("../services/utils");
 
-exports.crear = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
-  models.oficina
-    .create({
-      oficina_codigo: req.body.oficina_codigo,
-      oficina_nombre: req.body.oficina_nombre,
-      oficina_tipo: req.body.oficina_tipo,
-      oficina_ubicacion: req.body.oficina_ubicacion,
-      oficina_direccion: req.body.oficina_direccion,
-      oficina_referencia: req.body.oficina_referencia,
-      oficina_correo: req.body.oficina_correo,
-      oficina_encargado: req.body.oficina_encargado,
-      estado_registro: req.body.estado_registro,
-      empresa_codigo: req.body.empresa_codigo,
-      modo_conexion: req.body.modo_conexion,
-      tipo_arreglo: req.body.tipo_arreglo,
-      id_centro_poblado: req.body.id_centro_poblado
-    })
-    .then(oficina => {
-      //crear su lista de comisiones en 0
-      models.comision
-        .findAll({
-          attributes: ["monto_minimo", "monto_maximo"],
-          group: ["monto_minimo", "monto_maximo"],
-          order: [["monto_minimo", "ASC"]]
-        })
-        .then(listaRangos => {
-          let rangosInsertar = listaRangos.map(rango => {
-            return {
-              oficina_codigo: oficina.oficina_codigo,
-              monto_minimo: rango.monto_minimo,
-              monto_maximo: rango.monto_maximo,
-              comision: 0,
-              tipo_comision: "NUMERO"
-            };
-          });
-          models.comision
-            .bulkCreate(rangosInsertar, {
-              returning: true
-            })
-            .then(resp => {
-              res.json(oficina);
-            })
-            .catch(err => {
-              logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
-              res.status(409).send("Error al crear comisiones");
-            });
-        })
-        .catch(err => {
-          logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
-          res.status(409).send("Error al crear oficina");
-        });
-    })
-    .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
-      res.status(412).send(err);
-    });
-};
-
 exports.buscarNombre = (req, res) => {
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];

@@ -77,16 +77,6 @@ const crearModel = (sequelize, DataTypes) => {
       foreignKey: "oficina_codigo",
       constraints: false
     });
-    oficina.hasMany(models.contrato, {
-      foreignKey: "oficina_codigo",
-      constraints: false
-    });
-    oficina.hasMany(models.comision, {
-      as: "comisiones",
-      foreignKey: "oficina_codigo",
-      sourceKey: "oficina_codigo",
-      constraints: false
-    });
     oficina.hasMany(models.habilitacion, {
       foreignKey: "origen_oficina_codigo",
       sourceKey: "oficina_codigo",
@@ -96,14 +86,6 @@ const crearModel = (sequelize, DataTypes) => {
       foreignKey: "destino_oficina_codigo",
       sourceKey: "oficina_codigo",
       constraints: false
-    });
-    oficina.hasMany(models.transferencia, {
-      foreignKey: "oficina_codigo_origen",
-      sourceKey: "oficina_codigo"
-    });
-    oficina.hasMany(models.transferencia, {
-      foreignKey: "oficina_codigo_destino",
-      sourceKey: "oficina_codigo"
     });
   };
   return oficina;

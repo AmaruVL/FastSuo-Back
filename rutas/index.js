@@ -13,7 +13,7 @@ const logBody = require("../middleware/logBody");
 
 
 //RUTA DEL WEB SERVICE PARA LAS PAGINAS DE MONEY EXPRESS Y JUÑUY
-rutas.use("/estadogiro/:dni/:importe",utils.buscarGiro)
+// rutas.use("/estadogiro/:dni/:importe",utils.buscarGiro)
 
 //OTROS
 rutas.get("/logincaja/tipoarqueo", cuenta_usuario.tipoArqueo);

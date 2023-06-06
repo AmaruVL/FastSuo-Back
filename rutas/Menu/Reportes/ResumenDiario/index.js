@@ -1,7 +1,7 @@
 const rutas_reportes = require("express").Router();
 
 const reportes_resumen = require("../../../../controllers/resumen_reportes");
-const reportes = require("../../../../controllers/reportes")
+// const reportes = require("../../../../controllers/reportes")
 
 const cajas = require("../../../../controllers/caja");
 

@@ -34,35 +34,6 @@ exports.operaciones_oficina = (req, res) => {
   });
 };
 
-exports.listar_oficinas = (req, res) => {
-  var logger = req.app.get("winston");
-  var redis = req.app.get("redis");
-  const token = req.header("Authorization").split(" ")[1];
-  utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
-    redis.get(tokenDecodificado.id, async (err, usuario) => {
-      usuario = JSON.parse(usuario);
-
-      models.sequelize.query(
-        `select oficina_codigo_src,oficina.oficina_nombre from cuenta_corriente `+
-        `inner join oficina on cuenta_corriente.oficina_codigo_src = oficina.oficina_codigo `+
-        `where es_servicio = false group by oficina_codigo_src,oficina.oficina_nombre`,
-        {
-          type: models.sequelize.QueryTypes.SELECT
-        }
-      )
-      .then(resp => {
-        res.json(resp);
-      })
-      .catch(err => {
-        logger.log("error", { ubicacion: filename, token: token, message: {mensaje: err.message, tracestack: err.stack }});
-        res.status(409).send(err.message);
-        console.log(err);
-      })
-    })
-  });
-};
-
 exports.excel_cc_of = async (req, res) => {
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];

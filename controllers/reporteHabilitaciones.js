@@ -37,4 +37,4 @@ exports.habilitaciones = (req, res) => {
         });
     });
   });
-};
+}

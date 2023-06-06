@@ -67,7 +67,6 @@ app.get("/robots.txt", function(req, res) {
 });
 app.post("/login", cuenta_usuario.validar);
 //app.get("/migrar", cliente.migrar);
-//app.get("/migrartransferencias", transferencia.migrarOperaciones);
 //app.get("/test", reportesOrdenPago.listaOrdenesPago);
 //===================== MIDDLEWARES =========================
 /**

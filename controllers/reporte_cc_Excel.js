@@ -38,8 +38,7 @@ exports.excel = async (req, res) => {
             .locale("es")
             .format("DD/MM/Y HH:mm:ss"),
           importe_ingreso: parseFloat(fila.importe_ingreso),
-          importe_egreso: parseFloat(fila.importe_egreso),
-          comision: parseFloat(fila.comision)
+          importe_egreso: parseFloat(fila.importe_egreso)
         });
       });
 
@@ -75,35 +74,6 @@ exports.excel = async (req, res) => {
       res.status(409).send("Error al generar");
       console.log(err);
     });
-};
-
-exports.listar_clientes = (req, res) => {
-  var logger = req.app.get("winston");
-  var redis = req.app.get("redis");
-  const token = req.header("Authorization").split(" ")[1];
-  utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
-    redis.get(tokenDecodificado.id, async (err, usuario) => {
-      usuario = JSON.parse(usuario);
-
-      models.sequelize.query(
-        `select cc.id_cliente, oc.razon_social from operacion_cuenta oc `+
-        `inner join cuenta_corriente cc on oc.id_cuenta_tercera=cc.id_cuenta `+
-        `where cc.es_servicio=false group by cc.id_cliente, oc.razon_social`,
-        {
-          type: models.sequelize.QueryTypes.SELECT
-        }
-      )
-      .then(resp => {
-        res.json(resp);
-      })
-      .catch(err => {
-        logger.log("error", { ubicacion: filename, token: token, message: {mensaje: err.message, tracestack: err.stack }});
-        res.status(409).send(err.message);
-        console.log(err);
-      })
-    })
-  });
 };
 
 function construirHojaResumen(cliente_nombre, listaresumen, hoja_resumen, id_cliente) {

@@ -280,24 +280,12 @@ $body$;
  AFTER INSERT OR UPDATE OR DELETE ON cliente_proveedor
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
- CREATE TRIGGER auditoria_tabla_comision
- AFTER INSERT OR UPDATE OR DELETE ON comision
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
  CREATE TRIGGER auditoria_tabla_configuracion
  AFTER INSERT OR UPDATE OR DELETE ON configuracion
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
- CREATE TRIGGER auditoria_tabla_contrato
- AFTER INSERT OR UPDATE OR DELETE ON contrato
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
  CREATE TRIGGER auditoria_tabla_cuenta
  AFTER INSERT OR UPDATE OR DELETE ON cuenta
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
- CREATE TRIGGER auditoria_tabla_cuenta_corriente
- AFTER INSERT OR UPDATE OR DELETE ON cuenta_corriente
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
  CREATE TRIGGER auditoria_tabla_cuenta_usuario
@@ -316,10 +304,6 @@ $body$;
  AFTER INSERT OR UPDATE OR DELETE ON empresa
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
- CREATE TRIGGER auditoria_tabla_entidad_financiera_servicios
- AFTER INSERT OR UPDATE OR DELETE ON entidad_financiera_servicios
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
  CREATE TRIGGER auditoria_tabla_habilitacion
  AFTER INSERT OR UPDATE OR DELETE ON habilitacion
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
@@ -330,10 +314,6 @@ $body$;
 
  CREATE TRIGGER auditoria_tabla_menu_acceso
  AFTER INSERT OR UPDATE OR DELETE ON menu_acceso
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
- CREATE TRIGGER auditoria_tabla_moneda_cierre
- AFTER INSERT OR UPDATE OR DELETE ON moneda_cierre
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
  CREATE TRIGGER auditoria_tabla_moneda_denominacion
@@ -348,22 +328,10 @@ $body$;
  AFTER INSERT OR UPDATE OR DELETE ON operacion_caja
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
- CREATE TRIGGER auditoria_tabla_operacion_cuenta
- AFTER INSERT OR UPDATE OR DELETE ON operacion_cuenta
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
  CREATE TRIGGER auditoria_tabla_perfil
  AFTER INSERT OR UPDATE OR DELETE ON perfil
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
 
  CREATE TRIGGER auditoria_tabla_recibo_interno
  AFTER INSERT OR UPDATE OR DELETE ON recibo_interno
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
- CREATE TRIGGER auditoria_tabla_st_check
- AFTER INSERT OR UPDATE OR DELETE ON st_check
- FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
-
- CREATE TRIGGER auditoria_tabla_transferencia
- AFTER INSERT OR UPDATE OR DELETE ON transferencia
  FOR EACH ROW EXECUTE PROCEDURE audit.if_modified_func();
