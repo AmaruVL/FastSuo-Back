@@ -67,7 +67,7 @@ exports.buscar = (req, res) => {
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   models.cliente_proveedor
-    .findByPk(req.params.id_cliente, {
+    .findByPk(req.params.id_administrado, {
       attributes: ["id_cliente", "nombres", "ap_paterno", "ap_materno", "razon_social", "fecha_nacimiento", "sexo"]
     })
     .then(objeto => {
@@ -77,13 +77,13 @@ exports.buscar = (req, res) => {
       }
       //caso contrario crear nuevo cliente y retornar resultado
       else {
-        if (req.params.id_cliente.length === 11 && (req.params.id_cliente.substring(0, 2) == "20" || req.params.id_cliente.substring(0, 2) == "10")) {
+        if (req.params.id_administrado.length === 11 && (req.params.id_administrado.substring(0, 2) == "20" || req.params.id_administrado.substring(0, 2) == "10")) {
           //buscando en JNE
-          utils.buscarRUC(req.params.id_cliente, respuesta => {
+          utils.buscarRUC(req.params.id_administrado, respuesta => {
             if (respuesta) {
               models.cliente_proveedor
                 .create({
-                  id_cliente: req.params.id_cliente,
+                  id_cliente: req.params.id_administrado,
                   ap_paterno: "",
                   ap_materno: "",
                   nombres: "",
@@ -109,7 +109,7 @@ exports.buscar = (req, res) => {
             }
           });
         } else {
-          utils.buscarDNI(req.params.id_cliente, respuesta => {
+          utils.buscarDNI(req.params.id_administrado, respuesta => {
             if (respuesta) {
               models.cliente_proveedor
                 .create({
@@ -276,7 +276,7 @@ exports.actualizar = (req, res) => {
       },
       {
         where: {
-          id_cliente: req.params.id_cliente
+          id_cliente: req.params.id_administrado
         }
       }
     )
@@ -348,7 +348,7 @@ exports.eliminar = (req, res) => {
   models.cliente_proveedor
     .destroy({
       where: {
-        id_cliente: req.params.id_cliente
+        id_cliente: req.params.id_administrado
       }
     })
     .then(respuesta => {
