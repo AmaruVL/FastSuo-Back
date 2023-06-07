@@ -11,7 +11,7 @@ const usuarios = require("./Usuarios");
 const cuentaCorriente = require("./CuentasCorrientes");
 const configuracion = require("./Configuracion");
 const centroPoblado = require("./CentroPoblado");
-const menus = require("./Menus");
+const menuAccesos = require("./MenuAccesos");
 
 //SUBRUTAS
 rutas.use("/usuarios", usuarios);
@@ -22,7 +22,7 @@ rutas.use("/documentos", documentos);
 rutas.use("/empresas", empresas);
 rutas.use("/centrocosto", centroCosto);
 rutas.use("/entidadesfinancieras", entidadFinanciera);
-rutas.use("/menus", menus);
+rutas.use("/menuaccesos", menuAccesos);
 rutas.use("/perfiles", perfiles);
 rutas.use("/cuentacorriente", cuentaCorriente);
 rutas.use("/configuracion", configuracion);
