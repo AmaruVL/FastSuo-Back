@@ -1,14 +1,25 @@
-const rutas_clientes = require("express").Router();
-const clientes = require("../../../../controllers/cliente_proveedor");
+const rutas_administrados = require("express").Router();
+const administrados = require("../../../../controllers/cliente_proveedor");
 const verificarPerfil = require("../../../../middleware/verificarPerfil");
 
-rutas_clientes.get("/listar", [verificarPerfil(1)], clientes.listar);
-rutas_clientes.get("/buscar/:id_cliente", [verificarPerfil(2)], clientes.buscar);
-rutas_clientes.get("/buscarnombre/:nombre", [verificarPerfil(2)], clientes.buscarNombre);
+//TODO: Agregar "verificarPerfil" a cada endpoint
+// rutas_administrados.get("/listar", [verificarPerfil(1)], administrados.listar);
+// rutas_administrados.get("/buscar/:id_cliente", [verificarPerfil(2)], administrados.buscar);
+// rutas_administrados.get("/buscarnombre/:nombre", [verificarPerfil(2)], administrados.buscarNombre);
 
-rutas_clientes.post("/", [verificarPerfil(3)], clientes.crear);
-rutas_clientes.put("/actualizar/:id_cliente", [verificarPerfil(4)], clientes.actualizar);
+// rutas_administrados.post("/", [verificarPerfil(3)], administrados.crear);
+// rutas_administrados.put("/actualizar/:id_cliente", [verificarPerfil(4)], administrados.actualizar);
+// //rutas_clientes.put("/desactivar/:id_cliente", clientes.desactivar);
+// rutas_administrados.delete("/eliminar/:id_cliente", [verificarPerfil(6)], administrados.eliminar);
+rutas_administrados.get("/listar", administrados.listar);
+rutas_administrados.get("/buscar/:id_administrado", administrados.buscar);
+rutas_administrados.get("/buscarnombre/:nombre", administrados.buscarNombre);
+
+rutas_administrados.post("/", administrados.crear);
+rutas_administrados.put("/actualizar/:id_administrado", administrados.actualizar);
 //rutas_clientes.put("/desactivar/:id_cliente", clientes.desactivar);
-rutas_clientes.delete("/eliminar/:id_cliente", [verificarPerfil(6)], clientes.eliminar);
+rutas_administrados.delete("/eliminar/:id_administrado", administrados.eliminar);
 
-module.exports = rutas_clientes;
+module.exports = rutas_administrados;
+
+
