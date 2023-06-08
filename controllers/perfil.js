@@ -167,8 +167,6 @@ exports.listar = (req, res) => {
       attributes: ["perfil_codigo", "perfil_nombre", "descripcion", "icono", "estado_registro"]
     })
     .then(lista => {
-      console.log('lista', lista)
-
       res.json(lista);
     })
     .catch(err => {
