@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const {Op} = require("sequelize");
 const models = require("../models");
 var filename = module.filename.split("/").slice(-1);
 
@@ -16,9 +16,7 @@ exports.crear = (req, res) => {
     .then(perfil => {
       const lista_menu = req.body.lista_menus;
       let nueva_lista = [];
-      lista_menu.forEach(item => {
-        let menu_codigo = Object.keys(item)[0];
-        const nivel_acceso = item[menu_codigo];
+      lista_menu.forEach(({menu_codigo, nivel_acceso}) => {
         nueva_lista.push({
           perfil_codigo: req.body.perfil_codigo,
           menu_codigo: menu_codigo,
@@ -55,7 +53,12 @@ exports.buscar = (req, res) => {
         {
           model: models.lista_menu,
           required: true,
-          attributes: ["menu_codigo", "nivel_acceso"]
+          attributes: ["menu_codigo", "nivel_acceso"],
+          where: {
+            nivel_acceso:{
+              [Op.gt]:0  //Greater than (>)
+            }
+          } 
         }
       ]
     })
@@ -94,9 +97,7 @@ exports.actualizar = (req, res) => {
         .then(respuesta => {
           const lista_menu = req.body.lista_menus;
           let nueva_lista = [];
-          lista_menu.forEach(item => {
-            let menu_codigo = Object.keys(item)[0];
-            const nivel_acceso = item[menu_codigo];
+          lista_menu.forEach(({menu_codigo, nivel_acceso}) => {
             nueva_lista.push({
               perfil_codigo: req.params.perfil_codigo,
               menu_codigo: menu_codigo,
