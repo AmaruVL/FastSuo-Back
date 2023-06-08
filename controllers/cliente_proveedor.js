@@ -293,6 +293,7 @@ exports.actualizar = (req, res) => {
     });
 };
 
+//TODO: Agregar paginación a endpoint listar
 exports.listar = (req, res) => {
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];

@@ -21,5 +21,3 @@ rutas_administrados.put("/actualizar/:id_administrado", administrados.actualizar
 rutas_administrados.delete("/eliminar/:id_administrado", administrados.eliminar);
 
 module.exports = rutas_administrados;
-
-
