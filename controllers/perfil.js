@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const {Op} = require("sequelize");
 const models = require("../models");
 var filename = module.filename.split("/").slice(-1);
 
@@ -55,7 +55,12 @@ exports.buscar = (req, res) => {
         {
           model: models.lista_menu,
           required: true,
-          attributes: ["menu_codigo", "nivel_acceso"]
+          attributes: ["menu_codigo", "nivel_acceso"],
+          where: {
+            nivel_acceso:{
+              [Op.gt]:0  //Greater than (>)
+            }
+          } 
         }
       ]
     })
@@ -166,6 +171,8 @@ exports.listar = (req, res) => {
       attributes: ["perfil_codigo", "perfil_nombre", "descripcion", "icono", "estado_registro"]
     })
     .then(lista => {
+      console.log('lista', lista)
+
       res.json(lista);
     })
     .catch(err => {
