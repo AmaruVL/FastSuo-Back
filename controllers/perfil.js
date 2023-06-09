@@ -164,7 +164,19 @@ exports.listar = (req, res) => {
   const token = req.header("Authorization").split(" ")[1];
   models.perfil
     .findAll({
-      attributes: ["perfil_codigo", "perfil_nombre", "descripcion", "icono", "estado_registro"]
+      attributes: ["perfil_codigo", "perfil_nombre", "descripcion", "icono", "estado_registro"],
+      include: [
+        {
+          model: models.lista_menu,
+          required: true,
+          attributes: ["menu_codigo", "nivel_acceso"],
+          where: {
+            nivel_acceso:{
+              [Op.gt]:0  //Greater than (>)
+            }
+          } 
+        }
+      ]
     })
     .then(lista => {
       res.json(lista);

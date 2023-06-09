@@ -3,10 +3,11 @@ module.exports = {
   bracketSpacing: true,
   jsxBracketSameLine: false,
   jsxSingleQuote: false,
+  printWidth:  90,
   quoteProps: "as-needed",
-  singleQuote: false,
   semi: true,
-  useTabs: false,
+  singleQuote: false,
   tabWidth: 2,
   trailingComma: "all",
+  useTabs: false,
 };
