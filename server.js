@@ -5,9 +5,7 @@ require("dotenv").config();
 const http = require("http");
 const socketIo = require("socket.io");
 const { createAdapter } = require("@socket.io/redis-adapter");
-const bluebird = require("bluebird");
 const redis = require("redis");
-
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
@@ -21,15 +19,12 @@ require("tls").DEFAULT_MIN_VERSION = "TLSv1";
 const rutas = require("./rutas");
 var app = express();
 
-// bluebird.promisifyAll(redis.RedisClient.prototype);
-// bluebird.promisifyAll(redis.Multi.prototype);
-
 //RUTA DE API DEL WEB SERVICE PARA LAS PAGINAS DE MONEY EXPRESS Y JUÑUY
-app.use("/api",rutas)
+app.use("/api", rutas)
 
 // Configuracion de CORS
 app.use(cors());
-app.all("*", function(req, res, next) {
+app.all("*", function (req, res, next) {
   const token = req.header("Authorization") ? req.header("Authorization").split(" ")[1] : "Sin token";
   winston.log("info", {
     message: JSON.stringify({
@@ -61,7 +56,7 @@ if (JSON.stringify(env) === JSON.stringify("development")) {
 }
 
 //app.use(express.static(path.join(__dirname, "public")));
-app.get("/robots.txt", function(req, res) {
+app.get("/robots.txt", function (req, res) {
   res.type("text/plain");
   res.send("User-agent: *\nDisallow: /");
 });
@@ -86,7 +81,7 @@ const client = redis.createClient({
 });
 const redis_database = process.env.REDIS_DATABASE || 0;
 client.connect()
-  .then(async ()=>{
+  .then(async () => {
     await client.select(redis_database)
     console.log("Servidor REDIS conectado!")
     app.set('redis', client)
@@ -107,16 +102,16 @@ const io = socketIo(server, {
 const subClient = redis.createClient(process.env.REDIS_URL)
 io.adapter(createAdapter(client, subClient))
 
-io.on("connection", function(socket) {
-  socket.on("disconnect", function() {});
+io.on("connection", function (socket) {
+  socket.on("disconnect", function () { });
 });
 
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   winston.log("error", { message: { mensaje: err.message, tracestack: err.stack } });
   res.status(500).send({ Error: "Error" });
 });
 
-server.listen(process.env.PORT || 8000, function() {
+server.listen(process.env.PORT || 8000, function () {
   const host = server.address().address;
   const port = server.address().port;
   console.log(`API en: https://${host}:${port}`);
