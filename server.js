@@ -1,11 +1,9 @@
 const express = require("express");
-// const reportesOrdenPago = require("./controllers/reportesOrdenPago");
 
 require("dotenv").config();
 const http = require("http");
 const socketIo = require("socket.io");
 const { createAdapter } = require("@socket.io/redis-adapter");
-const bluebird = require("bluebird");
 const redis = require("redis");
 
 const cors = require("cors");
@@ -20,12 +18,6 @@ require("tls").DEFAULT_MIN_VERSION = "TLSv1";
 
 const rutas = require("./rutas");
 var app = express();
-
-// bluebird.promisifyAll(redis.RedisClient.prototype);
-// bluebird.promisifyAll(redis.Multi.prototype);
-
-//RUTA DE API DEL WEB SERVICE PARA LAS PAGINAS DE MONEY EXPRESS Y JUÑUY
-app.use("/api",rutas)
 
 // Configuracion de CORS
 app.use(cors());

@@ -12,9 +12,6 @@ const cliente_proveedor = require("../controllers/cliente_proveedor");
 const logBody = require("../middleware/logBody");
 
 
-//RUTA DEL WEB SERVICE PARA LAS PAGINAS DE MONEY EXPRESS Y JUÑUY
-// rutas.use("/estadogiro/:dni/:importe",utils.buscarGiro)
-
 //OTROS
 rutas.get("/logincaja/tipoarqueo", cuenta_usuario.tipoArqueo);
 rutas.get("/logincaja/getsaldocaja", caja_trabajo.obtenerSaldos);
