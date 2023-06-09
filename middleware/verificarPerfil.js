@@ -81,7 +81,7 @@ const verificarPerfil = nivel => {
                 })
                 .then(perfilBD => {
                   //GUARDAR PERFIL EN REDIS
-                  redis.set(
+                  cache.setValue(
                     "perfil-" + usuario.perfil_codigo,
                     JSON.stringify({
                       ListaMenu: perfilBD.ListaMenu,

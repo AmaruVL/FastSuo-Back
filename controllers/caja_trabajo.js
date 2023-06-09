@@ -1,6 +1,7 @@
 const utils = require("../services/utils")
 const Sequelize = require("sequelize");
 const models = require("../models");
+const cache = require("../config/cache");
 const Op = Sequelize.Op;
 var filename = module.filename.split("/").slice(-1);
 
@@ -104,7 +105,7 @@ exports.cerrarCaja = (req, res) => {
                             caja = JSON.parse(caja);
                             if (caja != null) {
                               caja.estado_caja = "CERRADO";
-                              redis.set(cajaTrabajo.caja_codigo, JSON.stringify(caja));
+                              cache.setValue(cajaTrabajo.caja_codigo, JSON.stringify(caja))
                             }
 
                             const listaMonedas = req.body.listaMonedas;
@@ -228,7 +229,7 @@ exports.abrirCajaCentral = (req, res) => {
                     })
                     .then(
                       cajaApertura => {
-                        redis.set(
+                        cache.setValue(
                           req.body.caja_codigo,
                           JSON.stringify({
                             fecha_trabajo: cajaApertura.fecha_trabajo,
@@ -345,7 +346,7 @@ exports.cerrarCajaCentral = (req, res) => {
                                   caja = JSON.parse(caja);
                                   if (caja != null) {
                                     caja.estado_caja = "CERRADO";
-                                    redis.set(cajaAnterior.caja_codigo, JSON.stringify(caja));
+                                    cache.setValue(cajaAnterior.caja_codigo, JSON.stringify(caja));
                                     socket.emit(cajaAnterior.caja_codigo + "cerrada", {
                                       mensaje: "Caja cerrada por usuario " + tokenDecodificado.id
                                     });

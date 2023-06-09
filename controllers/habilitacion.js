@@ -1,7 +1,8 @@
 const Sequelize = require("sequelize");
 const models = require("../models");
 const utils = require("../services/utils")
-const moment = require('moment')
+const moment = require('moment');
+const cache = require("../config/cache");
 const Op = Sequelize.Op;
 var filename = module.filename.split("/").slice(-1);
 
@@ -1842,7 +1843,7 @@ function buscarCajaAbrir(redis, caja_codigo, usuario_codigo) {
       }
     });
     if (cajaTrabajo) {
-      redis.set(
+      cache.setValue(
         caja_codigo,
         JSON.stringify({
           fecha_trabajo: cajaTrabajo.fecha_trabajo,
@@ -1903,7 +1904,7 @@ function abrirCaja(redis, caja_codigo, usuario_codigo) {
         estado_caja: "ABIERTO"
       })
       .then(respuesta => {
-        redis.set(
+        cache.setValue(
           caja_codigo,
           JSON.stringify({
             fecha_trabajo: respuesta.fecha_trabajo,

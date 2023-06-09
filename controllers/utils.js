@@ -7,6 +7,7 @@ const DeviceDetector = require("node-device-detector");
 const DEVICE_TYPE = require("node-device-detector/parser/const/device-type");
 var filename = module.filename.split("/").slice(-1);
 const hash = require("object-hash");
+const cache = require("../config/cache");
 
 exports.cerrarSesion = (req, res) => {
   var logger = req.app.get("winston");
@@ -34,14 +35,14 @@ exports.cerrarSesion = (req, res) => {
         redis.get(tokenDecodificado.id, function(err, usuario) {
           usuario = JSON.parse(usuario);
           delete usuario["token_mobil"];
-          redis.setex(tokenDecodificado.id, total, JSON.stringify(usuario));
+          cache.setValue(tokenDecodificado.id, JSON.stringify(usuario), total);
           socket.emit(tokenDecodificado.id + "mobillogout", result.device);
         });
       } else {
         redis.get(tokenDecodificado.id, function(err, usuario) {
           usuario = JSON.parse(usuario);
           delete usuario["token"];
-          redis.setex(tokenDecodificado.id, total, JSON.stringify(usuario));
+          cache.setValue(tokenDecodificado.id, JSON.stringify(usuario), total);
         });
       }
       res.json({ mensaje: "exito" });
@@ -65,7 +66,7 @@ exports.cerrarSesionMobil = (req, res) => {
       redis.get(tokenDecodificado.id, function(err, usuario) {
         usuario = JSON.parse(usuario);
         delete usuario["token_mobil"];
-        redis.setex(tokenDecodificado.id, total, JSON.stringify(usuario));
+        cache.setValue(tokenDecodificado.id,JSON.stringify(usuario), total);
       });
       res.json({ mensaje: "exito" });
     } catch (error) {

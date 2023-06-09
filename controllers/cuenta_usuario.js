@@ -8,7 +8,8 @@ const DEVICE_TYPE = require("node-device-detector/parser/const/device-type");
 var bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const key = require("../config/key");
-const utils = require('../services/utils')
+const utils = require('../services/utils');
+const cache = require("../config/cache");
 const Op = Sequelize.Op;
 var filename = module.filename.split("/").slice(-1);
 exports.crear = (req, res) => {
@@ -229,12 +230,11 @@ exports.validar = (req, res) => {
                   } else {
                     usuarioredis["token"] = token;
                   }
-                  redis.setex(usuario.usuario, total, JSON.stringify(usuarioredis));
+                  cache.setValue(usuario.usuario, JSON.stringify(usuarioredis), total);
                 } else {
                   if (esMobil) {
-                    redis.setex(
+                    cache.setValue(
                       usuario.usuario,
-                      total,
                       JSON.stringify({
                         token_mobil: token,
                         perfil_codigo: usuario.perfil_codigo,
@@ -242,12 +242,11 @@ exports.validar = (req, res) => {
                         estado_registro: usuario.estado_registro,
                         modo_conexion: usuario.modo_conexion,
                         pc_sn: usuario.pc_sn
-                      })
+                      }), total
                     );
                   } else {
-                    redis.setex(
+                    cache.setValue(
                       usuario.usuario,
-                      total,
                       JSON.stringify({
                         token: token,
                         perfil_codigo: usuario.perfil_codigo,
@@ -255,14 +254,14 @@ exports.validar = (req, res) => {
                         estado_registro: usuario.estado_registro,
                         modo_conexion: usuario.modo_conexion,
                         pc_sn: usuario.pc_sn
-                      })
+                      }), total
                     );
                   }
                 }
               });
 
               //guardar perfil en redis
-              redis.set(
+              cache.setValue(
                 "perfil-" + usuario.perfil_codigo,
                 JSON.stringify({
                   ListaMenu: perfil.ListaMenu
@@ -277,7 +276,7 @@ exports.validar = (req, res) => {
               redis.incr(req.body.usuario, (err, val) => {
                 if (!val) {
                   //si no existe val
-                  redis.set(req.body.usuario, 1);
+                  cache.setValue(req.body.usuario, 1);
                   val = 1;
                 }
                 if (val >= 3) {

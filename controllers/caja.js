@@ -87,7 +87,7 @@ exports.actualizar = async (req, res) => {
             cajaModificada = JSON.parse(cajaModificada);
             if (cajaModificada !== null) {
               cajaModificada.verificar_saldo_caja = req.body.verificar_saldo_caja;
-              redis.set(req.params.caja_codigo, JSON.stringify(cajaModificada));
+              cache.setValue(req.params.caja_codigo, JSON.stringify(cajaModificada));
               res.json(filasAfectadas);
             } else {
               res.json({

@@ -2,7 +2,8 @@ const jwt = require("jsonwebtoken");
 const moment = require("moment")
 const key = require("../config/key");
 const models = require("../models");
-const axios = require('axios')
+const axios = require('axios');
+const cache = require("../config/cache");
 // import models from "../models";
 // import axios from "axios";
 // const config = require("../config/config");
@@ -130,7 +131,7 @@ exports.verificarPerfil = (req, nivel) => {
                   })
                   .then(perfilBD => {
                     //GUARDAR PERFIL EN REDIS
-                    redis.set(
+                    cache.setValue(
                       "perfil-" + usuario.perfil_codigo,
                       JSON.stringify({
                         ListaMenu: perfilBD.ListaMenu

@@ -1,5 +1,6 @@
 var bcrypt = require("bcryptjs");
 const models = require("../models");
+const cache = require("../config/cache");
 var filename = module.filename.split("/").slice(-1);
 
 //VERIFICAR SI SE ENCUENTRA LOGUEADO
@@ -34,7 +35,7 @@ exports.verificar = () => {
                         })
                         .then(perfilBD => {
                           //GUARDAR PERFIL EN REDIS
-                          redis.set(
+                          cache.setValue(
                             "perfil-" + usuario.perfil_codigo,
                             JSON.stringify({
                               ListaMenu: perfilBD.ListaMenu
