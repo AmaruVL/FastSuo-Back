@@ -1,10 +1,9 @@
-"use strict";
 require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
 const Sequelize = require("sequelize");
 const basename = path.basename(__filename);
-const sequelize = require('../config/database')
+const sequelize = require("../config/database");
 const db = {};
 
 sequelize
@@ -22,8 +21,8 @@ fs.readdirSync(__dirname)
   })
   .forEach(file => {
     const model = require(path.join(__dirname, file));
-    const modelName = file.slice(0,-3)
-    db[modelName] = model
+    const modelName = file.slice(0, -3);
+    db[modelName] = model;
   });
 
 Object.keys(db).forEach(modelName => {
