@@ -12,9 +12,14 @@ const loggin = () => {
     const detector = new DeviceDetector();
     const userAgent = req.headers["user-agent"];
     const result = detector.detect(userAgent);
-    const isTabled = result.device && [DEVICE_TYPE.TABLET].indexOf(result.device.type) !== -1;
-    const isMobile = result.device && [DEVICE_TYPE.SMARTPHONE, DEVICE_TYPE.FEATURE_PHONE].indexOf(result.device.type) !== -1;
-    const isPhablet = result.device && [DEVICE_TYPE.PHABLET].indexOf(result.device.type) !== -1;
+    const isTabled =
+      result.device && [DEVICE_TYPE.TABLET].indexOf(result.device.type) !== -1;
+    const isMobile =
+      result.device &&
+      [DEVICE_TYPE.SMARTPHONE, DEVICE_TYPE.FEATURE_PHONE].indexOf(result.device.type) !==
+        -1;
+    const isPhablet =
+      result.device && [DEVICE_TYPE.PHABLET].indexOf(result.device.type) !== -1;
     let esMobil = false;
     if (isTabled || isMobile || isPhablet) {
       esMobil = true;
@@ -25,18 +30,17 @@ const loggin = () => {
       const auth = req.headers.authorization.split(" "); // "bearer token nspc hashexplorador"
       const token = auth[1];
 
-      jwt.verify(token, key.tokenKey, function(err, tokenDecodificado) {
+      jwt.verify(token, key.tokenKey, function (err, tokenDecodificado) {
         if (tokenDecodificado) {
-          var redis = req.app.get("redis");
           let usuario_codigo = tokenDecodificado.id;
-          let usuario = cache.getValue(usuario_codigo)
+          let usuario = cache.getValue(usuario_codigo);
           usuario = JSON.parse(usuario);
           if (usuario !== null) {
-            let tokenRedis = usuario.token;
+            let tokenCache = usuario.token;
             if (esMobil) {
-              tokenRedis = usuario.token_mobil;
+              tokenCache = usuario.token_mobil;
             }
-            if (tokenRedis === token) {
+            if (tokenCache === token) {
               if (usuario.modo_conexion === 1) {
                 if (auth.length >= 3) {
                   if (usuario.pc_sn === auth[2]) {
@@ -45,7 +49,7 @@ const loggin = () => {
                     logger.log("warn", {
                       ubicacion: filename,
                       token: token,
-                      message: "Dispositivo no reconocido 01"
+                      message: "Dispositivo no reconocido 01",
                     });
                     res.status(403).send("Dispositivo no reconocido 01");
                   }
@@ -53,7 +57,7 @@ const loggin = () => {
                   logger.log("warn", {
                     ubicacion: filename,
                     token: token,
-                    message: "No puede realizar esta operación 02"
+                    message: "No puede realizar esta operación 02",
                   });
                   res.status(403).send("No puede realizar esta operación 02");
                 }
@@ -64,7 +68,7 @@ const loggin = () => {
                   logger.log("warn", {
                     ubicacion: filename,
                     token: token,
-                    message: "No puede realizar esta operación 03"
+                    message: "No puede realizar esta operación 03",
                   });
                   res.status(403).send("No puede realizar esta operación 03");
                 }
@@ -76,7 +80,7 @@ const loggin = () => {
                     logger.log("warn", {
                       ubicacion: filename,
                       token: token,
-                      message: "Dispositivo no reconocido 04"
+                      message: "Dispositivo no reconocido 04",
                     });
                     res.status(403).send("Dispositivo no reconocido 04");
                   }
@@ -84,7 +88,7 @@ const loggin = () => {
                   logger.log("warn", {
                     ubicacion: filename,
                     token: token,
-                    message: "No puede realizar esta operación 05"
+                    message: "No puede realizar esta operación 05",
                   });
                   res.status(403).send("No puede realizar esta operación 05");
                 }
@@ -94,7 +98,7 @@ const loggin = () => {
                 logger.log("warn", {
                   ubicacion: filename,
                   token: token,
-                  message: "No puede realizar esta operación 06"
+                  message: "No puede realizar esta operación 06",
                 });
                 res.status(403).send("No puede realizar esta operación 06");
               }
@@ -102,7 +106,7 @@ const loggin = () => {
               logger.log("warn", {
                 ubicacion: filename,
                 token: token,
-                message: "Su token cambio, vuelva a iniciar sesion"
+                message: "Su token cambio, vuelva a iniciar sesion",
               });
               res.status(403).send("Su token cambio, vuelva a iniciar sesion");
             }
@@ -110,7 +114,7 @@ const loggin = () => {
             logger.log("warn", filename, {
               ubicacion: filename,
               token: token,
-              message: "Token eliminado, vuelva a iniciar sesion"
+              message: "Token eliminado, vuelva a iniciar sesion",
             });
             res.status(403).send("Token eliminado, vuelva a iniciar sesion");
           }
@@ -118,7 +122,7 @@ const loggin = () => {
           logger.log("warn", filename, {
             ubicacion: filename,
             token: token,
-            message: "token invalido"
+            message: "token invalido",
           });
           res.status(403).send("token invalido");
         }
@@ -126,7 +130,7 @@ const loggin = () => {
     } catch (e) {
       logger.log("warn", filename, {
         ubicacion: filename,
-        message: e.message
+        message: e.message,
       });
       res.status(403).send("falta token");
     }

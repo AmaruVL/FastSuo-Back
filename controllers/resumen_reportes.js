@@ -9,10 +9,10 @@ var filename = module.filename.split("/").slice(-1);
 
 exports.resumen = (req, res) => {
   var logger = req.app.get("winston");
-  var redis = req.app.get("redis");
+
   const token = req.header("Authorization").split(" ")[1];
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);

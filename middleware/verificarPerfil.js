@@ -62,11 +62,11 @@ const verificarPerfil = nivel => {
           });
           res.status(409).send("token invalido");
         }
-        var redis = req.app.get("redis"); //LLAMA A REDIS
+        //LLAMA AL CACHE
         let usuario_codigo = tokenDecodificado.id;
-        let usuario = cache.getValue(usuario_codigo)
+        let usuario = cache.getValue(usuario_codigo);
         usuario = JSON.parse(usuario);
-        let perfil = cache.getValue("perfil-" + usuario.perfil_codigo)
+        let perfil = cache.getValue("perfil-" + usuario.perfil_codigo);
         if (perfil) {
           perfil = JSON.parse(perfil);
           verificarNivelPermisos(nivel, perfil, token, logger, req, res, next);
@@ -80,7 +80,7 @@ const verificarPerfil = nivel => {
               include: ["ListaMenu"],
             })
             .then(perfilBD => {
-              //GUARDAR PERFIL EN REDIS
+              //GUARDAR PERFIL EN CACHE
               cache.setValue(
                 "perfil-" + usuario.perfil_codigo,
                 JSON.stringify({

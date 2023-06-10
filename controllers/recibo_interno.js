@@ -7,16 +7,15 @@ const Op = Sequelize.Op;
 var filename = module.filename.split("/").slice(-1);
 
 exports.crear = function (req, res, next) {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
-    //OBTENER DATOS DE CAJA DESDE REDIS
+    //OBTENER DATOS DE CAJA DESDE CACHE
     let caja = getValue(tokenDecodificado.idc);
     return models.sequelize
       .transaction(
@@ -199,15 +198,14 @@ exports.crear = function (req, res, next) {
 };
 
 exports.extornar = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
     usuario = JSON.parse(usuario);
-    //OBTENER DATOS DE CAJA DESDE REDIS
+    //OBTENER DATOS DE CAJA DESDE CACHE
     let caja = getValue(tokenDecodificado.idc);
     caja = JSON.parse(caja);
     return models.sequelize

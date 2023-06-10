@@ -4,10 +4,10 @@ var filename = module.filename.split("/").slice(-1);
 
 exports.resumen_dolar = (req, res) => {
   var logger = req.app.get("winston");
-  var redis = req.app.get("redis");
+
   const token = req.header("Authorization").split(" ")[1];
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
@@ -37,10 +37,10 @@ exports.resumen_dolar = (req, res) => {
 
 exports.listarPor = (req, res) => {
   var logger = req.app.get("winston");
-  var redis = req.app.get("redis");
+
   const token = req.header("Authorization").split(" ")[1];
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);

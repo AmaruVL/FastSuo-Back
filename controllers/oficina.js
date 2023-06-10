@@ -182,10 +182,9 @@ exports.listarOficinasActivas = (req, res) => {
 exports.listarOficinasEmpresa = (req, res) => {
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
-  var redis = req.app.get("redis");
 
   utils.decodeToken(token, async tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);

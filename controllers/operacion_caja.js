@@ -7,16 +7,15 @@ const Op = Sequelize.Op;
 var filename = module.filename.split("/").slice(-1);
 
 exports.crearTipoCambio = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
-    //OBTENER DATOS DE CAJA DESDE REDIS
+    //OBTENER DATOS DE CAJA DESDE CACHE
     let caja = getValue(tokenDecodificado.idc);
 
     caja = JSON.parse(caja);
@@ -170,16 +169,15 @@ exports.crearTipoCambio = (req, res) => {
 };
 
 exports.crearVentaMaterial = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
-    //OBTENER DATOS DE CAJA DESDE REDIS
+    //OBTENER DATOS DE CAJA DESDE CACHE
     let caja = getValue(tokenDecodificado.idc);
     caja = JSON.parse(caja);
     const hoy = new Date();
@@ -334,12 +332,11 @@ exports.crearVentaMaterial = (req, res) => {
 };
 
 exports.buscarOperacioncaja = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
@@ -398,7 +395,6 @@ exports.buscarOperacioncaja = (req, res) => {
 };
 
 exports.listarOperacionesDia = async (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
@@ -444,7 +440,7 @@ exports.listarOperacionesDia = async (req, res) => {
   }
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
@@ -475,7 +471,6 @@ exports.listarOperacionesDia = async (req, res) => {
 };
 
 exports.listarUltimasOperaciones = async (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
@@ -493,7 +488,7 @@ exports.listarUltimasOperaciones = async (req, res) => {
   const fechaHoy = moment().subtract(parseInt(tiempo), "days").format();
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);

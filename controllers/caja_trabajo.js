@@ -32,7 +32,6 @@ exports.crear = (req, res) => {
 };
 
 exports.cerrarCaja = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
@@ -178,7 +177,6 @@ exports.cerrarCaja = (req, res) => {
 };
 
 exports.abrirCajaCentral = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
@@ -280,7 +278,6 @@ exports.abrirCajaCentral = (req, res) => {
 };
 
 exports.cerrarCajaCentral = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
@@ -423,11 +420,10 @@ exports.cerrarCajaCentral = (req, res) => {
 };
 
 exports.obtenerSaldos = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     models.cuenta_usuario
       .findOne({
         where: {
@@ -503,7 +499,6 @@ exports.obtenerSaldos = (req, res) => {
 };
 
 exports.obtenerCajaTrabajo = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   models.caja_trabajo
@@ -554,7 +549,6 @@ exports.obtenerCajaTrabajo = (req, res) => {
 };
 
 exports.obtenerSaldosCajaAnterior = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   utils.decodeToken(token, tokenDecodificado => {
@@ -635,12 +629,11 @@ exports.obtenerSaldosCajaAnterior = (req, res) => {
 };
 
 exports.verificarSaldos = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = cache.getValue(tokenDecodificado.id);
     usuario = JSON.parse(usuario);
 
@@ -697,12 +690,11 @@ exports.verificarSaldos = (req, res) => {
 };
 
 exports.obtenerSaldosFecha = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = cache.getValue(tokenDecodificado.id);
     usuario = JSON.parse(usuario);
     const cajaCodigo = req.query.caja_codigo

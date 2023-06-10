@@ -66,7 +66,6 @@ exports.buscar = (req, res) => {
 };
 
 exports.actualizar = async (req, res) => {
-  var redis = req.app.get("redis");
   let obj = {};
   req.body.caja_contrasena
     ? (obj = {
@@ -127,9 +126,9 @@ exports.actualizar = async (req, res) => {
 exports.cambiarContrasena = (req, res) => {
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
-  var redis = req.app.get("redis");
+
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = cache.getValue(tokenDecodificado.id);
     usuario = JSON.parse(usuario);
     models.caja
@@ -158,7 +157,7 @@ exports.cambiarContrasena = (req, res) => {
                 .then(filasAfectadas => {
                   if (usuario !== null) {
                     const cajaUsuario = usuario.caja_codigo;
-                    //ELIMINAR DATOS DEL USUARIO DE REDIS
+                    //ELIMINAR DATOS DEL USUARIO DE CACHE
                     cache.delValue(tokenDecodificado.id);
                     //ELIMINAR CAJA SI EXISTIERA
                     cajaUsuario ? cache.delValue(cajaUsuario) : null;

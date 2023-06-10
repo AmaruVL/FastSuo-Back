@@ -7,17 +7,16 @@ const Op = Sequelize.Op;
 var filename = module.filename.split("/").slice(-1);
 
 exports.crear = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   var socket = req.app.get("socketio");
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = cache.getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
-    //OBTENER DATOS DE CAJA DESDE REDIS
+    //OBTENER DATOS DE CAJA DESDE CACHE
     let caja = cache.getValue(tokenDecodificado.idc);
     //INICIA TRANSACCION
     return models.sequelize
@@ -186,7 +185,6 @@ exports.crear = (req, res) => {
             caja_origen = respuesta[0].caja_origen;
             caja_destino = respuesta[0].caja_destino;
             NotificacionEgreso(
-              redis,
               socket,
               "HABILITACION",
               result.importe,
@@ -217,17 +215,16 @@ exports.crear = (req, res) => {
 };
 
 exports.amortizacion = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   var socket = req.app.get("socketio");
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = cache.getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
-    //OBTENER DATOS DE CAJA DESDE REDIS
+    //OBTENER DATOS DE CAJA DESDE CACHE
     let caja = cache.getValue(tokenDecodificado.idc);
 
     //INICIA TRANSACCION
@@ -365,7 +362,6 @@ exports.amortizacion = (req, res) => {
             caja_origen = respuesta[0].caja_origen;
             caja_destino = respuesta[0].caja_destino;
             NotificacionIngreso(
-              redis,
               socket,
               "AMORTIZACION",
               result.importe,
@@ -396,18 +392,17 @@ exports.amortizacion = (req, res) => {
 };
 
 exports.aceptar = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   var socket = req.app.get("socketio");
 
   let habilitacionBuscada;
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = cache.getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
-    //OBTENER DATOS DE CAJA DESDE REDIS
+    //OBTENER DATOS DE CAJA DESDE CACHE
     let caja = cache.getValue(tokenDecodificado.idc);
 
     //INICIA TRANSACCION
@@ -563,7 +558,6 @@ exports.aceptar = (req, res) => {
             caja_origen = respuesta[0].caja_origen;
             caja_destino = respuesta[0].caja_destino;
             NotificacionIngreso(
-              redis,
               socket,
               "HABILITACION",
               habilitacionBuscada.importe,
@@ -598,7 +592,6 @@ exports.aceptar = (req, res) => {
 };
 
 exports.autorizarAnulacion = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
@@ -657,17 +650,16 @@ exports.autorizarAnulacion = (req, res) => {
 };
 
 exports.anular = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   var socket = req.app.get("socketio");
   let habilitacionBuscada;
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = cache.getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
-    //OBTENER DATOS DE CAJA DESDE REDIS
+    //OBTENER DATOS DE CAJA DESDE CACHE
     let caja = cache.getValue(tokenDecodificado.idc);
 
     //INICIA TRANSACCION
@@ -817,7 +809,6 @@ exports.anular = (req, res) => {
             caja_origen = respuesta[0].caja_origen;
             caja_destino = respuesta[0].caja_destino;
             NotificacionIngreso(
-              redis,
               socket,
               "HABILITACION",
               habilitacionBuscada.importe,
@@ -850,17 +841,16 @@ exports.anular = (req, res) => {
 };
 
 exports.anularAmortizacion = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   var socket = req.app.get("socketio");
   let habilitacionBuscada;
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = cache.getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
-    //OBTENER DATOS DE CAJA DESDE REDIS
+    //OBTENER DATOS DE CAJA DESDE CACHE
     let caja = cache.getValue(tokenDecodificado.idc);
 
     //INICIA TRANSACCION
@@ -1008,7 +998,6 @@ exports.anularAmortizacion = (req, res) => {
             caja_origen = respuesta[0].caja_origen;
             caja_destino = respuesta[0].caja_destino;
             NotificacionIngreso(
-              redis,
               socket,
               "AMORTIZACION",
               habilitacionBuscada.importe,
@@ -1041,14 +1030,13 @@ exports.anularAmortizacion = (req, res) => {
 };
 
 exports.anularCentral = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   var socket = req.app.get("socketio");
   let habilitacionBuscada;
   if (req.body.motivo && req.body.motivo !== "") {
     utils.decodeToken(token, async tokenDecodificado => {
-      //OBTENER DATOS DEL USUARIO DESDE REDIS
+      //OBTENER DATOS DEL USUARIO DESDE CACHE
       let usuario = cache.getValue(tokenDecodificado.id);
 
       usuario = JSON.parse(usuario);
@@ -1100,11 +1088,7 @@ exports.anularCentral = (req, res) => {
               });
 
               //abrir caja en caso este cerrada y validar si esta abierta o cerrada
-              await getCajaRedis(
-                redis,
-                habilitacion_op_caja.caja_codigo,
-                tokenDecodificado.idc,
-              );
+              await getCajaCache(habilitacion_op_caja.caja_codigo, tokenDecodificado.idc);
 
               return models.operacion_caja
                 .findAll(
@@ -1232,7 +1216,6 @@ exports.anularCentral = (req, res) => {
               caja_origen = respuesta[0].caja_origen;
               caja_destino = respuesta[0].caja_destino;
               NotificacionEgreso(
-                redis,
                 socket,
                 "HABILITACION",
                 habilitacionBuscada.importe,
@@ -1268,13 +1251,12 @@ exports.anularCentral = (req, res) => {
 };
 
 exports.anularAmortizacionCentral = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   var socket = req.app.get("socketio");
   let habilitacionBuscada;
   utils.decodeToken(token, async tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
 
     usuario = JSON.parse(usuario);
 
@@ -1321,11 +1303,7 @@ exports.anularAmortizacionCentral = (req, res) => {
             });
 
             //abrir caja en caso este cerrada y validar si esta abierta o cerrada
-            await getCajaRedis(
-              redis,
-              habilitacion_op_caja.caja_codigo,
-              tokenDecodificado.idc,
-            );
+            await getCajaCache(habilitacion_op_caja.caja_codigo, tokenDecodificado.idc);
 
             return models.operacion_caja
               .findAll(
@@ -1453,7 +1431,6 @@ exports.anularAmortizacionCentral = (req, res) => {
             caja_origen = respuesta[0].caja_origen;
             caja_destino = respuesta[0].caja_destino;
             NotificacionEgreso(
-              redis,
               socket,
               "AMORTIZACION",
               habilitacionBuscada.importe,
@@ -1486,12 +1463,11 @@ exports.anularAmortizacionCentral = (req, res) => {
 };
 
 exports.buscar = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = cache.getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
@@ -1555,12 +1531,11 @@ exports.buscar = (req, res) => {
 };
 
 exports.buscarPorID = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = cache.getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
@@ -1637,7 +1612,6 @@ exports.buscarPorID = (req, res) => {
 };
 
 exports.listar = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   utils.decodeToken(token, tokenDecodificado => {
@@ -1688,7 +1662,6 @@ exports.listar = (req, res) => {
 };
 
 exports.listarRealizadas = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   utils.decodeToken(token, tokenDecodificado => {
@@ -1930,11 +1903,11 @@ function getSaldoCaja(fechaTrabajo, cajaCodigo) {
   });
 }
 
-function getCajaRedis(redis, caja_codigo, usuario_codigo) {
+function getCajaCache(caja_codigo, usuario_codigo) {
   return new Promise(async (resolve, reject) => {
-    let cajaRedis = await redis.getAsync(caja_codigo);
-    if (cajaRedis === null) {
-      buscarCajaAbrir(redis, caja_codigo, usuario_codigo)
+    let cajaCache = cache.getValue(caja_codigo);
+    if (cajaCache === null) {
+      buscarCajaAbrir(caja_codigo, usuario_codigo)
         .then(caja => {
           resolve(caja);
         })
@@ -1942,17 +1915,17 @@ function getCajaRedis(redis, caja_codigo, usuario_codigo) {
           reject(err);
         });
     } else {
-      cajaRedis = JSON.parse(cajaRedis);
-      if (cajaRedis.fecha_trabajo === moment().format("YYYY-MM-DD")) {
-        if (cajaRedis.estado_caja === "CERRADO") {
+      cajaCache = JSON.parse(cajaCache);
+      if (cajaCache.fecha_trabajo === moment().format("YYYY-MM-DD")) {
+        if (cajaCache.estado_caja === "CERRADO") {
           reject(
             Error("LA CAJA DE LA OFICINA ORIGEN SE ENCUENTRA CERRADA EL DIA DE HOY"),
           );
         } else {
-          resolve(cajaRedis);
+          resolve(cajaCache);
         }
       } else {
-        buscarCajaAbrir(redis, caja_codigo, usuario_codigo)
+        buscarCajaAbrir(caja_codigo, usuario_codigo)
           .then(cajared => {
             resolve(cajared);
           })
@@ -1964,7 +1937,7 @@ function getCajaRedis(redis, caja_codigo, usuario_codigo) {
   });
 }
 
-function buscarCajaAbrir(redis, caja_codigo, usuario_codigo) {
+function buscarCajaAbrir(caja_codigo, usuario_codigo) {
   return new Promise(async (resolve, reject) => {
     const cajaTrabajo = await models.caja_trabajo.findOne({
       where: {
@@ -2001,7 +1974,6 @@ function buscarCajaAbrir(redis, caja_codigo, usuario_codigo) {
         //SI EXISTE CAJA DEL DIA ANTERIOR
         if (cajaAnterior.estado_caja === "CERRADO") {
           //si esta cerrada la caja del dia anterior, abrir caja
-          //const caja_trabajo = await abrirCaja(redis, caja_codigo, usuario_codigo);
           reject(Error("Primero debe abrir caja"));
           resolve(caja_trabajo);
         } else {
@@ -2014,14 +1986,14 @@ function buscarCajaAbrir(redis, caja_codigo, usuario_codigo) {
         }
       } else {
         //SI NO EXISTE NINGUNA CAJA PARA ESA OFICINA, ABRIR CAJA
-        const caja_trabajo = await abrirCaja(redis, caja_codigo, usuario_codigo);
+        const caja_trabajo = await abrirCaja(caja_codigo, usuario_codigo);
         resolve(caja_trabajo);
       }
     }
   });
 }
 
-function abrirCaja(redis, caja_codigo, usuario_codigo) {
+function abrirCaja(caja_codigo, usuario_codigo) {
   return new Promise((resolve, reject) => {
     models.caja_trabajo
       .create({

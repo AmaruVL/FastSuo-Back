@@ -9,10 +9,10 @@ var filename = module.filename.split("/").slice(-1);
 
 exports.saldos_oficina = (req, res) => {
   var logger = req.app.get("winston");
-  var redis = req.app.get("redis");
+
   const token = req.header("Authorization").split(" ")[1];
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
     usuario = JSON.parse(usuario);
     var caja_codigo = req.body.caja_cod;
@@ -41,10 +41,10 @@ exports.saldos_oficina = (req, res) => {
 
 exports.listaDetalleOficina = (req, res) => {
   var logger = req.app.get("winston");
-  var redis = req.app.get("redis");
+
   const token = req.header("Authorization").split(" ")[1];
   utils.decodeToken(token, async tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
@@ -1040,11 +1040,11 @@ exports.listaDetalleOficina = (req, res) => {
 
 exports.detalle_caja_porOficina = (req, res) => {
   var logger = req.app.get("winston");
-  var redis = req.app.get("redis");
+
   const token = req.header("Authorization").split(" ")[1];
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
@@ -1137,11 +1137,11 @@ exports.detalle_caja_porOficina = (req, res) => {
 
 exports.listarPor = (req, res) => {
   var logger = req.app.get("winston");
-  var redis = req.app.get("redis");
+
   const token = req.header("Authorization").split(" ")[1];
 
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
     usuario = JSON.parse(usuario);
     models.caja

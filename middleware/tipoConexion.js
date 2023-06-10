@@ -13,9 +13,14 @@ exports.tipoConexion = () => {
     const userAgent = req.headers["user-agent"];
     const headers = req.headers;
     const result = detector.detect(userAgent);
-    const isTabled = result.device && [DEVICE_TYPE.TABLET].indexOf(result.device.type) !== -1;
-    const isMobile = result.device && [DEVICE_TYPE.SMARTPHONE, DEVICE_TYPE.FEATURE_PHONE].indexOf(result.device.type) !== -1;
-    const isPhablet = result.device && [DEVICE_TYPE.PHABLET].indexOf(result.device.type) !== -1;
+    const isTabled =
+      result.device && [DEVICE_TYPE.TABLET].indexOf(result.device.type) !== -1;
+    const isMobile =
+      result.device &&
+      [DEVICE_TYPE.SMARTPHONE, DEVICE_TYPE.FEATURE_PHONE].indexOf(result.device.type) !==
+        -1;
+    const isPhablet =
+      result.device && [DEVICE_TYPE.PHABLET].indexOf(result.device.type) !== -1;
     let esMobil = false;
     if (isTabled || isMobile || isPhablet) {
       esMobil = true;
@@ -26,29 +31,28 @@ exports.tipoConexion = () => {
       const auth = req.headers.authorization.split(" "); // "bearer token nspc hashexplorador"
       const token = auth[1];
 
-      jwt.verify(token, key.tokenKey, function(err, tokenDecodificado) {
+      jwt.verify(token, key.tokenKey, function (err, tokenDecodificado) {
         if (tokenDecodificado) {
-          var redis = req.app.get("redis");
           let usuario_codigo = tokenDecodificado.id;
-          let usuario = cache.getValue(usuario_codigo)
+          let usuario = cache.getValue(usuario_codigo);
           usuario = JSON.parse(usuario);
           if (usuario !== null) {
-            let tokenRedis = usuario.token;
+            let tokenCache = usuario.token;
             if (esMobil) {
-              tokenRedis = usuario.token_mobil;
-              console.log('headerss x2',headers)
+              tokenCache = usuario.token_mobil;
+              console.log("headerss x2", headers);
             }
-            if (tokenRedis === token) {
+            if (tokenCache === token) {
               if (usuario.modo_conexion === 1) {
                 if (auth.length >= 3) {
                   if (usuario.pc_sn === auth[2]) {
                     next();
-                    console.log('headers',headers)
+                    console.log("headers", headers);
                   } else {
                     logger.log("warn", {
                       ubicacion: filename,
                       token: token,
-                      message: "Dispositivo no reconocido 01"
+                      message: "Dispositivo no reconocido 01",
                     });
                     res.status(403).send("Dispositivo no reconocido 01");
                   }
@@ -56,19 +60,19 @@ exports.tipoConexion = () => {
                   logger.log("warn", {
                     ubicacion: filename,
                     token: token,
-                    message: "No puede realizar esta operación 02"
+                    message: "No puede realizar esta operación 02",
                   });
                   res.status(403).send("No puede realizar esta operación 02");
                 }
               } else if (usuario.modo_conexion === 2) {
                 if (auth.length === 4) {
                   next();
-                  console.log('headers x3',headers)
+                  console.log("headers x3", headers);
                 } else {
                   logger.log("warn", {
                     ubicacion: filename,
                     token: token,
-                    message: "No puede realizar esta operación 03"
+                    message: "No puede realizar esta operación 03",
                   });
                   res.status(403).send("No puede realizar esta operación 03");
                 }
@@ -76,12 +80,12 @@ exports.tipoConexion = () => {
                 if (auth.length === 3) {
                   if (usuario.pc_sn === auth[2]) {
                     next();
-                    console.log('headers x4',headers)
+                    console.log("headers x4", headers);
                   } else {
                     logger.log("warn", {
                       ubicacion: filename,
                       token: token,
-                      message: "Dispositivo no reconocido 04"
+                      message: "Dispositivo no reconocido 04",
                     });
                     res.status(403).send("Dispositivo no reconocido 04");
                   }
@@ -89,17 +93,20 @@ exports.tipoConexion = () => {
                   logger.log("warn", {
                     ubicacion: filename,
                     token: token,
-                    message: "No puede realizar esta operación 05"
+                    message: "No puede realizar esta operación 05",
                   });
                   res.status(403).send("No puede realizar esta operación 05");
                 }
               } else if (usuario.modo_conexion === 4) {
                 next();
-                console.log('headers x5',headers);
-                console.log('detector?',result)
-                console.log('tipo conexion',result.os.name+" | "+result.client.name);
-                console.log('tipo movil',result.device.type);
-                console.log('nombre dispositivo', result.device.brand + " | "+result.device.model);
+                console.log("headers x5", headers);
+                console.log("detector?", result);
+                console.log("tipo conexion", result.os.name + " | " + result.client.name);
+                console.log("tipo movil", result.device.type);
+                console.log(
+                  "nombre dispositivo",
+                  result.device.brand + " | " + result.device.model,
+                );
                 /*console.log('device', result.device);
                 console.log('os', result.os.name + '|'+result.client.name);
                 console.log('client', result.client);*/
@@ -107,7 +114,7 @@ exports.tipoConexion = () => {
                 logger.log("warn", {
                   ubicacion: filename,
                   token: token,
-                  message: "No puede realizar esta operación 06"
+                  message: "No puede realizar esta operación 06",
                 });
                 res.status(403).send("No puede realizar esta operación 06");
               }
@@ -115,7 +122,7 @@ exports.tipoConexion = () => {
               logger.log("warn", {
                 ubicacion: filename,
                 token: token,
-                message: "Su token cambio, vuelva a iniciar sesion"
+                message: "Su token cambio, vuelva a iniciar sesion",
               });
               res.status(403).send("Su token cambio, vuelva a iniciar sesion");
             }
@@ -123,7 +130,7 @@ exports.tipoConexion = () => {
             logger.log("warn", filename, {
               ubicacion: filename,
               token: token,
-              message: "Token eliminado, vuelva a iniciar sesion"
+              message: "Token eliminado, vuelva a iniciar sesion",
             });
             res.status(403).send("Token eliminado, vuelva a iniciar sesion");
           }
@@ -131,7 +138,7 @@ exports.tipoConexion = () => {
           logger.log("warn", filename, {
             ubicacion: filename,
             token: token,
-            message: "token invalido"
+            message: "token invalido",
           });
           res.status(403).send("token invalido");
         }
@@ -139,7 +146,7 @@ exports.tipoConexion = () => {
     } catch (e) {
       logger.log("warn", filename, {
         ubicacion: filename,
-        message: e.message
+        message: e.message,
       });
       res.status(403).send("falta token");
     }

@@ -7,7 +7,7 @@ const startCache = () => {
 };
 
 const setValue = (key, value, lifetime = 43200) => {
-  //lifetime in seconds, 12h (43200s) by default
+  //lifetime en segundos, 12h (43200s) por defecto
   startCache();
   const expires = Date.now() + lifetime * 1000;
   const cache = JSON.parse(process.env.CACHE);
@@ -34,8 +34,18 @@ const delValue = key => {
   process.env.CACHE = JSON.stringify({ ...cache });
 };
 
+const incrValue = key => {
+  // Incrementar valor de key en 1
+  const value = getValue(key);
+  const incrValue = Number(value) + 1;
+  if (isNaN(incrValue)) return null;
+  setValue(key, incrValue.toString());
+  return incrValue;
+};
+
 module.exports = {
   setValue,
-  delValue,
   getValue,
+  delValue,
+  incrValue,
 };

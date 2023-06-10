@@ -315,7 +315,6 @@ exports.listarActivos = async (req, res) => {
     };
   }
 
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   services.decodeToken(token, tokenDecodificado => {
@@ -368,7 +367,6 @@ exports.listarActivos = async (req, res) => {
 };
 
 exports.listarRecibosIngreso = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   services.decodeToken(token, tokenDecodificado => {
@@ -420,7 +418,6 @@ exports.listarRecibosIngreso = (req, res) => {
 };
 
 exports.listarRecibosHabilitaciones = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   services.decodeToken(token, tokenDecodificado => {
@@ -472,7 +469,6 @@ exports.listarRecibosHabilitaciones = (req, res) => {
 };
 
 exports.listarRecibosEgreso = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   services.decodeToken(token, tokenDecodificado => {
@@ -535,7 +531,7 @@ exports.listarDocumentoRI = (req, res) => {
       modulo: "Reciboingreso",
     };
   }
-  var redis = req.app.get("redis");
+
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   services.decodeToken(token, tokenDecodificado => {
@@ -587,7 +583,6 @@ exports.listarDocumentoRI = (req, res) => {
 };
 
 exports.listarTodosActivos = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   services.decodeToken(token, tokenDecodificado => {

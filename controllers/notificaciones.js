@@ -6,18 +6,18 @@ const Op = Sequelize.Op;
 const fs = require("fs");
 const key = require("../config/key");
 const hash = require("object-hash");
+const { getValue } = require("../config/cache");
 var filename = module.filename.split("/").slice(-1);
 
 exports.buscar = (req, res) => {
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
     let usuario = getValue(tokenDecodificado.id);
 
     usuario = JSON.parse(usuario);
-    //OBTENER DATOS DE CAJA DESDE REDIS
+    //OBTENER DATOS DE CAJA DESDE CACHE
     models.sequelize
       .query(`select * from buscar_operaciones_central(:usuario, :fechaTrabajo);`, {
         replacements: {
