@@ -24,3 +24,5 @@ const vehiculo = sequelize.define("vehiculo", {
     type: DataTypes.STRING(10),
   },
 });
+
+module.exports = vehiculo;

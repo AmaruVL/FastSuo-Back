@@ -1,12 +1,8 @@
 const jwt = require("jsonwebtoken");
-const moment = require("moment");
 const key = require("../config/key");
 const models = require("../models");
-const axios = require("axios");
 const cache = require("../config/cache");
-// import models from "../models";
-// import axios from "axios";
-// const config = require("../config/config");
+
 exports.decodeToken = (token, callback) => {
   jwt.verify(token, key.tokenKey, function (err, decoded) {
     if (!err) {
@@ -15,79 +11,6 @@ exports.decodeToken = (token, callback) => {
       callback(false);
     }
   });
-};
-
-exports.transaccionDia = callback => {
-  models.operacion_caja
-    .count({
-      where: {
-        fecha_trabajo: Date.now(),
-      },
-    })
-    .then(operacion => {
-      callback(operacion);
-    });
-};
-
-exports.operacionDia = async () => {
-  var hoy = moment().date();
-  var res = await models.operacion_caja.count({
-    where: {
-      fecha_trabajo: Date.now(),
-    },
-  });
-  return res;
-};
-
-exports.buscarDNI = (dni, callback) => {
-  axios({
-    method: "get",
-    baseURL: `http://localhost:6060/dni/${dni}`,
-    url: ``,
-  })
-    .then(response => {
-      const datos = response.data;
-      if (datos) {
-        callback({
-          dni: dni,
-          nombres: datos.nombres,
-          ap_paterno: datos.ap_paterno,
-          ap_materno: datos.ap_materno,
-          fecha_nacimiento: datos.fecha_nacimiento,
-          sexo: datos.sexo,
-          direccion: datos.direccion,
-        });
-      } else {
-        callback(false);
-      }
-    })
-    .catch(err => {
-      console.log(err);
-    });
-};
-
-exports.buscarRUC = (ruc, callback) => {
-  axios({
-    method: "get",
-    baseURL: "http://localhost:6060/ruc",
-    url: `/${ruc}`,
-  })
-    .then(response => {
-      const datos = response.data;
-      if (datos.razon_social) {
-        callback({
-          razon_social: datos.razon_social,
-          contribuyente_estado: "Activo",
-          domicilio_fiscal: datos.domicilio_fiscal,
-          representante_legal: "",
-        });
-      } else {
-        callback(false);
-      }
-    })
-    .catch(err => {
-      callback(false);
-    });
 };
 
 exports.verificarPerfil = (req, nivel) => {
