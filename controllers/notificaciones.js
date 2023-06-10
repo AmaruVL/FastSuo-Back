@@ -14,28 +14,28 @@ exports.buscar = (req, res) => {
   const token = req.header("Authorization").split(" ")[1];
   utils.decodeToken(token, tokenDecodificado => {
     //OBTENER DATOS DEL USUARIO DESDE REDIS
-    redis.get(tokenDecodificado.id, (err, usuario) => {
-      usuario = JSON.parse(usuario);
-      //OBTENER DATOS DE CAJA DESDE REDIS
-      models.sequelize
-        .query(`select * from buscar_operaciones_central(:usuario, :fechaTrabajo);`, {
-          replacements: {
-            usuario: tokenDecodificado.id,
-            fechaTrabajo: moment().format("YYYY-MM-DD")
-          },
-          type: models.sequelize.QueryTypes.SELECT
-        })
-        .then(operaciones => {
-          res.json(operaciones);
-        })
-        .catch(err => {
-          logger.log("error", {
-            ubicacion: filename,
-            token: token,
-            message: { mensaje: err.message, tracestack: err.stack }
-          });
-          res.status(409).send("Error al listar");
+    let usuario = getValue(tokenDecodificado.id);
+
+    usuario = JSON.parse(usuario);
+    //OBTENER DATOS DE CAJA DESDE REDIS
+    models.sequelize
+      .query(`select * from buscar_operaciones_central(:usuario, :fechaTrabajo);`, {
+        replacements: {
+          usuario: tokenDecodificado.id,
+          fechaTrabajo: moment().format("YYYY-MM-DD"),
+        },
+        type: models.sequelize.QueryTypes.SELECT,
+      })
+      .then(operaciones => {
+        res.json(operaciones);
+      })
+      .catch(err => {
+        logger.log("error", {
+          ubicacion: filename,
+          token: token,
+          message: { mensaje: err.message, tracestack: err.stack },
         });
-    });
+        res.status(409).send("Error al listar");
+      });
   });
 };
