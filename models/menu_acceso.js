@@ -64,7 +64,7 @@ const crearModel = (sequelize, DataTypes) => {
 				type: DataTypes.STRING(30),
 				validate: {
 					is: {
-						args: /^[a-z\d\-_\s]+$/i, //valida texto alfanumerico con espacios
+						args: /^[a-z\d\-_./\s]+$/i, //valida texto alfanumerico con espacios
 						msg: "Campo debe contener solo letras y numeros"
 					}
 				}

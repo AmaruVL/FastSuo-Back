@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const key = require("../config/key");
 const models = require("../models");
+const cache = require("../config/cache");
 var filename = module.filename.split("/").slice(-1);
 
 const verificarNivelPermisos = (
@@ -61,37 +62,34 @@ const verificarPerfil = nivel => {
           });
           res.status(409).send("token invalido");
         }
-        var redis = req.app.get("redis"); //LLAMA A REDIS
+        //LLAMA AL CACHE
         let usuario_codigo = tokenDecodificado.id;
-
-        redis.get(usuario_codigo, function (err, usuario) {
-          usuario = JSON.parse(usuario);
-          redis.get("perfil-" + usuario.perfil_codigo, (err, perfil) => {
-            if (perfil) {
-              perfil = JSON.parse(perfil);
-              verificarNivelPermisos(nivel, perfil, token, logger, req, res, next);
-            } else {
-              //Buscar perfil en BD
-              models.perfil
-                .findOne({
-                  where: {
-                    perfil_codigo: usuario.perfil_codigo,
-                  },
-                  include: ["ListaMenu"],
-                })
-                .then(perfilBD => {
-                  //GUARDAR PERFIL EN REDIS
-                  redis.set(
-                    "perfil-" + usuario.perfil_codigo,
-                    JSON.stringify({
-                      ListaMenu: perfilBD.ListaMenu,
-                    }),
-                  );
-                  verificarNivelPermisos(nivel, perfilBD, token, logger, req, res, next);
-                });
-            }
-          });
-        });
+        let usuario = cache.getValue(usuario_codigo);
+        usuario = JSON.parse(usuario);
+        let perfil = cache.getValue("perfil-" + usuario.perfil_codigo);
+        if (perfil) {
+          perfil = JSON.parse(perfil);
+          verificarNivelPermisos(nivel, perfil, token, logger, req, res, next);
+        } else {
+          //Buscar perfil en BD
+          models.perfil
+            .findOne({
+              where: {
+                perfil_codigo: usuario.perfil_codigo,
+              },
+              include: ["ListaMenu"],
+            })
+            .then(perfilBD => {
+              //GUARDAR PERFIL EN CACHE
+              cache.setValue(
+                "perfil-" + usuario.perfil_codigo,
+                JSON.stringify({
+                  ListaMenu: perfilBD.ListaMenu,
+                }),
+              );
+              verificarNivelPermisos(nivel, perfilBD, token, logger, req, res, next);
+            });
+        }
       });
     } catch (e) {
       logger.log("error", { ubicacion: filename, token: token, e });

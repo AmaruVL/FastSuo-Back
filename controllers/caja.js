@@ -1,7 +1,8 @@
 const Sequelize = require("sequelize");
 const models = require("../models");
 var bcrypt = require("bcryptjs");
-const utils = require("../services/utils")
+const utils = require("../services/utils");
+const cache = require("../config/cache");
 var filename = module.filename.split("/").slice(-1);
 
 exports.crear = (req, res) => {
@@ -21,13 +22,17 @@ exports.crear = (req, res) => {
       caja_bitacora: `${Date.now()}-Creacion de caja`,
       estado_registro: req.body.estado_registro,
       oficina_codigo: req.body.oficina_codigo,
-      verificar_saldo_caja: req.body.verificar_saldo_caja || "VERIFICAR"
+      verificar_saldo_caja: req.body.verificar_saldo_caja || "VERIFICAR",
     })
     .then(objeto => {
       res.json(objeto);
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(412).send(err);
     });
 };
@@ -37,23 +42,34 @@ exports.buscar = (req, res) => {
   const token = req.header("Authorization").split(" ")[1];
   models.caja
     .findByPk(req.params.caja_codigo, {
-      attributes: ["caja_codigo", "caja_nombre", "direccion_ip_acceso", "almacen_defecto", "estado_registro", "oficina_codigo", "createdAt"]
+      attributes: [
+        "caja_codigo",
+        "caja_nombre",
+        "direccion_ip_acceso",
+        "almacen_defecto",
+        "estado_registro",
+        "oficina_codigo",
+        "createdAt",
+      ],
     })
     .then(objeto => {
       res.json(objeto);
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(412).send();
     });
 };
 
 exports.actualizar = async (req, res) => {
-  var redis = req.app.get("redis");
   let obj = {};
   req.body.caja_contrasena
     ? (obj = {
-        caja_contrasena: bcrypt.hashSync(req.body.caja_contrasena, 8)
+        caja_contrasena: bcrypt.hashSync(req.body.caja_contrasena, 8),
       })
     : null;
   const caja = await models.caja.findByPk(req.params.caja_codigo);
@@ -73,32 +89,35 @@ exports.actualizar = async (req, res) => {
           almacen_defecto: req.body.almacen_defecto,
           caja_bitacora: bitacora + "-" + tokenDecodificado.id + "act" + Date.now(),
           oficina_codigo: req.body.oficina_codigo,
-          verificar_saldo_caja: req.body.verificar_saldo_caja
+          verificar_saldo_caja: req.body.verificar_saldo_caja,
         },
         {
           where: {
-            caja_codigo: req.params.caja_codigo
-          }
-        }
+            caja_codigo: req.params.caja_codigo,
+          },
+        },
       )
       .then(filasAfectadas => {
         if (filasAfectadas == 1) {
-          redis.get(req.params.caja_codigo, async function(err, cajaModificada) {
-            cajaModificada = JSON.parse(cajaModificada);
-            if (cajaModificada !== null) {
-              cajaModificada.verificar_saldo_caja = req.body.verificar_saldo_caja;
-              redis.set(req.params.caja_codigo, JSON.stringify(cajaModificada));
-              res.json(filasAfectadas);
-            } else {
-              res.json({
-                mensaje: filasAfectadas
-              });
-            }
-          });
+          let cajaModificada = cache.getValue(req.params.caja_codigo);
+          cajaModificada = JSON.parse(cajaModificada);
+          if (cajaModificada !== null) {
+            cajaModificada.verificar_saldo_caja = req.body.verificar_saldo_caja;
+            cache.setValue(req.params.caja_codigo, JSON.stringify(cajaModificada));
+            res.json(filasAfectadas);
+          } else {
+            res.json({
+              mensaje: filasAfectadas,
+            });
+          }
         }
       })
       .catch(err => {
-        logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+        logger.log("error", {
+          ubicacion: filename,
+          token: token,
+          message: { mensaje: err.message, tracestack: err.stack },
+        });
         res.status(412).send();
       });
   });
@@ -107,52 +126,63 @@ exports.actualizar = async (req, res) => {
 exports.cambiarContrasena = (req, res) => {
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
-  var redis = req.app.get("redis");
+
   utils.decodeToken(token, tokenDecodificado => {
-    //OBTENER DATOS DEL USUARIO DESDE REDIS
-    redis.get(tokenDecodificado.id, (err, usuario) => {
-      usuario = JSON.parse(usuario);
-      models.caja
-        .findOne({
-          where: {
-            caja_codigo: usuario.caja_codigo
-          }
-        })
-        .then(caja => {
-          bcrypt.compare(req.body.contrasena_old, caja.caja_contrasena, async (err, respuesta) => {
+    //OBTENER DATOS DEL USUARIO DESDE CACHE
+    let usuario = cache.getValue(tokenDecodificado.id);
+    usuario = JSON.parse(usuario);
+    models.caja
+      .findOne({
+        where: {
+          caja_codigo: usuario.caja_codigo,
+        },
+      })
+      .then(caja => {
+        bcrypt.compare(
+          req.body.contrasena_old,
+          caja.caja_contrasena,
+          async (err, respuesta) => {
             if (respuesta) {
               models.caja
                 .update(
                   {
-                    caja_contrasena: bcrypt.hashSync(req.body.contrasena, 8)
+                    caja_contrasena: bcrypt.hashSync(req.body.contrasena, 8),
                   },
                   {
                     where: {
-                      caja_codigo: usuario.caja_codigo
-                    }
-                  }
+                      caja_codigo: usuario.caja_codigo,
+                    },
+                  },
                 )
-                .then(async filasAfectadas => {
+                .then(filasAfectadas => {
                   if (usuario !== null) {
                     const cajaUsuario = usuario.caja_codigo;
-                    //ELIMINAR DATOS DEL USUARIO DE REDIS
-                    await redis.del(tokenDecodificado.id);
+                    //ELIMINAR DATOS DEL USUARIO DE CACHE
+                    cache.delValue(tokenDecodificado.id);
                     //ELIMINAR CAJA SI EXISTIERA
-                    cajaUsuario ? redis.del(cajaUsuario) : null;
+                    cajaUsuario ? cache.delValue(cajaUsuario) : null;
                     res.json(filasAfectadas);
                   }
                 })
                 .catch(err => {
-                  logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+                  logger.log("error", {
+                    ubicacion: filename,
+                    token: token,
+                    message: { mensaje: err.message, tracestack: err.stack },
+                  });
                   res.status(412).send("No se pudo cambiar la contraseña de caja");
                 });
             } else {
-              logger.log("warn", { ubicacion: filename, token: token, message: "La contraseña actual no es válida" });
+              logger.log("warn", {
+                ubicacion: filename,
+                token: token,
+                message: "La contraseña actual no es válida",
+              });
               res.status(409).send("La contraseña actual no es válida");
             }
-          });
-        });
-    });
+          },
+        );
+      });
   });
 };
 
@@ -162,21 +192,25 @@ exports.desactivar = (req, res) => {
   models.caja
     .update(
       {
-        estado_registro: req.body.estado_registro
+        estado_registro: req.body.estado_registro,
       },
       {
         where: {
-          caja_codigo: req.params.caja_codigo
-        }
-      }
+          caja_codigo: req.params.caja_codigo,
+        },
+      },
     )
     .then(filasAfectadas => {
       res.json({
-        mensaje: filasAfectadas
+        mensaje: filasAfectadas,
       });
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(412).send();
     });
 };
@@ -194,14 +228,18 @@ exports.listar = (req, res) => {
         "estado_registro",
         "oficina_codigo",
         "verificar_saldo_caja",
-        "createdAt"
-      ]
+        "createdAt",
+      ],
     })
     .then(lista => {
       res.json(lista);
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(412).send();
     });
 };
@@ -219,15 +257,19 @@ exports.listarActivas = (req, res) => {
         "estado_registro",
         "oficina_codigo",
         "verificar_saldo_caja",
-        "createdAt"
+        "createdAt",
       ],
-      where: { estado_registro: true }
+      where: { estado_registro: true },
     })
     .then(lista => {
       res.json(lista);
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(412).send();
     });
 };
@@ -245,17 +287,21 @@ exports.listarPor = (req, res) => {
         "estado_registro",
         "oficina_codigo",
         "verificar_saldo_caja",
-        "createdAt"
+        "createdAt",
       ],
       where: {
-        oficina_codigo: req.params.oficina_codigo || req.query.oficina_codigo
-      }
+        oficina_codigo: req.params.oficina_codigo || req.query.oficina_codigo,
+      },
     })
     .then(lista => {
       res.json(lista);
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(412).send();
     });
 };
@@ -266,16 +312,20 @@ exports.eliminar = (req, res) => {
   models.caja
     .destroy({
       where: {
-        caja_codigo: req.params.caja_codigo
-      }
+        caja_codigo: req.params.caja_codigo,
+      },
     })
     .then(respuesta => {
       res.json({
-        mensaje: respuesta
+        mensaje: respuesta,
       });
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(409).send();
     });
 };

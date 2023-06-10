@@ -1,11 +1,7 @@
 const express = require("express");
-// const reportesOrdenPago = require("./controllers/reportesOrdenPago");
-
 require("dotenv").config();
 const http = require("http");
 const socketIo = require("socket.io");
-const { createAdapter } = require("@socket.io/redis-adapter");
-const redis = require("redis");
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
@@ -19,21 +15,20 @@ require("tls").DEFAULT_MIN_VERSION = "TLSv1";
 const rutas = require("./rutas");
 var app = express();
 
-//RUTA DE API DEL WEB SERVICE PARA LAS PAGINAS DE MONEY EXPRESS Y JUÑUY
-app.use("/api", rutas)
-
 // Configuracion de CORS
 app.use(cors());
 app.all("*", function (req, res, next) {
-  const token = req.header("Authorization") ? req.header("Authorization").split(" ")[1] : "Sin token";
+  const token = req.header("Authorization")
+    ? req.header("Authorization").split(" ")[1]
+    : "Sin token";
   winston.log("info", {
     message: JSON.stringify({
       token: token,
       ip_cliente: requestIp.getClientIp(req),
       url: req.url,
       method: req.method,
-      headers: req.headers
-    })
+      headers: req.headers,
+    }),
   });
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With, ,Authorization, DevId");
@@ -74,36 +69,16 @@ app.use(autenticacion());
 //RUTAS API
 app.use("/", rutas);
 
-//redis
-const client = redis.createClient({
-  url: process.env.REDIS_URL || 'redis://localhost:6379',
-  legacyMode: true
-});
-const redis_database = process.env.REDIS_DATABASE || 0;
-client.connect()
-  .then(async () => {
-    await client.select(redis_database)
-    console.log("Servidor REDIS conectado!")
-    app.set('redis', client)
-    // await client.disconnect()
-  })
-client.on("error", (err) => {
-  console.log('Error al conectarse a REDIS', err.message);
-});
-
 //=============== INICIAR EL SERVIDOR  ======================
 // Crear el servidor
 const server = http.createServer(app);
 
 const io = socketIo(server, {
-  upgradeTimeout: 30000
+  upgradeTimeout: 30000,
 });
 
-const subClient = redis.createClient(process.env.REDIS_URL)
-io.adapter(createAdapter(client, subClient))
-
 io.on("connection", function (socket) {
-  socket.on("disconnect", function () { });
+  socket.on("disconnect", function () {});
 });
 
 app.use(function (err, req, res, next) {

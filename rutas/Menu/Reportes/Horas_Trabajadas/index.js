@@ -1,8 +1,6 @@
 const rutas_reportes = require("express").Router();
-const reporteBanco_Afiliados = require("../../../../controllers/reporteBanco_afiliados");
 const reporte_horas_trabajadas = require("../../../../controllers/reporte_horas_trabajadas");
 const usuarios = require("../../../../controllers/cuenta_usuario");
-const oficinas = require("../../../../controllers/oficina");
 
 //agregue para la ruta de obtener usuarios
 //rutas_reportes.get("/activas", oficinas.listar)
