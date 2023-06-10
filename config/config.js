@@ -25,15 +25,5 @@ module.exports = {
     dialect: "postgres",
     logging: true
   },
-  productionmoney: {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
-    logging: false,
-    //"sslfactory" : "org.postgresql.ssl.NonValidatingFactory"
-    dialectOptions: { ssl: process.env.DB_SSL }
-  },
   quertium: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.MTMwNg.JaX1IDv-abFIDe-NpRrBiNhNyxJ7GvuFM0auaYEwle0"
 };

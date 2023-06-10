@@ -8,11 +8,11 @@ const fs = require("fs");
 const { default: PQueue } = require("p-queue");
 var filename = module.filename.split("/").slice(-1);
 
-exports.migrar = async function(req, res, next) {
+exports.migrar = async function (req, res, next) {
   const queue = new PQueue({ concurrency: 1 });
-  const inTransaction = fn => queue.add(() => models.sequelize.transaction(transaction => fn(transaction)));
+  const inTransaction = fn =>
+    queue.add(() => models.sequelize.transaction(transaction => fn(transaction)));
 
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   //const token = req.header("Authorization").split(" ")[1];
 
@@ -32,11 +32,11 @@ exports.migrar = async function(req, res, next) {
             limit: 1,
             where: {
               documento_codigo: giro.documento_codigo,
-              documento_serie: giro.documento_serie
+              documento_serie: giro.documento_serie,
             },
-            order: [["nro_operacion", "DESC"]]
+            order: [["nro_operacion", "DESC"]],
           },
-          { transaction: t }
+          { transaction: t },
         )
         .then(async opsCaja => {
           let nro_operacion;
@@ -45,8 +45,8 @@ exports.migrar = async function(req, res, next) {
             const docSerie = await models.documento_serie.findOne({
               where: {
                 documento_codigo: giro.documento_codigo,
-                documento_serie: giro.documento_serie
-              }
+                documento_serie: giro.documento_serie,
+              },
             });
             nro_operacion = parseInt(docSerie.nro_inicio) - 1;
           } else {
@@ -54,24 +54,31 @@ exports.migrar = async function(req, res, next) {
           }
           var date = new Date();
           var fechaString;
-          fechaString = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
+          fechaString =
+            date.getFullYear() +
+            "-" +
+            ("0" + (date.getMonth() + 1)).slice(-2) +
+            "-" +
+            ("0" + date.getDate()).slice(-2);
           return models.operacion_caja
             .count(
               {
                 where: {
-                  fecha_hora_operacion: { [Op.gte]: fechaString }
-                }
+                  fecha_hora_operacion: { [Op.gte]: fechaString },
+                },
               },
               {
-                transaction: t
-              }
+                transaction: t,
+              },
             )
             .then(async nro_operacion_dia => {
-              const cliente = await models.cliente_proveedor.findByPk(giro.beneficiario_docident);
+              const cliente = await models.cliente_proveedor.findByPk(
+                giro.beneficiario_docident,
+              );
               let id_cliente = {};
               if (cliente !== null) {
                 id_cliente = {
-                  id_cliente: giro.beneficiario_docident
+                  id_cliente: giro.beneficiario_docident,
                 };
               }
             });
@@ -92,11 +99,11 @@ exports.migrar = async function(req, res, next) {
   res.status(200).send("hecho");
 };
 
-exports.migrarOperaciones = async function(req, res, next) {
+exports.migrarOperaciones = async function (req, res, next) {
   const queue = new PQueue({ concurrency: 1 });
-  const inTransaction = fn => queue.add(() => models.sequelize.transaction(transaction => fn(transaction)));
+  const inTransaction = fn =>
+    queue.add(() => models.sequelize.transaction(transaction => fn(transaction)));
 
-  var redis = req.app.get("redis");
   var logger = req.app.get("winston");
   //const token = req.header("Authorization").split(" ")[1];
 
@@ -125,11 +132,11 @@ exports.migrarOperaciones = async function(req, res, next) {
             concepto: giro.concepto,
             moneda1_Ingre: giro.moneda1_ingreso,
             moneda1_Egre: giro.moneda1_egreso,
-            modulo: giro.modulo
+            modulo: giro.modulo,
           },
           {
-            transaction: t
-          }
+            transaction: t,
+          },
         )
         .then(op_Caja => {
           return models.habilitacion.create(
@@ -145,11 +152,11 @@ exports.migrarOperaciones = async function(req, res, next) {
               destino_nro_operacion: giro.b_nro_operacion,
               destino_oficina_codigo: giro.a_destino_codigo,
               origen_oficina_codigo: giro.a_origen_codigo,
-              habilitacion_estado: giro.a_habilitacion_estado
+              habilitacion_estado: giro.a_habilitacion_estado,
             },
             {
-              transaction: t
-            }
+              transaction: t,
+            },
           );
         });
     })
