@@ -24,53 +24,52 @@ exports.verificar = () => {
             } else {
               bcrypt.compare(req.body.contrasena, usuario.contrasena, async (err, respuesta) => {
                 if (respuesta) {
-                  redis.get(`perfil-${usuario.perfil_codigo}`, (err, perfilCodigo) => {
-                    if (perfilCodigo == null) {
-                      models.perfil
-                        .findOne({
-                          where: {
-                            perfil_codigo: usuario.perfil_codigo
-                          },
-                          include: ["ListaMenu"]
-                        })
-                        .then(perfilBD => {
-                          //GUARDAR PERFIL EN REDIS
-                          cache.setValue(
-                            "perfil-" + usuario.perfil_codigo,
-                            JSON.stringify({
-                              ListaMenu: perfilBD.ListaMenu
-                            })
-                          );
+                  let perfilCodigo = cache.getValue(`perfil-${usuario.perfil_codigo}`)
+                  if (perfilCodigo == null) {
+                    models.perfil
+                      .findOne({
+                        where: {
+                          perfil_codigo: usuario.perfil_codigo
+                        },
+                        include: ["ListaMenu"]
+                      })
+                      .then(perfilBD => {
+                        //GUARDAR PERFIL EN REDIS
+                        cache.setValue(
+                          "perfil-" + usuario.perfil_codigo,
+                          JSON.stringify({
+                            ListaMenu: perfilBD.ListaMenu
+                          })
+                        );
 
-                          const modulo = perfilBD.ListaMenu.find(item => item.tipo_modulo == "autorizaroperaciones");
-                          if (modulo) {
-                            if (modulo.lista_menu.nivel_acceso >= 5) {
-                              next();
-                            } else {
-                              logger.log("warn", { ubicacion: filename, message: "Este usuario no puede autorizar la operación" });
-                              res.status(409).send("Este usuario no puede autorizar la operación");
-                            }
+                        const modulo = perfilBD.ListaMenu.find(item => item.tipo_modulo == "autorizaroperaciones");
+                        if (modulo) {
+                          if (modulo.lista_menu.nivel_acceso >= 5) {
+                            next();
                           } else {
                             logger.log("warn", { ubicacion: filename, message: "Este usuario no puede autorizar la operación" });
                             res.status(409).send("Este usuario no puede autorizar la operación");
                           }
-                        });
-                    } else {
-                      perfilCodigo = JSON.parse(perfilCodigo);
-                      const modulo = perfilCodigo.ListaMenu.find(item => item.tipo_modulo == "autorizaroperaciones");
-                      if (modulo) {
-                        if (modulo.lista_menu.nivel_acceso >= 5) {
-                          next();
                         } else {
                           logger.log("warn", { ubicacion: filename, message: "Este usuario no puede autorizar la operación" });
                           res.status(409).send("Este usuario no puede autorizar la operación");
                         }
+                      });
+                  } else {
+                    perfilCodigo = JSON.parse(perfilCodigo);
+                    const modulo = perfilCodigo.ListaMenu.find(item => item.tipo_modulo == "autorizaroperaciones");
+                    if (modulo) {
+                      if (modulo.lista_menu.nivel_acceso >= 5) {
+                        next();
                       } else {
                         logger.log("warn", { ubicacion: filename, message: "Este usuario no puede autorizar la operación" });
                         res.status(409).send("Este usuario no puede autorizar la operación");
                       }
+                    } else {
+                      logger.log("warn", { ubicacion: filename, message: "Este usuario no puede autorizar la operación" });
+                      res.status(409).send("Este usuario no puede autorizar la operación");
                     }
-                  });
+                  }
                 } else {
                   logger.log("warn", { ubicacion: filename, message: `Contraseña incorrecta` });
                   res.status(409).send("Contraseña incorrecta");

@@ -1,3 +1,4 @@
+const cache = require("../config/cache");
 const models = require("../models");
 const utils = require("../services/utils")
 var filename = module.filename.split("/").slice(-1);
@@ -8,41 +9,39 @@ exports.verificarOfOrigen = () => {
     var redis = req.app.get("redis");
     const token = req.header("Authorization").split(" ")[1];
     utils.decodeToken(token, tokenDecodificado => {
-      redis.get(tokenDecodificado.id, (err, usuario) => {
-        usuario = JSON.parse(usuario);
-        redis.get(tokenDecodificado.idc, (err, caja) => {
-          caja = JSON.parse(caja);
-          if (caja.estado_caja !== "ABIERTO") {
-            res.status(403).send("Caja cerrada");
-          } else {
-            models.oficina
-              .findOne({
-                where: {
-                  oficina_codigo: usuario.oficina_codigo
-                },
-                include: [
-                  {
-                    attributes: ["estado_registro"],
-                    model: models.empresa,
-                    required: false
-                  }
-                ]
-              })
-              .then(oficina => {
-                if (oficina.estado_registro && oficina.empresa.estado_registro) {
-                  next();
-                } else {
-                  logger.log("warn", { ubicacion: filename, token: token, message: "Su oficina se encuentra desactivada" });
-                  res.status(401).send("Su oficina se encuentra desactivada");
-                }
-              })
-              .catch(err => {
-                logger.log("warn", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
-                res.status(401).send("Error en oficina");
-              });
-          }
-        });
-      });
+      let usuario = cache.getValue(tokenDecodificado.id)
+      usuario = JSON.parse(usuario);
+      let caja = cache.getValue(tokenDecodificado.idc)
+      caja = JSON.parse(caja);
+      if (caja.estado_caja !== "ABIERTO") {
+        res.status(403).send("Caja cerrada");
+      } else {
+        models.oficina
+          .findOne({
+            where: {
+              oficina_codigo: usuario.oficina_codigo
+            },
+            include: [
+              {
+                attributes: ["estado_registro"],
+                model: models.empresa,
+                required: false
+              }
+            ]
+          })
+          .then(oficina => {
+            if (oficina.estado_registro && oficina.empresa.estado_registro) {
+              next();
+            } else {
+              logger.log("warn", { ubicacion: filename, token: token, message: "Su oficina se encuentra desactivada" });
+              res.status(401).send("Su oficina se encuentra desactivada");
+            }
+          })
+          .catch(err => {
+            logger.log("warn", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+            res.status(401).send("Error en oficina");
+          });
+      }
     });
   };
 };

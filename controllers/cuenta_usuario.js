@@ -221,44 +221,43 @@ exports.validar = (req, res) => {
                 include: ["ListaMenu"]
               });
               //guardar usuario en redis
-              redis.get(usuario.usuario, function(err, usuarioredis) {
-                usuarioredis = JSON.parse(usuarioredis);
-                if (usuarioredis !== null && typeof usuarioredis == "object") {
-                  if (esMobil) {
-                    usuarioredis["token_mobil"] = token;
-                    socket.emit(usuario.usuario + "mobil", result.device);
-                  } else {
-                    usuarioredis["token"] = token;
-                  }
-                  cache.setValue(usuario.usuario, JSON.stringify(usuarioredis), total);
+              let usuarioredis = cache.getValue(usuario.usuario)
+              usuarioredis = JSON.parse(usuarioredis);
+              if (usuarioredis !== null && typeof usuarioredis == "object") {
+                if (esMobil) {
+                  usuarioredis["token_mobil"] = token;
+                  socket.emit(usuario.usuario + "mobil", result.device);
                 } else {
-                  if (esMobil) {
-                    cache.setValue(
-                      usuario.usuario,
-                      JSON.stringify({
-                        token_mobil: token,
-                        perfil_codigo: usuario.perfil_codigo,
-                        caja_codigo: usuario.caja_codigo,
-                        estado_registro: usuario.estado_registro,
-                        modo_conexion: usuario.modo_conexion,
-                        pc_sn: usuario.pc_sn
-                      }), total
-                    );
-                  } else {
-                    cache.setValue(
-                      usuario.usuario,
-                      JSON.stringify({
-                        token: token,
-                        perfil_codigo: usuario.perfil_codigo,
-                        caja_codigo: usuario.caja_codigo,
-                        estado_registro: usuario.estado_registro,
-                        modo_conexion: usuario.modo_conexion,
-                        pc_sn: usuario.pc_sn
-                      }), total
-                    );
-                  }
+                  usuarioredis["token"] = token;
                 }
-              });
+                cache.setValue(usuario.usuario, JSON.stringify(usuarioredis), total);
+              } else {
+                if (esMobil) {
+                  cache.setValue(
+                    usuario.usuario,
+                    JSON.stringify({
+                      token_mobil: token,
+                      perfil_codigo: usuario.perfil_codigo,
+                      caja_codigo: usuario.caja_codigo,
+                      estado_registro: usuario.estado_registro,
+                      modo_conexion: usuario.modo_conexion,
+                      pc_sn: usuario.pc_sn
+                    }), total
+                  );
+                } else {
+                  cache.setValue(
+                    usuario.usuario,
+                    JSON.stringify({
+                      token: token,
+                      perfil_codigo: usuario.perfil_codigo,
+                      caja_codigo: usuario.caja_codigo,
+                      estado_registro: usuario.estado_registro,
+                      modo_conexion: usuario.modo_conexion,
+                      pc_sn: usuario.pc_sn
+                    }), total
+                  );
+                }
+              }
 
               //guardar perfil en redis
               cache.setValue(
@@ -444,19 +443,18 @@ exports.actualizar = (req, res) => {
     .then(filasAfectadas => {
       var redis = req.app.get("redis");
       let usuario = req.params.usuario;
-      redis.get(usuario, async function(err, usuarioXeliminar) {
-        usuarioXeliminar = JSON.parse(usuarioXeliminar);
-        if (usuarioXeliminar !== null) {
-          const cajaUsuario = usuarioXeliminar.caja_codigo;
-          //ELIMINAR DATOS DEL USUARIO DE REDIS
-          await redis.del(usuario);
-          //ELIMINAR CAJA SI EXISTIERA
-          cajaUsuario ? redis.del(cajaUsuario) : null;
-          res.json(filasAfectadas);
-        } else {
-          res.json(filasAfectadas);
-        }
-      });
+      let usuarioXeliminar = cache.getValue(usuario)
+      usuarioXeliminar = JSON.parse(usuarioXeliminar);
+      if (usuarioXeliminar !== null) {
+        const cajaUsuario = usuarioXeliminar.caja_codigo;
+        //ELIMINAR DATOS DEL USUARIO DE REDIS
+        cache.delValue(usuario);
+        //ELIMINAR CAJA SI EXISTIERA
+        cajaUsuario ? cache.delValue(cajaUsuario) : null;
+        res.json(filasAfectadas);
+      } else {
+        res.json(filasAfectadas);
+      }
     })
     .catch(err => {
       logger.log("error", {
@@ -485,19 +483,18 @@ exports.desactivar = (req, res) => {
     .then(filasAfectadas => {
       var redis = req.app.get("redis");
       let usuario = req.params.usuario;
-      redis.get(usuario, async function(err, usuarioXeliminar) {
-        usuarioXeliminar = JSON.parse(usuarioXeliminar);
-        if (usuarioXeliminar !== null) {
-          const cajaUsuario = usuarioXeliminar.caja_codigo;
-          //ELIMINAR DATOS DEL USUARIO DE REDIS
-          await redis.del(usuario);
-          //ELIMINAR CAJA SI EXISTIERA
-          cajaUsuario ? redis.del(cajaUsuario) : null;
-          res.json(filasAfectadas);
-        } else {
-          res.json(filasAfectadas);
-        }
-      });
+      let usuarioXeliminar = cache.getValue(usuario)
+      usuarioXeliminar = JSON.parse(usuarioXeliminar);
+      if (usuarioXeliminar !== null) {
+        const cajaUsuario = usuarioXeliminar.caja_codigo;
+        //ELIMINAR DATOS DEL USUARIO DE REDIS
+        cache.delValue(usuario);
+        //ELIMINAR CAJA SI EXISTIERA
+        cajaUsuario ? cache.delValue(cajaUsuario) : null;
+        res.json(filasAfectadas);
+      } else {
+        res.json(filasAfectadas);
+      }
     })
     .catch(err => {
       logger.log("error", {
@@ -537,17 +534,16 @@ exports.cambiarContrasena = (req, res) => {
               )
               .then(filasAfectadas => {
                 var redis = req.app.get("redis");
-                redis.get(tokenDecodificado.id, async function(err, usuarioXeliminar) {
-                  usuarioXeliminar = JSON.parse(usuarioXeliminar);
-                  if (usuarioXeliminar !== null) {
-                    const cajaUsuario = usuarioXeliminar.caja_codigo;
-                    //ELIMINAR DATOS DEL USUARIO DE REDIS
-                    await redis.del(tokenDecodificado.id);
-                    //ELIMINAR CAJA SI EXISTIERA
-                    cajaUsuario ? redis.del(cajaUsuario) : null;
-                    res.json(filasAfectadas);
-                  }
-                });
+                let usuarioXeliminar = cache.getValue(tokenDecodificado.id)
+                usuarioXeliminar = JSON.parse(usuarioXeliminar);
+                if (usuarioXeliminar !== null) {
+                  const cajaUsuario = usuarioXeliminar.caja_codigo;
+                  //ELIMINAR DATOS DEL USUARIO DE REDIS
+                  cache.delValue(tokenDecodificado.id);
+                  //ELIMINAR CAJA SI EXISTIERA
+                  cajaUsuario ? cache.delValue(cajaUsuario) : null;
+                  res.json(filasAfectadas);
+                }
               })
               .catch(err => {
                 logger.log("error", {

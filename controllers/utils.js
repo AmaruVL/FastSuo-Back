@@ -32,18 +32,16 @@ exports.cerrarSesion = (req, res) => {
       const fin = end.setHours(23, 59, 59, 999);
       const total = Math.trunc((fin - inicio) / 1000);
       if (esMobil) {
-        redis.get(tokenDecodificado.id, function(err, usuario) {
-          usuario = JSON.parse(usuario);
-          delete usuario["token_mobil"];
-          cache.setValue(tokenDecodificado.id, JSON.stringify(usuario), total);
-          socket.emit(tokenDecodificado.id + "mobillogout", result.device);
-        });
+        let usuario = cache.getValue(tokenDecodificado.id)
+        usuario = JSON.parse(usuario);
+        delete usuario["token_mobil"];
+        cache.setValue(tokenDecodificado.id, JSON.stringify(usuario), total);
+        socket.emit(tokenDecodificado.id + "mobillogout", result.device);
       } else {
-        redis.get(tokenDecodificado.id, function(err, usuario) {
-          usuario = JSON.parse(usuario);
-          delete usuario["token"];
-          cache.setValue(tokenDecodificado.id, JSON.stringify(usuario), total);
-        });
+        let usuario = cache.getValue(tokenDecodificado.id)
+        usuario = JSON.parse(usuario);
+        delete usuario["token"];
+        cache.setValue(tokenDecodificado.id, JSON.stringify(usuario), total);
       }
       res.json({ mensaje: "exito" });
     } catch (error) {
@@ -63,11 +61,10 @@ exports.cerrarSesionMobil = (req, res) => {
     const fin = end.setHours(23, 59, 59, 999);
     const total = Math.trunc((fin - inicio) / 1000);
     try {
-      redis.get(tokenDecodificado.id, function(err, usuario) {
-        usuario = JSON.parse(usuario);
-        delete usuario["token_mobil"];
-        cache.setValue(tokenDecodificado.id,JSON.stringify(usuario), total);
-      });
+      let usuario = cache.getValue(tokenDecodificado.id)
+      usuario = JSON.parse(usuario);
+      delete usuario["token_mobil"];
+      cache.setValue(tokenDecodificado.id,JSON.stringify(usuario), total);
       res.json({ mensaje: "exito" });
     } catch (error) {
       logger.log("error", { ubicacion: filename, error });

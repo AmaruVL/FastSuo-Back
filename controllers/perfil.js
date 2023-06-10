@@ -1,5 +1,6 @@
 const {Op} = require("sequelize");
 const models = require("../models");
+const cache = require("../config/cache");
 var filename = module.filename.split("/").slice(-1);
 
 exports.crear = (req, res) => {
@@ -109,9 +110,8 @@ exports.actualizar = (req, res) => {
             .bulkCreate(nueva_lista)
             .then(respuesta => {
               var redis = req.app.get("redis");
-              redis.del("perfil-" + req.params.perfil_codigo, function(err, response) {
-                res.json(perfil);
-              });
+              cache.delValue("perfil-" + req.params.perfil_codigo)
+              res.json(perfil);
             })
             .catch(err => {
               logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
@@ -140,16 +140,15 @@ exports.desactivar = (req, res) => {
       }
     )
     .then(filasAfectadas => {
-      redis.del("perfil-" + req.params.perfil_codigo, function(err, response) {
-        if (response == 1) {
-          res.json({
-            mensaje: filasAfectadas
-          });
-        } else {
-          logger.log("warn", { ubicacion: filename, token: token, message: "Error rds" });
-          res.status(400).send("Error rds");
-        }
-      });
+      try {
+        cache.delValue("perfil-" + req.params.perfil_codigo)
+        res.json({
+          mensaje: filasAfectadas
+        });
+      } catch (error) {
+        logger.log("warn", { ubicacion: filename, token: token, message: "Error al eliminar de cache" });
+        res.status(400).send("Error al eliminar de cache");
+      }
     })
     .catch(err => {
       logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
@@ -199,7 +198,7 @@ exports.eliminar = (req, res) => {
       }
     })
     .then(respuesta => {
-      redis.del("perfil-" + req.params.perfil_codigo, function(err, response) {
+      cache.delValue("perfil-" + req.params.perfil_codigo, function(err, response) {
         if (response == 1) {
           res.json({
             mensaje: respuesta

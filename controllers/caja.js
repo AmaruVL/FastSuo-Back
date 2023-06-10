@@ -1,7 +1,8 @@
 const Sequelize = require("sequelize");
 const models = require("../models");
 var bcrypt = require("bcryptjs");
-const utils = require("../services/utils")
+const utils = require("../services/utils");
+const cache = require("../config/cache");
 var filename = module.filename.split("/").slice(-1);
 
 exports.crear = (req, res) => {
@@ -132,13 +133,13 @@ exports.cambiarContrasena = (req, res) => {
                     }
                   }
                 )
-                .then(async filasAfectadas => {
+                .then(filasAfectadas => {
                   if (usuario !== null) {
                     const cajaUsuario = usuario.caja_codigo;
                     //ELIMINAR DATOS DEL USUARIO DE REDIS
-                    await redis.del(tokenDecodificado.id);
+                    cache.delValue(tokenDecodificado.id)
                     //ELIMINAR CAJA SI EXISTIERA
-                    cajaUsuario ? redis.del(cajaUsuario) : null;
+                    cajaUsuario ? cache.delValue(cajaUsuario) : null;
                     res.json(filasAfectadas);
                   }
                 })

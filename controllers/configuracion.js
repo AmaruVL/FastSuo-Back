@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const models = require("../models");
+const cache = require("../config/cache");
 var filename = module.filename.split("/").slice(-1);
 
 exports.crear = (req, res) => {
@@ -49,7 +50,7 @@ exports.actualizar = (req, res) => {
       }
     )
     .then(filasAfectadas => {
-      redis.del(req.params.clave);
+      cache.delValue(req.params.clave)
       res.json({
         mensaje: filasAfectadas
       });
