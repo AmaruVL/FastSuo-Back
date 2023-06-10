@@ -648,31 +648,6 @@ exports.listar = (req, res) => {
     });
 };
 
-exports.tipoArqueo = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
-
-  utils.decodeToken(token, tokenDecodificado => {
-    models.cuenta_usuario
-      .findOne({
-        where: {
-          usuario: tokenDecodificado.id,
-        },
-      })
-      .then(usuario => {
-        res.json({ tipo_arqueo: usuario.tipo_arqueo });
-      })
-      .catch(err => {
-        logger.log("error", {
-          ubicacion: filename,
-          token: token,
-          message: { mensaje: err.message, tracestack: err.stack },
-        });
-        res.status(409).send(err.message);
-      });
-  });
-};
-
 exports.eliminar = (req, res) => {
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];

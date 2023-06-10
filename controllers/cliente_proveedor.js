@@ -1,6 +1,5 @@
 const Sequelize = require("sequelize");
 const models = require("../models");
-const moment = require("moment");
 const axios = require("axios");
 const Op = Sequelize.Op;
 const fs = require("fs");
@@ -20,18 +19,22 @@ exports.migrar = (req, res) => {
       nombres: persona.nombre,
       ap_paterno: persona.apPaterno,
       ap_materno: persona.apMaterno,
-      razon_social: `${persona.nombre} ${persona.apPaterno} ${persona.apMaterno}`
+      razon_social: `${persona.nombre} ${persona.apPaterno} ${persona.apMaterno}`,
     });
   });
   models.cliente_proveedor
     .bulkCreate(arrcreate, {
-      ignoreDuplicates: true
+      ignoreDuplicates: true,
     })
     .then(result => {
       res.status(200).send(result);
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(409).send("Error");
     });
 };
@@ -52,13 +55,17 @@ exports.crear = (req, res) => {
       nro_fijo: req.body.nro_fijo,
       nro_movil: req.body.nro_movil,
       correo: req.body.correo,
-      direccion: req.body.direccion
+      direccion: req.body.direccion,
     })
     .then(objeto => {
       res.json(objeto);
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(412).send(err);
     });
 };
@@ -68,7 +75,15 @@ exports.buscar = (req, res) => {
   const token = req.header("Authorization").split(" ")[1];
   models.cliente_proveedor
     .findByPk(req.params.id_administrado, {
-      attributes: ["id_cliente", "nombres", "ap_paterno", "ap_materno", "razon_social", "fecha_nacimiento", "sexo"]
+      attributes: [
+        "id_cliente",
+        "nombres",
+        "ap_paterno",
+        "ap_materno",
+        "razon_social",
+        "fecha_nacimiento",
+        "sexo",
+      ],
     })
     .then(objeto => {
       //si existe en la base de datos retornar resultado
@@ -77,7 +92,11 @@ exports.buscar = (req, res) => {
       }
       //caso contrario crear nuevo cliente y retornar resultado
       else {
-        if (req.params.id_administrado.length === 11 && (req.params.id_administrado.substring(0, 2) == "20" || req.params.id_administrado.substring(0, 2) == "10")) {
+        if (
+          req.params.id_administrado.length === 11 &&
+          (req.params.id_administrado.substring(0, 2) == "20" ||
+            req.params.id_administrado.substring(0, 2) == "10")
+        ) {
           //buscando en JNE
           utils.buscarRUC(req.params.id_administrado, respuesta => {
             if (respuesta) {
@@ -89,22 +108,30 @@ exports.buscar = (req, res) => {
                   nombres: "",
                   cliente_tipo_persona: "Juridica",
                   direccion: respuesta.domicilio_fiscal,
-                  razon_social: respuesta.razon_social
+                  razon_social: respuesta.razon_social,
                 })
                 .then(objeto => {
                   res.json(objeto);
                 })
                 .catch(err => {
-                  logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
-                  res.status(400).json({
-                    error: "Error al guardar cliente"
+                  logger.log("error", {
+                    ubicacion: filename,
+                    token: token,
+                    message: { mensaje: err.message, tracestack: err.stack },
                   });
-                  console.log(err)
+                  res.status(400).json({
+                    error: "Error al guardar cliente",
+                  });
+                  console.log(err);
                 });
             } else {
-              logger.log("warn", { ubicacion: filename, token: token, message: "RUC no encontrado" });
+              logger.log("warn", {
+                ubicacion: filename,
+                token: token,
+                message: "RUC no encontrado",
+              });
               res.status(400).json({
-                error: "RUC no encontrado"
+                error: "RUC no encontrado",
               });
             }
           });
@@ -119,15 +146,19 @@ exports.buscar = (req, res) => {
                   ap_materno: respuesta.ap_materno,
                   nombres: respuesta.nombres,
                   razon_social: `${respuesta.nombres} ${respuesta.ap_paterno} ${respuesta.ap_materno}`,
-                  fecha_nacimiento: null,// moment(respuesta.fecha_nacimiento, "DD/MM/YYYY").format("YYYY-MM-DD"),
+                  fecha_nacimiento: null, // moment(respuesta.fecha_nacimiento, "DD/MM/YYYY").format("YYYY-MM-DD"),
                   sexo: respuesta.sexo,
-                  direccion: respuesta.direccion
+                  direccion: respuesta.direccion,
                 })
                 .then(objeto => {
                   res.json(objeto);
                 });
             } else {
-              logger.log("warn", { ubicacion: filename, token: token, message: "No se encontro DNI" });
+              logger.log("warn", {
+                ubicacion: filename,
+                token: token,
+                message: "No se encontro DNI",
+              });
               res.status(409).send("No se encontro DNI");
             }
           });
@@ -135,11 +166,15 @@ exports.buscar = (req, res) => {
       }
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
-      res.json({
-        error: err.errors
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
       });
-      console.log(err)
+      res.json({
+        error: err.errors,
+      });
+      console.log(err);
     });
 };
 
@@ -152,13 +187,13 @@ exports.buscarNombre = (req, res) => {
         [Op.or]: [
           {
             razon_social: {
-              [Op.iLike]: `%${req.params.nombre}%`
-            }
+              [Op.iLike]: `%${req.params.nombre}%`,
+            },
           },
           {
-            id_cliente: req.params.nombre
-          }
-        ]
+            id_cliente: req.params.nombre,
+          },
+        ],
       },
       limit: 20,
       attributes: [
@@ -175,15 +210,29 @@ exports.buscarNombre = (req, res) => {
         "correo",
         "direccion",
         "createdAt",
-        [Sequelize.fn("CONCAT", Sequelize.col("nombres"), " ", Sequelize.col("ap_paterno"), " ", Sequelize.col("ap_materno")), "full_name"]
+        [
+          Sequelize.fn(
+            "CONCAT",
+            Sequelize.col("nombres"),
+            " ",
+            Sequelize.col("ap_paterno"),
+            " ",
+            Sequelize.col("ap_materno"),
+          ),
+          "full_name",
+        ],
       ],
-      order: [["razon_social", "ASC"]]
+      order: [["razon_social", "ASC"]],
     })
     .then(respuesta => {
       res.json(respuesta);
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(409).send(err);
     });
 };
@@ -194,8 +243,8 @@ exports.buscarRazonSocial = (req, res) => {
   models.cliente_proveedor
     .findOne({
       where: {
-        razon_social: req.params.razon_social
-      }
+        razon_social: req.params.razon_social,
+      },
     })
     .then(objeto => {
       //si existe en la base de datos retornar resultado
@@ -207,8 +256,9 @@ exports.buscarRazonSocial = (req, res) => {
         //buscando en JNE
         axios({
           method: "get",
-          baseURL: "http://aplicaciones007.jne.gob.pe/srop_publico/Consulta/Afiliado/GetNombresCiudadano",
-          url: `?DNI=${req.params.razon_social}`
+          baseURL:
+            "http://aplicaciones007.jne.gob.pe/srop_publico/Consulta/Afiliado/GetNombresCiudadano",
+          url: `?DNI=${req.params.razon_social}`,
         }).then(response => {
           let datos = response.data.split("|");
           if (datos.length > 0) {
@@ -222,30 +272,42 @@ exports.buscarRazonSocial = (req, res) => {
                   ap_paterno: datos[0],
                   ap_materno: datos[1],
                   nombres: datos[2],
-                  razon_social: req.params.razon_social
+                  razon_social: req.params.razon_social,
                 })
                 .then(objeto => {
                   res.json(objeto);
                 });
             } else {
-              logger.log("warn", { ubicacion: filename, token: token, message: "DNI no encontrado" });
+              logger.log("warn", {
+                ubicacion: filename,
+                token: token,
+                message: "DNI no encontrado",
+              });
               res.status(400).json({
-                error: "DNI no encontrado"
+                error: "DNI no encontrado",
               });
             }
           } else {
-            logger.log("warn", { ubicacion: filename, token: token, message: "DNI no encontrado" });
+            logger.log("warn", {
+              ubicacion: filename,
+              token: token,
+              message: "DNI no encontrado",
+            });
             res.status(400).json({
-              error: "DNI no encontrado"
+              error: "DNI no encontrado",
             });
           }
         });
       }
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.json({
-        error: err.errors
+        error: err.errors,
       });
     });
 };
@@ -256,7 +318,7 @@ exports.actualizar = (req, res) => {
   let fecha_nacimiento = {};
   fecha_nacimiento = req.body.fecha_nacimiento
     ? {
-        fecha_nacimiento: req.body.fecha_nacimiento.split("T")[0]
+        fecha_nacimiento: req.body.fecha_nacimiento.split("T")[0],
       }
     : {};
   models.cliente_proveedor
@@ -272,23 +334,27 @@ exports.actualizar = (req, res) => {
         nro_fijo: req.body.nro_fijo,
         nro_movil: req.body.nro_movil,
         correo: req.body.correo,
-        direccion: req.body.direccion
+        direccion: req.body.direccion,
       },
       {
         where: {
-          id_cliente: req.params.id_administrado
-        }
-      }
+          id_cliente: req.params.id_administrado,
+        },
+      },
     )
     .then(filasAfectadas => {
       res.json({
-        mensaje: filasAfectadas
+        mensaje: filasAfectadas,
       });
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.json({
-        error: err.errors
+        error: err.errors,
       });
     });
 };
@@ -314,15 +380,29 @@ exports.listar = (req, res) => {
         "correo",
         "direccion",
         "createdAt",
-        [Sequelize.fn("CONCAT", Sequelize.col("nombres"), " ", Sequelize.col("ap_paterno"), " ", Sequelize.col("ap_materno")), "full_name"]
+        [
+          Sequelize.fn(
+            "CONCAT",
+            Sequelize.col("nombres"),
+            " ",
+            Sequelize.col("ap_paterno"),
+            " ",
+            Sequelize.col("ap_materno"),
+          ),
+          "full_name",
+        ],
       ],
-      order: [["razon_social", "ASC"]]
+      order: [["razon_social", "ASC"]],
     })
     .then(lista => {
       res.json(lista);
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(412).send(err);
     });
 };
@@ -332,13 +412,26 @@ exports.listarMin = (req, res) => {
   const token = req.header("Authorization").split(" ")[1];
   models.cliente_proveedor
     .findAll({
-      attributes: ["id_cliente", "nombres", "ap_paterno", "ap_materno", "nro_movil", ["razon_social", "full_name"], "fecha_nacimiento", "sexo"]
+      attributes: [
+        "id_cliente",
+        "nombres",
+        "ap_paterno",
+        "ap_materno",
+        "nro_movil",
+        ["razon_social", "full_name"],
+        "fecha_nacimiento",
+        "sexo",
+      ],
     })
     .then(lista => {
       res.json(lista);
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(412).send(err);
     });
 };
@@ -349,16 +442,20 @@ exports.eliminar = (req, res) => {
   models.cliente_proveedor
     .destroy({
       where: {
-        id_cliente: req.params.id_administrado
-      }
+        id_cliente: req.params.id_administrado,
+      },
     })
     .then(respuesta => {
       res.json({
-        mensaje: respuesta
+        mensaje: respuesta,
       });
     })
     .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: { mensaje: err.message, tracestack: err.stack } });
+      logger.log("error", {
+        ubicacion: filename,
+        token: token,
+        message: { mensaje: err.message, tracestack: err.stack },
+      });
       res.status(409).send(err);
     });
 };
