@@ -5,9 +5,6 @@ dump.rdb
 app.json
 images
 images/*
-imagenesComprobantes
-imagenesComprobantes/*
-listaGirosProcesados.json
 logs
 logs/*
 .log

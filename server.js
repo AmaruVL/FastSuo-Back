@@ -5,15 +5,15 @@ const socketIo = require("socket.io");
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-const env = process.env.NODE_ENV || "development";
 const winston = require("./config/winston");
 const cuenta_usuario = require("./controllers/cuenta_usuario");
 const autenticacion = require("./middleware/autenticacion");
 const requestIp = require("request-ip");
 require("tls").DEFAULT_MIN_VERSION = "TLSv1";
+const env = process.env.NODE_ENV || "development";
 
-const rutas = require("./rutas");
-var app = express();
+const rutas = require("./routes");
+const app = express();
 
 // Configuracion de CORS
 app.use(cors());
@@ -36,9 +36,8 @@ app.all("*", function (req, res, next) {
 });
 
 app.set("winston", winston);
-app.use("/imagenesComprobantes", express.static(__dirname + "/imagenesComprobantes"));
-//PARSER REQUEST
 
+//PARSER REQUEST
 app.use(bodyParser.json());
 
 //=============== SOLO PARA TEST MOCHA, CHAI ================
@@ -56,8 +55,7 @@ app.get("/robots.txt", function (req, res) {
   res.send("User-agent: *\nDisallow: /");
 });
 app.post("/login", cuenta_usuario.validar);
-//app.get("/migrar", cliente.migrar);
-//app.get("/test", reportesOrdenPago.listaOrdenesPago);
+
 //===================== MIDDLEWARES =========================
 /**
  * ================== LOGIN ===================

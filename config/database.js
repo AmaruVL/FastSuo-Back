@@ -1,16 +1,20 @@
-const Sequelize = require('sequelize')
+const Sequelize = require("sequelize");
 const env = process.env.NODE_ENV || "development";
-let config = require(__dirname + "./../config/config")[env];
+const config = require("./config");
 
+const paramsDB = config[env];
 let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable]);
+
+if (env === "development" || env === "production") {
+  // Establecer conexion con BD
+  const logging = paramsDB.logging !== "false" ? console.log : false;
+  sequelize = new Sequelize(paramsDB.database, paramsDB.username, paramsDB.password, {
+    host: paramsDB.host,
+    dialect: paramsDB.dialect,
+    logging,
+  });
 } else {
-  // sequelize = new Sequelize(config.database, config.username, config.password, config); //Warning
-  sequelize = new Sequelize(config.database, config.username, config.password, {
-    host: config.host,
-    dialect: config.dialect
-  })
+  sequelize = new Sequelize(paramsDB);
 }
 
-module.exports = sequelize
+module.exports = sequelize;

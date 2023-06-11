@@ -1,17 +1,13 @@
-const Sequelize = require("sequelize");
-// import services from "../services/utils";
-const services = require("../services/utils");
-const moment = require("moment");
 const models = require("../models");
 const DeviceDetector = require("node-device-detector");
 const DEVICE_TYPE = require("node-device-detector/parser/const/device-type");
 var bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const key = require("../config/key");
-const utils = require("../services/utils");
+const utils = require("../helpers/utils");
 const cache = require("../config/cache");
-const Op = Sequelize.Op;
 var filename = module.filename.split("/").slice(-1);
+
 exports.crear = (req, res) => {
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
@@ -26,7 +22,7 @@ exports.crear = (req, res) => {
       estado_registro: req.body.estado_registro,
       empresa_codigo: req.body.empresa_codigo,
       pc_sn: req.body.pc_sn,
-      caja_codigo: req.body.caja_codigo,
+      // caja_codigo: req.body.caja_codigo,
       perfil_codigo: req.body.perfil_codigo,
       puede_editar_DT: req.body.puede_editar_DT,
       modo_conexion: req.body.modo_conexion,
@@ -339,74 +335,6 @@ exports.validar = (req, res) => {
     });
 };
 
-exports.loginCaja = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
-  services.decodeToken(token, tokenDecodificado => {
-    models.cuenta_usuario
-      .findOne({
-        where: {
-          usuario: tokenDecodificado.id,
-        },
-        include: [
-          {
-            model: models.caja,
-          },
-        ],
-      })
-      .then(usuario => {
-        if (usuario.estado_registro === false) {
-          logger.log("warn", {
-            ubicacion: filename,
-            token: token,
-            message: "Usuario deshabilitado",
-          });
-          res.status(400).send("Usuario deshabilitado");
-          return;
-        }
-
-        try {
-          if (usuario.caja.estado_registro === false) {
-            logger.log("warn", {
-              ubicacion: filename,
-              token: token,
-              message: "Caja deshabilitada",
-            });
-            res.status(400).send("Caja deshabilitada");
-            return;
-          }
-        } catch (error) {
-          logger.log("error", {
-            ubicacion: filename,
-            token: token,
-            message: { mensaje: err.message, tracestack: err.stack },
-          });
-          res.status(400).send("Usuario no tiene una caja registrada");
-          return;
-        }
-
-        if (usuario.caja) {
-          bcrypt.compare(
-            req.body.contrasena,
-            usuario.caja.caja_contrasena,
-            async (err, respuesta) => {
-              if (respuesta) {
-                res.json("Contrasena de caja correcta");
-              } else {
-                logger.log("warn", {
-                  ubicacion: filename,
-                  token: token,
-                  message: "Contraseña invalida",
-                });
-                res.status(400).send("Contraseña invalida");
-              }
-            },
-          );
-        }
-      });
-  });
-};
-
 exports.buscar = (req, res) => {
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
@@ -595,41 +523,12 @@ exports.listar = (req, res) => {
         "usuario_nombre",
         "estado_registro",
         "perfil_codigo",
-        "caja_codigo",
         "pregunta_secreta",
         "createdAt",
         "puede_editar_DT",
         "pc_sn",
         "modo_conexion",
         "tipo_arqueo",
-      ],
-      include: [
-        {
-          attributes: [
-            "caja_codigo",
-            "caja_nombre",
-            "direccion_ip_acceso",
-            "almacen_defecto",
-            "estado_registro",
-            "oficina_codigo",
-            "verificar_saldo_caja",
-            "createdAt",
-          ],
-          model: models.caja,
-          required: false,
-          include: [
-            {
-              attributes: ["oficina_nombre", "oficina_codigo"],
-              model: models.oficina,
-              required: false,
-            },
-          ],
-        },
-        {
-          attributes: ["perfil_nombre"],
-          model: models.perfil,
-          required: false,
-        },
       ],
       order: [["usuario_nombre", "ASC"]],
     })
@@ -646,31 +545,6 @@ exports.listar = (req, res) => {
         error: err.errors,
       });
     });
-};
-
-exports.tipoArqueo = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
-
-  utils.decodeToken(token, tokenDecodificado => {
-    models.cuenta_usuario
-      .findOne({
-        where: {
-          usuario: tokenDecodificado.id,
-        },
-      })
-      .then(usuario => {
-        res.json({ tipo_arqueo: usuario.tipo_arqueo });
-      })
-      .catch(err => {
-        logger.log("error", {
-          ubicacion: filename,
-          token: token,
-          message: { mensaje: err.message, tracestack: err.stack },
-        });
-        res.status(409).send(err.message);
-      });
-  });
 };
 
 exports.eliminar = (req, res) => {
