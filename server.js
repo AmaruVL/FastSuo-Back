@@ -12,7 +12,7 @@ const autenticacion = require("./middleware/autenticacion");
 const requestIp = require("request-ip");
 require("tls").DEFAULT_MIN_VERSION = "TLSv1";
 
-const rutas = require("./rutas");
+const rutas = require("./routes");
 var app = express();
 
 // Configuracion de CORS
@@ -36,9 +36,8 @@ app.all("*", function (req, res, next) {
 });
 
 app.set("winston", winston);
-app.use("/imagenesComprobantes", express.static(__dirname + "/imagenesComprobantes"));
-//PARSER REQUEST
 
+//PARSER REQUEST
 app.use(bodyParser.json());
 
 //=============== SOLO PARA TEST MOCHA, CHAI ================
@@ -56,8 +55,7 @@ app.get("/robots.txt", function (req, res) {
   res.send("User-agent: *\nDisallow: /");
 });
 app.post("/login", cuenta_usuario.validar);
-//app.get("/migrar", cliente.migrar);
-//app.get("/test", reportesOrdenPago.listaOrdenesPago);
+
 //===================== MIDDLEWARES =========================
 /**
  * ================== LOGIN ===================

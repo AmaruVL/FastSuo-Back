@@ -5,7 +5,7 @@ const DEVICE_TYPE = require("node-device-detector/parser/const/device-type");
 var bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const key = require("../config/key");
-const utils = require("../services/utils");
+const utils = require("../helpers/utils");
 const cache = require("../config/cache");
 var filename = module.filename.split("/").slice(-1);
 

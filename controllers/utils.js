@@ -1,4 +1,4 @@
-const utils = require("../services/utils");
+const utils = require("../helpers/utils");
 const DeviceDetector = require("node-device-detector");
 const DEVICE_TYPE = require("node-device-detector/parser/const/device-type");
 var filename = module.filename.split("/").slice(-1);

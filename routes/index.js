@@ -10,7 +10,7 @@ rutas.use("/configuracion", configuracion);
 rutas.use("/mantenimientos", mantenimientos);
 rutas.use(logBody());
 
-//DOCUMENTOS
+//CERRAR SESION
 rutas.post("/salir", utils.cerrarSesion);
 rutas.post("/salirmobil", utils.cerrarSesionMobil);
 
