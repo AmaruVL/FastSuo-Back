@@ -49,19 +49,6 @@ const cuenta_usuario = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
-    empresa_codigo: {
-      type: DataTypes.STRING(14),
-      references: {
-        model: "empresa",
-        key: "empresa_codigo",
-      },
-      validate: {
-        is: {
-          args: /^[a-z\d\-_\.ñÑáéíóúÁÉÍÓÚ\s]+|$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
-        },
-      },
-    },
     perfil_codigo: {
       type: DataTypes.SMALLINT,
       references: {

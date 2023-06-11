@@ -1,16 +1,13 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
+const cliente_proveedor = require("./cliente_proveedor");
 
-const brevete = sequelize.define(
-  "brevete",
+const conductor = sequelize.define(
+  "conductor",
   {
-    id: {
+    nro_brevete: {
       primaryKey: true,
-      autoIncrement: true,
       type: DataTypes.INTEGER,
-    },
-    razon_social: {
-      type: DataTypes.STRING(100),
     },
     nro_licencia_correlativo: {
       type: DataTypes.STRING(100),
@@ -34,4 +31,9 @@ const brevete = sequelize.define(
   },
 );
 
-module.exports = brevete;
+conductor.belongsTo(cliente_proveedor, {
+  foreignKey: "id_conductor",
+  target: "id_cliente",
+});
+
+module.exports = conductor;

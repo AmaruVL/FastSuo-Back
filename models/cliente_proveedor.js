@@ -1,5 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
+const conductor = require("./conductor");
+const vehiculoPropietario = require("./vehiculo_propietario");
 
 const cliente_proveedor = sequelize.define(
   "cliente_proveedor",
@@ -49,5 +51,7 @@ const cliente_proveedor = sequelize.define(
 );
 
 cliente_proveedor.removeAttribute("id");
+cliente_proveedor.hasOne(conductor);
+cliente_proveedor.hasMany(vehiculoPropietario);
 
 module.exports = cliente_proveedor;

@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
+const vehiculoPropietario = require("./vehiculo_propietario");
 
 const vehiculo = sequelize.define("vehiculo", {
   id_vehiculo: {
@@ -24,5 +25,7 @@ const vehiculo = sequelize.define("vehiculo", {
     type: DataTypes.STRING(10),
   },
 });
+
+vehiculo.hasMany(vehiculoPropietario);
 
 module.exports = vehiculo;
