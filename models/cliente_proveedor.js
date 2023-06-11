@@ -51,7 +51,7 @@ const cliente_proveedor = sequelize.define(
 );
 
 cliente_proveedor.removeAttribute("id");
-cliente_proveedor.hasOne(conductor);
-cliente_proveedor.hasMany(vehiculoPropietario);
+// cliente_proveedor.hasOne(conductor);
+// cliente_proveedor.hasMany(vehiculoPropietario);
 
 module.exports = cliente_proveedor;

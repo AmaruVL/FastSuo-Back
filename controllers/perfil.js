@@ -228,6 +228,7 @@ exports.listar = (req, res) => {
 exports.eliminar = (req, res) => {
   var logger = req.app.get("winston");
   const token = req.header("Authorization").split(" ")[1];
+  console.log({ perfil_codigo: req.params.perfil_codigo });
   models.perfil
     .destroy({
       where: {
@@ -235,15 +236,10 @@ exports.eliminar = (req, res) => {
       },
     })
     .then(respuesta => {
-      cache.delValue("perfil-" + req.params.perfil_codigo, function (err, response) {
-        if (response == 1) {
-          res.json({
-            mensaje: respuesta,
-          });
-        } else {
-          logger.log("warn", { ubicacion: filename, token: token, message: "Error rds" });
-          res.status(400).send("Error rds");
-        }
+      console.log("llego aqui");
+      cache.delValue("perfil-" + req.params.perfil_codigo);
+      res.json({
+        mensaje: respuesta,
       });
     })
     .catch(err => {

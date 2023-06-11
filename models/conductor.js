@@ -31,9 +31,9 @@ const conductor = sequelize.define(
   },
 );
 
-conductor.belongsTo(cliente_proveedor, {
-  foreignKey: "id_conductor",
-  target: "id_cliente",
-});
+// conductor.belongsTo(cliente_proveedor, {
+//   foreignKey: "id_conductor",
+//   target: "id_cliente",
+// });
 
 module.exports = conductor;
