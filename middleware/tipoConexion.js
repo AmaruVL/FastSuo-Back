@@ -152,5 +152,3 @@ exports.tipoConexion = () => {
     }
   };
 };
-
-//module.exports = tipoConexion;

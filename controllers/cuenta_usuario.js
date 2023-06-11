@@ -1,4 +1,3 @@
-const Sequelize = require("sequelize");
 const models = require("../models");
 const DeviceDetector = require("node-device-detector");
 const DEVICE_TYPE = require("node-device-detector/parser/const/device-type");
@@ -23,7 +22,7 @@ exports.crear = (req, res) => {
       estado_registro: req.body.estado_registro,
       empresa_codigo: req.body.empresa_codigo,
       pc_sn: req.body.pc_sn,
-      caja_codigo: req.body.caja_codigo,
+      // caja_codigo: req.body.caja_codigo,
       perfil_codigo: req.body.perfil_codigo,
       puede_editar_DT: req.body.puede_editar_DT,
       modo_conexion: req.body.modo_conexion,

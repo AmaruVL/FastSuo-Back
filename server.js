@@ -5,12 +5,12 @@ const socketIo = require("socket.io");
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-const env = process.env.NODE_ENV || "development";
 const winston = require("./config/winston");
 const cuenta_usuario = require("./controllers/cuenta_usuario");
 const autenticacion = require("./middleware/autenticacion");
 const requestIp = require("request-ip");
 require("tls").DEFAULT_MIN_VERSION = "TLSv1";
+const env = process.env.NODE_ENV || "development";
 
 const rutas = require("./routes");
 const app = express();

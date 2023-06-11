@@ -17,15 +17,6 @@ const tipo_conexion = sequelize.define(
       allowNull: false,
       type: DataTypes.DATEONLY,
     },
-    caja_codigo: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.STRING(7),
-      references: {
-        model: "caja",
-        key: "caja_codigo",
-      },
-    },
     fecha_hora_apertura: {
       type: DataTypes.DATE,
       validate: {

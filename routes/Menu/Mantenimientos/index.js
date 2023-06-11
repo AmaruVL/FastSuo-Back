@@ -7,8 +7,8 @@ const configuracion = require("./Configuracion");
 const menuAccesos = require("./MenuAccesos");
 
 //SUBRUTAS
-rutas.use("/usuarios", usuarios);
 rutas.use(logBody());
+rutas.use("/usuarios", usuarios);
 rutas.use("/administrados", administrados);
 rutas.use("/menuaccesos", menuAccesos);
 rutas.use("/perfiles", perfiles);

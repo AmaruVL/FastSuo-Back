@@ -15,7 +15,6 @@ rutas.post("/salir", utils.cerrarSesion);
 rutas.post("/salirmobil", utils.cerrarSesionMobil);
 
 //RUTAS DIRECTAS
-
 rutas.get("/", (req, res) => {
   res.status(200).json({
     municusco: "Plataforma V1.0",
