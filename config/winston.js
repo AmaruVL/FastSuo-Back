@@ -1,76 +1,58 @@
-const moment = require('moment');
 const winston = require("winston");
-require('winston-daily-rotate-file');
+require("winston-daily-rotate-file");
 
-const { combine, timestamp, label, prettyPrint, printf, errors } = winston.format;
+const { combine, timestamp, label, printf } = winston.format;
 
-var filename = module.filename.split("/").slice(-1);
-const appendTimestamp = winston.format((info, opts) => {
-  if (opts.tz)
-    info.timestamp = moment()
-      .tz(opts.tz)
-      .format();
-  return info;
-});
-const formato = printf(info => `${info.timestamp} [${info.level}]: ${info.label} - ${info.message} - ${info.err}`);
+const formato = printf(
+  info =>
+    `${info.timestamp} [${info.level}]: ${info.label} - ${info.message} - ${info.err}`,
+);
+
+const timezoned = () => {
+  return new Date().toLocaleString("es-ES", {
+    timeZone: "America/Lima",
+  });
+};
 
 // define the custom settings for each transport (file, console)
-var options = {
-  console: {
-    level: "debug",
-    format: combine(label({ label: "main" }), appendTimestamp({ tz: "America/Lima" }), formato),
-    filename: `./logs/debug.log`,
-    handleExceptions: true,
-    //json: true,
-    //maxsize: 5242880, // 5MB
-    maxFiles: 100,
-    colorize: true
-  },
+const defaultOptions = {
+  datePattern: "DD-MM-YYYY",
+  format: combine(label({ label: "main" }), timestamp({ format: timezoned }), formato),
+  handleExceptions: true,
+  maxFiles: 100,
+  colorize: true,
+};
+
+const options = {
+  console: { level: "debug", filename: "./logs/debug.log", ...defaultOptions },
   info: {
     level: "info",
+    filename: "./logs/info-%DATE%.log",
     meta: true,
-    datePattern: "DD-MM-YYYY",
-    format: combine(label({ label: "main" }), appendTimestamp({ tz: "America/Lima" }), formato),
-    filename: `./logs/info-%DATE%.log`,
-    handleExceptions: true,
-    //json: true,
-    //maxsize: 5242880, // 5MB
-    maxFiles: 100,
-    colorize: true
+    ...defaultOptions,
   },
   warning: {
     level: "warn",
-    datePattern: "DD-MM-YYYY",
-    format: combine(label({ label: "main" }), appendTimestamp({ tz: "America/Lima" }), formato),
-    filename: `./logs/warning-%DATE%.log`,
-    handleExceptions: true,
-    //json: true,
-    //maxsize: 5242880, // 5MB
-    maxFiles: 100,
-    colorize: true
+    filename: "./logs/warning-%DATE%.log",
+    ...defaultOptions,
   },
   error: {
     level: "error",
-    datePattern: "DD-MM-YYYY",
-    format: combine(label({ label: "main" }), appendTimestamp({ tz: "America/Lima" }), prettyPrint()),
-    filename: `./logs/error-%DATE%.log`,
-    handleExceptions: true,
-    //json: true,
+    filename: "./logs/error-%DATE%.log",
     maxsize: 5242880, // 5MB
-    maxFiles: 100,
-    colorize: true
-  }
+    ...defaultOptions,
+  },
 };
 
 // instantiate a new Winston Logger with the settings defined above
-var logger = new winston.createLogger({
+const logger = new winston.createLogger({
   transports: [
     //new winston.transports.Console(options.console),
     new winston.transports.DailyRotateFile(options.info),
     new winston.transports.DailyRotateFile(options.warning),
-    new winston.transports.DailyRotateFile(options.error)
+    new winston.transports.DailyRotateFile(options.error),
   ],
-  exitOnError: false // do not exit on handled exceptions
+  exitOnError: false, // do not exit on handled exceptions
 });
 
 module.exports = logger;

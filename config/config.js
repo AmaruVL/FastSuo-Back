@@ -1,4 +1,4 @@
-require("dotenv").config(); // this is important!
+require("dotenv").config();
 module.exports = {
   development: {
     username: process.env.DB_USERNAME,
@@ -7,15 +7,14 @@ module.exports = {
     host: process.env.DB_HOST,
     dialect: process.env.DB_DIALECT,
     logging: true,
-    //"sslfactory" : "org.postgresql.ssl.NonValidatingFactory"
-    dialectOptions: { ssl: process.env.DB_SSL }
+    dialectOptions: { ssl: process.env.DB_SSL },
   },
   test: {
     username: "root",
     password: null,
     database: "database_test",
     host: "127.0.0.1",
-    dialect: "mysql"
+    dialect: "mysql",
   },
   production: {
     username: "xademrjobxrebf",
@@ -23,7 +22,6 @@ module.exports = {
     database: "dflda6ilgmg0cn",
     host: "ec2-54-163-226-238.compute-1.amazonaws.com",
     dialect: "postgres",
-    logging: true
+    logging: true,
   },
-  quertium: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.MTMwNg.JaX1IDv-abFIDe-NpRrBiNhNyxJ7GvuFM0auaYEwle0"
 };

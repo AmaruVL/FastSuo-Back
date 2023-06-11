@@ -13,7 +13,7 @@ const requestIp = require("request-ip");
 require("tls").DEFAULT_MIN_VERSION = "TLSv1";
 
 const rutas = require("./routes");
-var app = express();
+const app = express();
 
 // Configuracion de CORS
 app.use(cors());
