@@ -1,5 +1,5 @@
 const rutas_accesos = require("express").Router();
-const accesos = require("../../../../controllers/menu_acceso");
+const accesos = require("../../../../controllers/vehiculo");
 const verificarPerfil = require("../../../../middleware/verificarPerfil");
 
 rutas_accesos.get("/listar", [verificarPerfil(1)], accesos.listar);
