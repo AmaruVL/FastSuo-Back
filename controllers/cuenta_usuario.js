@@ -201,8 +201,8 @@ exports.validar = (req, res) => {
           usuario.contrasena,
           async (err, respuesta) => {
             if (respuesta) {
-              var inicio = Date.now();
-              var end = new Date();
+              const inicio = Date.now();
+              const end = new Date();
               const fin = end.setHours(23, 59, 59, 999);
               const total = Math.trunc((fin - inicio) / 1000);
               const token = jwt.sign(
@@ -349,7 +349,7 @@ exports.buscar = (req, res) => {
 };
 
 exports.actualizar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   let obj = {};
   req.body.contrasena
@@ -405,7 +405,7 @@ exports.actualizar = (req, res) => {
 };
 
 exports.desactivar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.cuenta_usuario
     .update(
@@ -444,7 +444,7 @@ exports.desactivar = (req, res) => {
 };
 
 exports.cambiarContrasena = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
 
   utils.decodeToken(token, (tokenDecodificado) => {
@@ -507,7 +507,7 @@ exports.cambiarContrasena = (req, res) => {
 };
 
 exports.listar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.cuenta_usuario
     .findAll({
@@ -541,7 +541,7 @@ exports.listar = (req, res) => {
 };
 
 exports.eliminar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.cuenta_usuario
     .destroy({

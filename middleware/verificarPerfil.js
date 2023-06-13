@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const key = require('../config/key');
 const models = require('../models');
 const cache = require('../config/cache');
-var filename = module.filename.split('/').slice(-1);
+const filename = module.filename.split('/').slice(-1);
 
 const verificarNivelPermisos = (
   nivel,
@@ -52,7 +52,7 @@ const verificarPerfil = (nivel) => {
   return (req, res, next) => {
     try {
       const token = req.headers.authorization.split(' ')[1]; // OBTIWNE EL TOKEN
-      var logger = req.app.get('winston'); // LALLAMA AL LOGGER
+      const logger = req.app.get('winston'); // LALLAMA AL LOGGER
       jwt.verify(token, key.tokenKey, function (err, tokenDecodificado) {
         if (!tokenDecodificado || err) {
           logger.log('error', {

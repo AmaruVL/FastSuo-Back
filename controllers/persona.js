@@ -5,7 +5,7 @@ const { Op } = Sequelize;
 const filename = module.filename.split('/').slice(-1);
 
 exports.crear = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.persona
     .create({
@@ -36,7 +36,7 @@ exports.crear = (req, res) => {
 };
 
 exports.buscar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.persona
     .findByPk(req.params.id_administrado, {
@@ -69,7 +69,7 @@ exports.buscar = (req, res) => {
 };
 
 exports.buscarNombre = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.persona
     .findAll({
@@ -128,7 +128,7 @@ exports.buscarNombre = (req, res) => {
 };
 
 exports.actualizar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   let fecha_nacimiento = {};
   fecha_nacimiento = req.body.fecha_nacimiento
@@ -176,7 +176,7 @@ exports.actualizar = (req, res) => {
 
 // TODO: Agregar paginación a endpoint listar
 exports.listar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.persona
     .findAll({
@@ -223,7 +223,7 @@ exports.listar = (req, res) => {
 };
 
 exports.eliminar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.persona
     .destroy({

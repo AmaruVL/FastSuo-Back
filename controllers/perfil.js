@@ -1,10 +1,10 @@
 const { Op } = require('sequelize');
 const models = require('../models');
 const cache = require('../config/cache');
-var filename = module.filename.split('/').slice(-1);
+const filename = module.filename.split('/').slice(-1);
 
 exports.crear = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.perfil
     .create({
@@ -51,7 +51,7 @@ exports.crear = (req, res) => {
 };
 
 exports.buscar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.perfil
     .findOne({
@@ -85,7 +85,7 @@ exports.buscar = (req, res) => {
 };
 
 exports.actualizar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.perfil
     .update(
@@ -145,7 +145,7 @@ exports.actualizar = (req, res) => {
 };
 
 exports.desactivar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.perfil
     .update(
@@ -186,7 +186,7 @@ exports.desactivar = (req, res) => {
 };
 
 exports.listar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.perfil
     .findAll({
@@ -226,7 +226,7 @@ exports.listar = (req, res) => {
 };
 
 exports.eliminar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   console.log({ perfil_codigo: req.params.perfil_codigo });
   models.perfil

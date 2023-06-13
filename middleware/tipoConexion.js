@@ -4,7 +4,7 @@ const models = require('../models');
 const DeviceDetector = require('node-device-detector');
 const DEVICE_TYPE = require('node-device-detector/parser/const/device-type');
 const cache = require('../config/cache');
-var filename = module.filename.split('/').slice(-1);
+const filename = module.filename.split('/').slice(-1);
 
 // VERIFICAR SI SE ENCUENTRA LOGUEADO
 exports.tipoConexion = () => {
@@ -27,7 +27,7 @@ exports.tipoConexion = () => {
     }
 
     try {
-      var logger = req.app.get('winston');
+      const logger = req.app.get('winston');
       const auth = req.headers.authorization.split(' '); //  "bearer token nspc hashexplorador"
       const token = auth[1];
 
