@@ -1,13 +1,13 @@
-"use strict";
+
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface, Sequelize) => 
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
 
-      Example:*/
-    return queryInterface.bulkInsert(
+      Example: */
+     queryInterface.bulkInsert(
       "moneda_denominacion",
       [
         {
@@ -97,8 +97,8 @@ module.exports = {
         }
       ],
       {}
-    );
-  },
+    )
+  ,
 
   down: (queryInterface, Sequelize) => {
     /*

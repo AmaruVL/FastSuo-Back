@@ -23,7 +23,7 @@ exports.listar = (req, res) => {
       res.json(lista);
     })
     .catch((err) => {
-      logger.log('error', { ubicacion: filename, token: token, message: err.message });
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.json({
         error: err.errors,
       });
@@ -40,7 +40,7 @@ exports.buscar = (req, res) => {
       res.json(objeto);
     })
     .catch((err) => {
-      logger.log('error', { ubicacion: filename, token: token, message: err.message });
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.status(400).json({
         error: err.errors,
       });
@@ -66,7 +66,7 @@ exports.crear = (req, res) => {
       });
     })
     .catch((err) => {
-      logger.log('error', { ubicacion: filename, token: token, message: err.message });
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.status(400).json({
         error: err.errors,
       });
@@ -98,7 +98,7 @@ exports.actualizar = (req, res) => {
       });
     })
     .catch((err) => {
-      logger.log('error', { ubicacion: filename, token: token, message: err.message });
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.status(400).json({
         error: err.errors,
       });
@@ -121,7 +121,7 @@ exports.eliminar = (req, res) => {
       });
     })
     .catch((err) => {
-      logger.log('error', { ubicacion: filename, token: token, message: err.message });
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.status(400).json({
         error: err.errors,
       });

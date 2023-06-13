@@ -28,7 +28,7 @@ exports.crear = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(412).send(err);
@@ -59,7 +59,7 @@ exports.buscar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.json({
@@ -120,7 +120,7 @@ exports.buscarNombre = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(409).send(err);
@@ -165,7 +165,7 @@ exports.actualizar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.json({
@@ -215,7 +215,7 @@ exports.listar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(412).send(err);
@@ -239,7 +239,7 @@ exports.eliminar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(409).send(err);

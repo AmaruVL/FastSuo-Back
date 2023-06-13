@@ -8,11 +8,9 @@ const formato = printf(
     `${info.timestamp} [${info.level}]: ${info.label} - ${info.message} - ${info.err}`,
 );
 
-const timezoned = () => {
-  return new Date().toLocaleString('es-ES', {
+const timezoned = () => new Date().toLocaleString('es-ES', {
     timeZone: 'America/Lima',
   });
-};
 
 //  define the custom settings for each transport (file, console)
 const defaultOptions = {

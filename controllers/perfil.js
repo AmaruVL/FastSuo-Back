@@ -1,6 +1,7 @@
 const { Op } = require('sequelize');
 const models = require('../models');
 const cache = require('../config/cache');
+
 const filename = module.filename.split('/').slice(-1);
 
 exports.crear = (req, res) => {
@@ -16,12 +17,12 @@ exports.crear = (req, res) => {
     })
     .then((perfil) => {
       const lista_menu = req.body.lista_menus;
-      let nueva_lista = [];
+      const nueva_lista = [];
       lista_menu.forEach(({ menu_codigo, nivel_acceso }) => {
         nueva_lista.push({
           perfil_codigo: req.body.perfil_codigo,
-          menu_codigo: menu_codigo,
-          nivel_acceso: nivel_acceso,
+          menu_codigo,
+          nivel_acceso,
         });
       });
       models.lista_menu
@@ -34,7 +35,7 @@ exports.crear = (req, res) => {
         .catch((err) => {
           logger.log('error', {
             ubicacion: filename,
-            token: token,
+            token,
             message: { mensaje: err.message, tracestack: err.stack },
           });
           res.status(400).send(err);
@@ -43,7 +44,7 @@ exports.crear = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(400).send(err);
@@ -77,7 +78,7 @@ exports.buscar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(404).json(err);
@@ -109,25 +110,25 @@ exports.actualizar = (req, res) => {
         })
         .then((respuesta) => {
           const lista_menu = req.body.lista_menus;
-          let nueva_lista = [];
+          const nueva_lista = [];
           lista_menu.forEach(({ menu_codigo, nivel_acceso }) => {
             nueva_lista.push({
               perfil_codigo: req.params.perfil_codigo,
-              menu_codigo: menu_codigo,
-              nivel_acceso: nivel_acceso,
+              menu_codigo,
+              nivel_acceso,
             });
           });
 
           models.lista_menu
             .bulkCreate(nueva_lista)
             .then((respuesta) => {
-              cache.delValue('perfil-' + req.params.perfil_codigo);
+              cache.delValue(`perfil-${  req.params.perfil_codigo}`);
               res.json(perfil);
             })
             .catch((err) => {
               logger.log('error', {
                 ubicacion: filename,
-                token: token,
+                token,
                 message: { mensaje: err.message, tracestack: err.stack },
               });
               res.status(400).send(err);
@@ -137,7 +138,7 @@ exports.actualizar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(400).send(err);
@@ -160,14 +161,14 @@ exports.desactivar = (req, res) => {
     )
     .then((filasAfectadas) => {
       try {
-        cache.delValue('perfil-' + req.params.perfil_codigo);
+        cache.delValue(`perfil-${  req.params.perfil_codigo}`);
         res.json({
           mensaje: filasAfectadas,
         });
       } catch (error) {
         logger.log('warn', {
           ubicacion: filename,
-          token: token,
+          token,
           message: 'Error al eliminar de cache',
         });
         res.status(400).send('Error al eliminar de cache');
@@ -176,7 +177,7 @@ exports.desactivar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(400).json({
@@ -216,7 +217,7 @@ exports.listar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(400).json({
@@ -237,7 +238,7 @@ exports.eliminar = (req, res) => {
     })
     .then((respuesta) => {
       console.log('llego aqui');
-      cache.delValue('perfil-' + req.params.perfil_codigo);
+      cache.delValue(`perfil-${  req.params.perfil_codigo}`);
       res.json({
         mensaje: respuesta,
       });
@@ -245,7 +246,7 @@ exports.eliminar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(400).json({

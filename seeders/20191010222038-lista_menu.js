@@ -1,6 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert(
+  up: (queryInterface, Sequelize) => queryInterface.bulkInsert(
       'lista_menu',
       [
         {
@@ -12,10 +11,7 @@ module.exports = {
         },
       ],
       {},
-    );
-  },
+    ),
 
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('lista_menu', null, {});
-  },
+  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('lista_menu', null, {}),
 };

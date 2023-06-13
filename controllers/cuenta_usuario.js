@@ -132,7 +132,7 @@ exports.validar = (req, res) => {
                   },
                 },
               );
-              usuario['pc_sn'] = token[0];
+              usuario.pc_sn = token[0];
             }
           } else if (token[0] === 'nt' || usuario.pc_sn === token[0]) {
             console.log('logueado');
@@ -159,7 +159,7 @@ exports.validar = (req, res) => {
                   },
                 },
               );
-              usuario['pc_sn'] = token[1];
+              usuario.pc_sn = token[1];
             } else {
               logger.log('warn', {
                 ubicacion: filename,
@@ -225,12 +225,12 @@ exports.validar = (req, res) => {
               // guardar usuario en CACHE
               let usuarioCache = cache.getValue(usuario.usuario);
               usuarioCache = JSON.parse(usuarioCache);
-              if (usuarioCache !== null && typeof usuarioCache == 'object') {
+              if (usuarioCache !== null && typeof usuarioCache === 'object') {
                 if (esMobil) {
-                  usuarioCache['token_mobil'] = token;
-                  socket.emit(usuario.usuario + 'mobil', result.device);
+                  usuarioCache.token_mobil = token;
+                  socket.emit(`${usuario.usuario  }mobil`, result.device);
                 } else {
-                  usuarioCache['token'] = token;
+                  usuarioCache.token = token;
                 }
                 cache.setValue(usuario.usuario, JSON.stringify(usuarioCache), total);
               } else if (esMobil) {
@@ -270,7 +270,7 @@ exports.validar = (req, res) => {
               );
 
               res.json({
-                token: token,
+                token,
                 _p: perfil.ListaMenu,
               });
             } else {
@@ -298,7 +298,7 @@ exports.validar = (req, res) => {
                   },
                 );
               } else {
-                let total = 3 - parseInt(val);
+                const total = 3 - parseInt(val);
                 logger.log('warn', {
                   ubicacion: filename,
                   message: `Usuario ${req.body.usuario} o contraseña inválida, intentos restantes: ${total}`,
@@ -380,7 +380,7 @@ exports.actualizar = (req, res) => {
       },
     )
     .then((filasAfectadas) => {
-      let usuario = req.params.usuario;
+      const {usuario} = req.params;
       let usuarioXeliminar = cache.getValue(usuario);
       usuarioXeliminar = JSON.parse(usuarioXeliminar);
       if (usuarioXeliminar !== null) {
@@ -397,7 +397,7 @@ exports.actualizar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(412).send(err);
@@ -419,7 +419,7 @@ exports.desactivar = (req, res) => {
       },
     )
     .then((filasAfectadas) => {
-      let usuario = req.params.usuario;
+      const {usuario} = req.params;
       let usuarioXeliminar = cache.getValue(usuario);
       usuarioXeliminar = JSON.parse(usuarioXeliminar);
       if (usuarioXeliminar !== null) {
@@ -436,7 +436,7 @@ exports.desactivar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(412).send(err);
@@ -487,7 +487,7 @@ exports.cambiarContrasena = (req, res) => {
                 .catch((err) => {
                   logger.log('error', {
                     ubicacion: filename,
-                    token: token,
+                    token,
                     message: { mensaje: err.message, tracestack: err.stack },
                   });
                   res.status(412).send('No se pudo cambiar la contraseña de usuario');
@@ -495,7 +495,7 @@ exports.cambiarContrasena = (req, res) => {
             } else {
               logger.log('warn', {
                 ubicacion: filename,
-                token: token,
+                token,
                 message: 'La contraseña actual no es válida',
               });
               res.status(409).send('La contraseña actual no es válida');
@@ -531,7 +531,7 @@ exports.listar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.json({
@@ -557,7 +557,7 @@ exports.eliminar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(409).send(err);

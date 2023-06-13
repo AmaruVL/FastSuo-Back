@@ -1,8 +1,7 @@
-"use strict";
+
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert(
+  up: (queryInterface, Sequelize) => queryInterface.bulkInsert(
       "configuracion",
       [
         {
@@ -35,10 +34,7 @@ module.exports = {
         }
       ],
       {}
-    );
-  },
+    ),
 
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("configuracion", null, {});
-  }
+  down: (queryInterface, Sequelize) => queryInterface.bulkDelete("configuracion", null, {})
 };

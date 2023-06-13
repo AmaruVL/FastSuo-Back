@@ -2,10 +2,11 @@
 process.env.NODE_ENV = 'test';
 
 // Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../server');
-let should = chai.should();
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const server = require('../server');
+
+const should = chai.should();
 
 chai.use(chaiHttp);
 // Our parent block
@@ -31,7 +32,7 @@ describe('menu_acceso', () => {
    */
   describe('/POST menu_acceso', () => {
     it('it should not POST a book without pages field', (done) => {
-      let book = {
+      const book = {
         menu_codigo: 'The Lord of the Rings',
         menu_etiqueta: 'J.R.R. Tolkien',
         nivel: '7',

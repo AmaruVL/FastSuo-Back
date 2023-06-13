@@ -1,14 +1,14 @@
 const jwt = require('jsonwebtoken');
-const key = require('../config/key');
-const models = require('../models');
 const DeviceDetector = require('node-device-detector');
 const DEVICE_TYPE = require('node-device-detector/parser/const/device-type');
+const key = require('../config/key');
+const models = require('../models');
 const cache = require('../config/cache');
+
 const filename = module.filename.split('/').slice(-1);
 
 // VERIFICAR SI SE ENCUENTRA LOGUEADO
-const loggin = () => {
-  return (req, res, next) => {
+const loggin = () => (req, res, next) => {
     const detector = new DeviceDetector();
     const userAgent = req.headers['user-agent'];
     const result = detector.detect(userAgent);
@@ -30,9 +30,9 @@ const loggin = () => {
       const auth = req.headers.authorization.split(' '); //  "bearer token nspc hashexplorador"
       const token = auth[1];
 
-      jwt.verify(token, key.tokenKey, function (err, tokenDecodificado) {
+      jwt.verify(token, key.tokenKey, (err, tokenDecodificado) => {
         if (tokenDecodificado) {
-          let usuario_codigo = tokenDecodificado.id;
+          const usuario_codigo = tokenDecodificado.id;
           let usuario = cache.getValue(usuario_codigo);
           usuario = JSON.parse(usuario);
           if (usuario !== null) {
@@ -48,7 +48,7 @@ const loggin = () => {
                   } else {
                     logger.log('warn', {
                       ubicacion: filename,
-                      token: token,
+                      token,
                       message: 'Dispositivo no reconocido 01',
                     });
                     res.status(403).send('Dispositivo no reconocido 01');
@@ -56,7 +56,7 @@ const loggin = () => {
                 } else {
                   logger.log('warn', {
                     ubicacion: filename,
-                    token: token,
+                    token,
                     message: 'No puede realizar esta operación 02',
                   });
                   res.status(403).send('No puede realizar esta operación 02');
@@ -67,7 +67,7 @@ const loggin = () => {
                 } else {
                   logger.log('warn', {
                     ubicacion: filename,
-                    token: token,
+                    token,
                     message: 'No puede realizar esta operación 03',
                   });
                   res.status(403).send('No puede realizar esta operación 03');
@@ -79,7 +79,7 @@ const loggin = () => {
                   } else {
                     logger.log('warn', {
                       ubicacion: filename,
-                      token: token,
+                      token,
                       message: 'Dispositivo no reconocido 04',
                     });
                     res.status(403).send('Dispositivo no reconocido 04');
@@ -87,7 +87,7 @@ const loggin = () => {
                 } else {
                   logger.log('warn', {
                     ubicacion: filename,
-                    token: token,
+                    token,
                     message: 'No puede realizar esta operación 05',
                   });
                   res.status(403).send('No puede realizar esta operación 05');
@@ -97,7 +97,7 @@ const loggin = () => {
               } else {
                 logger.log('warn', {
                   ubicacion: filename,
-                  token: token,
+                  token,
                   message: 'No puede realizar esta operación 06',
                 });
                 res.status(403).send('No puede realizar esta operación 06');
@@ -105,7 +105,7 @@ const loggin = () => {
             } else {
               logger.log('warn', {
                 ubicacion: filename,
-                token: token,
+                token,
                 message: 'Su token cambio, vuelva a iniciar sesion',
               });
               res.status(403).send('Su token cambio, vuelva a iniciar sesion');
@@ -113,7 +113,7 @@ const loggin = () => {
           } else {
             logger.log('warn', filename, {
               ubicacion: filename,
-              token: token,
+              token,
               message: 'Token eliminado, vuelva a iniciar sesion',
             });
             res.status(403).send('Token eliminado, vuelva a iniciar sesion');
@@ -121,7 +121,7 @@ const loggin = () => {
         } else if (err) {
           logger.log('warn', filename, {
             ubicacion: filename,
-            token: token,
+            token,
             message: 'token invalido',
           });
           res.status(403).send('token invalido');
@@ -135,6 +135,5 @@ const loggin = () => {
       res.status(403).send('falta token');
     }
   };
-};
 
 module.exports = loggin;

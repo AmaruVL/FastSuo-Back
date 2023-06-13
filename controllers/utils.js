@@ -1,6 +1,7 @@
-const utils = require('../helpers/utils');
 const DeviceDetector = require('node-device-detector');
 const DEVICE_TYPE = require('node-device-detector/parser/const/device-type');
+const utils = require('../helpers/utils');
+
 const filename = module.filename.split('/').slice(-1);
 const cache = require('../config/cache');
 
@@ -34,13 +35,13 @@ exports.cerrarSesion = (req, res) => {
       if (esMobil) {
         let usuario = cache.getValue(tokenDecodificado.id);
         usuario = JSON.parse(usuario);
-        delete usuario['token_mobil'];
+        delete usuario.token_mobil;
         cache.setValue(tokenDecodificado.id, JSON.stringify(usuario), total);
-        socket.emit(tokenDecodificado.id + 'mobillogout', result.device);
+        socket.emit(`${tokenDecodificado.id  }mobillogout`, result.device);
       } else {
         let usuario = cache.getValue(tokenDecodificado.id);
         usuario = JSON.parse(usuario);
-        delete usuario['token'];
+        delete usuario.token;
         cache.setValue(tokenDecodificado.id, JSON.stringify(usuario), total);
       }
       res.json({ mensaje: 'exito' });
@@ -63,7 +64,7 @@ exports.cerrarSesionMobil = (req, res) => {
     try {
       let usuario = cache.getValue(tokenDecodificado.id);
       usuario = JSON.parse(usuario);
-      delete usuario['token_mobil'];
+      delete usuario.token_mobil;
       cache.setValue(tokenDecodificado.id, JSON.stringify(usuario), total);
       res.json({ mensaje: 'exito' });
     } catch (error) {

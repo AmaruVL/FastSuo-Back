@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const key = require('../config/key');
 const models = require('../models');
 const cache = require('../config/cache');
+
 const filename = module.filename.split('/').slice(-1);
 
 const verificarNivelPermisos = (
@@ -27,7 +28,7 @@ const verificarNivelPermisos = (
   if (!menuAcceso) {
     logger.log('warn', {
       ubicacion: filename,
-      token: token,
+      token,
       message: 'Usted no tiene acceso a este modulo',
     });
     response.status(401).send('Usted no tiene acceso a este modulo');
@@ -38,7 +39,7 @@ const verificarNivelPermisos = (
   if (nivel > nivelAccesoPerfil) {
     logger.log('warn', {
       ubicacion: filename,
-      token: token,
+      token,
       message: 'Usted no tiene acceso a este modulo',
     });
     response.status(401).send('Usted no tiene acceso a este modulo');
@@ -48,25 +49,24 @@ const verificarNivelPermisos = (
 };
 
 // VERIFICAR SI EL PERFIL PUEDE ACCEDER A UN MODULO
-const verificarPerfil = (nivel) => {
-  return (req, res, next) => {
+const verificarPerfil = (nivel) => (req, res, next) => {
     try {
       const token = req.headers.authorization.split(' ')[1]; // OBTIWNE EL TOKEN
       const logger = req.app.get('winston'); // LALLAMA AL LOGGER
-      jwt.verify(token, key.tokenKey, function (err, tokenDecodificado) {
+      jwt.verify(token, key.tokenKey, (err, tokenDecodificado) => {
         if (!tokenDecodificado || err) {
           logger.log('error', {
             ubicacion: filename,
-            token: token,
+            token,
             message: { mensaje: err.message, tracestack: err.stack },
           });
           res.status(409).send('token invalido');
         }
         // LLAMA AL CACHE
-        let usuario_codigo = tokenDecodificado.id;
+        const usuario_codigo = tokenDecodificado.id;
         let usuario = cache.getValue(usuario_codigo);
         usuario = JSON.parse(usuario);
-        let perfil = cache.getValue('perfil-' + usuario.perfil_codigo);
+        let perfil = cache.getValue(`perfil-${  usuario.perfil_codigo}`);
         if (perfil) {
           perfil = JSON.parse(perfil);
           verificarNivelPermisos(nivel, perfil, token, logger, req, res, next);
@@ -82,7 +82,7 @@ const verificarPerfil = (nivel) => {
             .then((perfilBD) => {
               // GUARDAR PERFIL EN CACHE
               cache.setValue(
-                'perfil-' + usuario.perfil_codigo,
+                `perfil-${  usuario.perfil_codigo}`,
                 JSON.stringify({
                   ListaMenu: perfilBD.ListaMenu,
                 }),
@@ -92,10 +92,9 @@ const verificarPerfil = (nivel) => {
         }
       });
     } catch (e) {
-      logger.log('error', { ubicacion: filename, token: token, e });
+      logger.log('error', { ubicacion: filename, token, e });
       res.status(409).send('falta token');
     }
   };
-};
 
 module.exports = verificarPerfil;
