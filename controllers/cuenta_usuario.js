@@ -42,9 +42,8 @@ exports.crear = (req, res) => {
 };
 
 exports.validar = (req, res) => {
-  var logger = req.app.get('winston');
-
-  var socket = req.app.get('socketio');
+  const logger = req.app.get('winston');
+  const socket = req.app.get('socketio');
   const token = req.header('Authorization').split(' ');
   const detector = new DeviceDetector();
   const userAgent = req.headers['user-agent'];
