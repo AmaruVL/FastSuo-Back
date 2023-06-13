@@ -1,16 +1,16 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
 const tipo_conexion = sequelize.define(
-  "tipo_conexion",
+  'tipo_conexion',
   {
     usuario: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.STRING(20),
       references: {
-        model: "cuenta_usuario",
-        key: "usuario",
+        model: 'cuenta_usuario',
+        key: 'usuario',
       },
     },
     fecha_trabajo: {
@@ -27,8 +27,8 @@ const tipo_conexion = sequelize.define(
       type: DataTypes.STRING(10),
       validate: {
         is: {
-          args: /^[a-z\d\-_\s]+$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
+          args: /^[a-z\d\-_\s]+$/i, // valida texto alfanumerico con espacios
+          msg: 'Campo debe contener solo letras y numeros',
         },
       },
     },
@@ -53,12 +53,12 @@ const tipo_conexion = sequelize.define(
   },
 );
 
-tipo_conexion.removeAttribute("id");
+tipo_conexion.removeAttribute('id');
 tipo_conexion.associate = function (models) {
-  // associations can be defined here
+  //  associations can be defined here
   tipo_conexion.belongsTo(models.cuenta_usuario, {
-    foreignKey: "usuario",
-    targetKey: "usuario",
+    foreignKey: 'usuario',
+    targetKey: 'usuario',
   });
 };
 

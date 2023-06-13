@@ -1,9 +1,9 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
-const cliente_proveedor = require("./cliente_proveedor");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+const cliente_proveedor = require('./cliente_proveedor');
 
 const conductor = sequelize.define(
-  "conductor",
+  'conductor',
   {
     nro_brevete: {
       primaryKey: true,
@@ -31,9 +31,9 @@ const conductor = sequelize.define(
   },
 );
 
-// conductor.belongsTo(cliente_proveedor, {
-//   foreignKey: "id_conductor",
-//   target: "id_cliente",
-// });
+//  conductor.belongsTo(cliente_proveedor, {
+//    foreignKey: "id_conductor",
+//    target: "id_cliente",
+//  });
 
 module.exports = conductor;

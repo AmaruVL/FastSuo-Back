@@ -1,16 +1,16 @@
-const models = require("../models");
-const DeviceDetector = require("node-device-detector");
-const DEVICE_TYPE = require("node-device-detector/parser/const/device-type");
-var bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const key = require("../config/key");
-const utils = require("../helpers/utils");
-const cache = require("../config/cache");
-var filename = module.filename.split("/").slice(-1);
+const models = require('../models');
+const DeviceDetector = require('node-device-detector');
+const DEVICE_TYPE = require('node-device-detector/parser/const/device-type');
+var bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const key = require('../config/key');
+const utils = require('../helpers/utils');
+const cache = require('../config/cache');
+var filename = module.filename.split('/').slice(-1);
 
 exports.crear = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.cuenta_usuario
     .create({
       usuario: req.body.usuario,
@@ -22,17 +22,17 @@ exports.crear = (req, res) => {
       estado_registro: req.body.estado_registro,
       empresa_codigo: req.body.empresa_codigo,
       pc_sn: req.body.pc_sn,
-      // caja_codigo: req.body.caja_codigo,
+      //  caja_codigo: req.body.caja_codigo,
       perfil_codigo: req.body.perfil_codigo,
       puede_editar_DT: req.body.puede_editar_DT,
       modo_conexion: req.body.modo_conexion,
       tipo_arqueo: req.body.tipo_arqueo,
     })
-    .then(objeto => {
+    .then((objeto) => {
       res.json(objeto);
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
@@ -42,12 +42,12 @@ exports.crear = (req, res) => {
 };
 
 exports.validar = (req, res) => {
-  var logger = req.app.get("winston");
+  var logger = req.app.get('winston');
 
-  var socket = req.app.get("socketio");
-  const token = req.header("Authorization").split(" ");
+  var socket = req.app.get('socketio');
+  const token = req.header('Authorization').split(' ');
   const detector = new DeviceDetector();
-  const userAgent = req.headers["user-agent"];
+  const userAgent = req.headers['user-agent'];
   const result = detector.detect(userAgent);
   const isTabled =
     result.device && [DEVICE_TYPE.TABLET].indexOf(result.device.type) !== -1;
@@ -68,31 +68,31 @@ exports.validar = (req, res) => {
         usuario: req.body.usuario,
       },
     })
-    .then(async usuario => {
+    .then(async (usuario) => {
       if (usuario) {
         if (usuario.estado_registro === false) {
-          logger.log("warn", {
+          logger.log('warn', {
             ubicacion: filename,
-            message: "Usuario bloqueado, contacte con el administrador del sistema",
+            message: 'Usuario bloqueado, contacte con el administrador del sistema',
           });
           res
             .status(400)
-            .send("Usuario bloqueado, contacte con el administrador del sistema");
+            .send('Usuario bloqueado, contacte con el administrador del sistema');
           return;
         } else {
-          //SI EL MODO EL WEB
-          console.log("MODO CONEXION", usuario.modo_conexion);
-          console.log("NUMERO DE SERIE", usuario.pc_sn);
-          console.log("N/S", token[0]);
-          //SOLO WEB
+          // SI EL MODO EL WEB
+          console.log('MODO CONEXION', usuario.modo_conexion);
+          console.log('NUMERO DE SERIE', usuario.pc_sn);
+          console.log('N/S', token[0]);
+          // SOLO WEB
           if (usuario.modo_conexion === 1) {
             if (usuario.pc_sn && usuario.pc_sn.length > 0) {
               if (usuario.pc_sn !== token[0]) {
-                logger.log("warn", {
+                logger.log('warn', {
                   ubicacion: filename,
-                  message: "No se puede ingresar al sistema - 01",
+                  message: 'No se puede ingresar al sistema - 01',
                 });
-                res.status(400).send("No se puede ingresar al sistema - 01");
+                res.status(400).send('No se puede ingresar al sistema - 01');
                 return;
               }
             } else {
@@ -107,21 +107,21 @@ exports.validar = (req, res) => {
                     },
                   },
                 );
-                usuario["pc_sn"] = token[0];
+                usuario['pc_sn'] = token[0];
               } else {
-                logger.log("warn", {
+                logger.log('warn', {
                   ubicacion: filename,
-                  message: "No se puede ingresar al sistema - 02",
+                  message: 'No se puede ingresar al sistema - 02',
                 });
-                res.status(400).send("No se puede ingresar al sistema - 02");
+                res.status(400).send('No se puede ingresar al sistema - 02');
                 return;
               }
             }
           }
-          //WEB + WEB MOBIL
+          // WEB + WEB MOBIL
           else if (usuario.modo_conexion === 2) {
-            if (usuario.pc_sn === null || usuario.pc_sn === "") {
-              if (token[0] !== "nt" && token[0] !== null && token[0].length > 10) {
+            if (usuario.pc_sn === null || usuario.pc_sn === '') {
+              if (token[0] !== 'nt' && token[0] !== null && token[0].length > 10) {
                 await models.cuenta_usuario.update(
                   {
                     pc_sn: token[0],
@@ -132,25 +132,25 @@ exports.validar = (req, res) => {
                     },
                   },
                 );
-                usuario["pc_sn"] = token[0];
+                usuario['pc_sn'] = token[0];
               }
             } else {
-              if (token[0] === "nt" || usuario.pc_sn === token[0]) {
-                console.log("logueado");
+              if (token[0] === 'nt' || usuario.pc_sn === token[0]) {
+                console.log('logueado');
               } else {
-                logger.log("warn", {
+                logger.log('warn', {
                   ubicacion: filename,
-                  message: "No se puede ingresar al sistema - 03",
+                  message: 'No se puede ingresar al sistema - 03',
                 });
-                res.status(400).send("No se puede ingresar al sistema - 03");
+                res.status(400).send('No se puede ingresar al sistema - 03');
                 return;
               }
             }
           }
-          //APP ANDROID
+          // APP ANDROID
           else if (usuario.modo_conexion === 3) {
-            if (usuario.pc_sn === null || usuario.pc_sn === "") {
-              if (token[0] === "app") {
+            if (usuario.pc_sn === null || usuario.pc_sn === '') {
+              if (token[0] === 'app') {
                 await models.cuenta_usuario.update(
                   {
                     pc_sn: token[1],
@@ -161,42 +161,42 @@ exports.validar = (req, res) => {
                     },
                   },
                 );
-                usuario["pc_sn"] = token[1];
+                usuario['pc_sn'] = token[1];
               } else {
-                logger.log("warn", {
+                logger.log('warn', {
                   ubicacion: filename,
-                  message: "No se puede ingresar al sistema - 04",
+                  message: 'No se puede ingresar al sistema - 04',
                 });
-                res.status(400).send("No se puede ingresar al sistema - 04");
+                res.status(400).send('No se puede ingresar al sistema - 04');
                 return;
               }
             } else {
-              if (token[0] === "app") {
+              if (token[0] === 'app') {
                 if (usuario.pc_sn === token[1]) {
-                  console.log("app log");
+                  console.log('app log');
                 } else {
-                  logger.log("warn", {
+                  logger.log('warn', {
                     ubicacion: filename,
-                    message: "Dispositivo no reconocido - 05",
+                    message: 'Dispositivo no reconocido - 05',
                   });
-                  res.status(400).send("Dispositivo no reconocido - 05");
+                  res.status(400).send('Dispositivo no reconocido - 05');
                   return;
                 }
               } else {
-                logger.log("warn", {
+                logger.log('warn', {
                   ubicacion: filename,
-                  message: "No se puede ingresar al sistema - 06",
+                  message: 'No se puede ingresar al sistema - 06',
                 });
-                res.status(400).send("No se puede ingresar al sistema - 06");
+                res.status(400).send('No se puede ingresar al sistema - 06');
                 return;
               }
             }
           } else if (usuario.modo_conexion !== 4) {
-            logger.log("warn", {
+            logger.log('warn', {
               ubicacion: filename,
-              message: "No se puede ingresar al sistema - 07",
+              message: 'No se puede ingresar al sistema - 07',
             });
-            res.status(400).send("No se puede ingresar al sistema - 07");
+            res.status(400).send('No se puede ingresar al sistema - 07');
             return;
           }
 
@@ -219,22 +219,22 @@ exports.validar = (req, res) => {
                     expiresIn: total,
                   },
                 );
-                //obtener perfil de usuario
+                // obtener perfil de usuario
                 const perfil = await models.perfil.findOne({
                   where: {
                     perfil_codigo: usuario.perfil_codigo,
                   },
-                  include: ["ListaMenu"],
+                  include: ['ListaMenu'],
                 });
-                //guardar usuario en CACHE
+                // guardar usuario en CACHE
                 let usuarioCache = cache.getValue(usuario.usuario);
                 usuarioCache = JSON.parse(usuarioCache);
-                if (usuarioCache !== null && typeof usuarioCache == "object") {
+                if (usuarioCache !== null && typeof usuarioCache == 'object') {
                   if (esMobil) {
-                    usuarioCache["token_mobil"] = token;
-                    socket.emit(usuario.usuario + "mobil", result.device);
+                    usuarioCache['token_mobil'] = token;
+                    socket.emit(usuario.usuario + 'mobil', result.device);
                   } else {
-                    usuarioCache["token"] = token;
+                    usuarioCache['token'] = token;
                   }
                   cache.setValue(usuario.usuario, JSON.stringify(usuarioCache), total);
                 } else {
@@ -267,9 +267,9 @@ exports.validar = (req, res) => {
                   }
                 }
 
-                //guardar perfil en cache
+                // guardar perfil en cache
                 cache.setValue(
-                  "perfil-" + usuario.perfil_codigo,
+                  'perfil-' + usuario.perfil_codigo,
                   JSON.stringify({
                     ListaMenu: perfil.ListaMenu,
                   }),
@@ -282,17 +282,17 @@ exports.validar = (req, res) => {
               } else {
                 let val = cache.incrValue(req.body.usuario);
                 if (!val) {
-                  //si no existe val
+                  // si no existe val
                   cache.setValue(req.body.usuario, 1);
                   val = 1;
                 }
                 if (val >= 3) {
-                  //bloquear usuario
-                  logger.log("warn", {
+                  // bloquear usuario
+                  logger.log('warn', {
                     ubicacion: filename,
                     message: `Usuario ${req.body.usuario} bloqueado, contacte con su supervisor.`,
                   });
-                  res.status(400).send("Usuario bloqueado, contacte con su supervisor.");
+                  res.status(400).send('Usuario bloqueado, contacte con su supervisor.');
                   models.cuenta_usuario.update(
                     {
                       estado_registro: false,
@@ -305,7 +305,7 @@ exports.validar = (req, res) => {
                   );
                 } else {
                   let total = 3 - parseInt(val);
-                  logger.log("warn", {
+                  logger.log('warn', {
                     ubicacion: filename,
                     message: `Usuario ${req.body.usuario} o contraseña inválida, intentos restantes: ${total}`,
                   });
@@ -318,33 +318,33 @@ exports.validar = (req, res) => {
           );
         }
       } else {
-        logger.log("warn", {
+        logger.log('warn', {
           ubicacion: filename,
           message: `Usuario no existe ${req.body.usuario}`,
         });
         res.status(409).send(`Usuario no existe`);
       }
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
-      res.status(400).send("Usuario no existe");
+      res.status(400).send('Usuario no existe');
     });
 };
 
 exports.buscar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.cuenta_usuario
     .findByPk(req.params.usuario)
-    .then(objeto => {
+    .then((objeto) => {
       res.json(objeto);
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
@@ -356,8 +356,8 @@ exports.buscar = (req, res) => {
 };
 
 exports.actualizar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   let obj = {};
   req.body.contrasena
     ? (obj = {
@@ -386,23 +386,23 @@ exports.actualizar = (req, res) => {
         },
       },
     )
-    .then(filasAfectadas => {
+    .then((filasAfectadas) => {
       let usuario = req.params.usuario;
       let usuarioXeliminar = cache.getValue(usuario);
       usuarioXeliminar = JSON.parse(usuarioXeliminar);
       if (usuarioXeliminar !== null) {
         const cajaUsuario = usuarioXeliminar.caja_codigo;
-        //ELIMINAR DATOS DEL USUARIO DE CACHE
+        // ELIMINAR DATOS DEL USUARIO DE CACHE
         cache.delValue(usuario);
-        //ELIMINAR CAJA SI EXISTIERA
+        // ELIMINAR CAJA SI EXISTIERA
         cajaUsuario ? cache.delValue(cajaUsuario) : null;
         res.json(filasAfectadas);
       } else {
         res.json(filasAfectadas);
       }
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
@@ -412,8 +412,8 @@ exports.actualizar = (req, res) => {
 };
 
 exports.desactivar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.cuenta_usuario
     .update(
       {
@@ -425,23 +425,23 @@ exports.desactivar = (req, res) => {
         },
       },
     )
-    .then(filasAfectadas => {
+    .then((filasAfectadas) => {
       let usuario = req.params.usuario;
       let usuarioXeliminar = cache.getValue(usuario);
       usuarioXeliminar = JSON.parse(usuarioXeliminar);
       if (usuarioXeliminar !== null) {
         const cajaUsuario = usuarioXeliminar.caja_codigo;
-        //ELIMINAR DATOS DEL USUARIO DE CACHE
+        // ELIMINAR DATOS DEL USUARIO DE CACHE
         cache.delValue(usuario);
-        //ELIMINAR CAJA SI EXISTIERA
+        // ELIMINAR CAJA SI EXISTIERA
         cajaUsuario ? cache.delValue(cajaUsuario) : null;
         res.json(filasAfectadas);
       } else {
         res.json(filasAfectadas);
       }
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
@@ -451,17 +451,17 @@ exports.desactivar = (req, res) => {
 };
 
 exports.cambiarContrasena = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
 
-  utils.decodeToken(token, tokenDecodificado => {
+  utils.decodeToken(token, (tokenDecodificado) => {
     models.cuenta_usuario
       .findOne({
         where: {
           usuario: tokenDecodificado.id,
         },
       })
-      .then(usuario => {
+      .then((usuario) => {
         bcrypt.compare(
           req.body.contrasena_old,
           usuario.contrasena,
@@ -479,33 +479,33 @@ exports.cambiarContrasena = (req, res) => {
                     },
                   },
                 )
-                .then(filasAfectadas => {
+                .then((filasAfectadas) => {
                   let usuarioXeliminar = cache.getValue(tokenDecodificado.id);
                   usuarioXeliminar = JSON.parse(usuarioXeliminar);
                   if (usuarioXeliminar !== null) {
                     const cajaUsuario = usuarioXeliminar.caja_codigo;
-                    //ELIMINAR DATOS DEL USUARIO DE CACHE
+                    // ELIMINAR DATOS DEL USUARIO DE CACHE
                     cache.delValue(tokenDecodificado.id);
-                    //ELIMINAR CAJA SI EXISTIERA
+                    // ELIMINAR CAJA SI EXISTIERA
                     cajaUsuario ? cache.delValue(cajaUsuario) : null;
                     res.json(filasAfectadas);
                   }
                 })
-                .catch(err => {
-                  logger.log("error", {
+                .catch((err) => {
+                  logger.log('error', {
                     ubicacion: filename,
                     token: token,
                     message: { mensaje: err.message, tracestack: err.stack },
                   });
-                  res.status(412).send("No se pudo cambiar la contraseña de usuario");
+                  res.status(412).send('No se pudo cambiar la contraseña de usuario');
                 });
             } else {
-              logger.log("warn", {
+              logger.log('warn', {
                 ubicacion: filename,
                 token: token,
-                message: "La contraseña actual no es válida",
+                message: 'La contraseña actual no es válida',
               });
-              res.status(409).send("La contraseña actual no es válida");
+              res.status(409).send('La contraseña actual no es válida');
             }
           },
         );
@@ -514,29 +514,29 @@ exports.cambiarContrasena = (req, res) => {
 };
 
 exports.listar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.cuenta_usuario
     .findAll({
       attributes: [
-        "usuario",
-        "usuario_nombre",
-        "estado_registro",
-        "perfil_codigo",
-        "pregunta_secreta",
-        "createdAt",
-        "puede_editar_DT",
-        "pc_sn",
-        "modo_conexion",
-        "tipo_arqueo",
+        'usuario',
+        'usuario_nombre',
+        'estado_registro',
+        'perfil_codigo',
+        'pregunta_secreta',
+        'createdAt',
+        'puede_editar_DT',
+        'pc_sn',
+        'modo_conexion',
+        'tipo_arqueo',
       ],
-      order: [["usuario_nombre", "ASC"]],
+      order: [['usuario_nombre', 'ASC']],
     })
-    .then(lista => {
+    .then((lista) => {
       res.json(lista);
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
@@ -548,21 +548,21 @@ exports.listar = (req, res) => {
 };
 
 exports.eliminar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.cuenta_usuario
     .destroy({
       where: {
         usuario: req.params.usuario,
       },
     })
-    .then(respuesta => {
+    .then((respuesta) => {
       res.json({
         mensaje: respuesta,
       });
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },

@@ -1,8 +1,8 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
 const menu_acceso = sequelize.define(
-  "menu_acceso",
+  'menu_acceso',
   {
     menu_codigo: {
       allowNull: false,
@@ -14,8 +14,8 @@ const menu_acceso = sequelize.define(
       type: DataTypes.STRING(20),
       validate: {
         is: {
-          args: /^[a-z\d\-_\s]+$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
+          args: /^[a-z\d\-_\s]+$/i, // valida texto alfanumerico con espacios
+          msg: 'Campo debe contener solo letras y numeros',
         },
       },
     },
@@ -24,8 +24,8 @@ const menu_acceso = sequelize.define(
       type: DataTypes.STRING(20),
       validate: {
         is: {
-          args: /^[a-z\d\-_\s]+$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
+          args: /^[a-z\d\-_\s]+$/i, // valida texto alfanumerico con espacios
+          msg: 'Campo debe contener solo letras y numeros',
         },
       },
     },
@@ -34,9 +34,9 @@ const menu_acceso = sequelize.define(
       type: DataTypes.SMALLINT,
       validate: {
         isInt: {
-          //valida que sea numero entero
+          // valida que sea numero entero
           args: true,
-          msg: "Campo debe contener solo numeros",
+          msg: 'Campo debe contener solo numeros',
         },
       },
     },
@@ -44,8 +44,8 @@ const menu_acceso = sequelize.define(
       type: DataTypes.STRING(20),
       validate: {
         is: {
-          args: /^[a-z\d\-_\s]+$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
+          args: /^[a-z\d\-_\s]+$/i, // valida texto alfanumerico con espacios
+          msg: 'Campo debe contener solo letras y numeros',
         },
       },
     },
@@ -53,8 +53,8 @@ const menu_acceso = sequelize.define(
       type: DataTypes.STRING(20),
       validate: {
         is: {
-          args: /^[a-z\d\-_\s]+$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
+          args: /^[a-z\d\-_\s]+$/i, // valida texto alfanumerico con espacios
+          msg: 'Campo debe contener solo letras y numeros',
         },
       },
     },
@@ -62,8 +62,8 @@ const menu_acceso = sequelize.define(
       type: DataTypes.STRING(30),
       validate: {
         is: {
-          args: /^[a-z\d\-_./\s]+$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
+          args: /^[a-z\d\-_./\s]+$/i, // valida texto alfanumerico con espacios
+          msg: 'Campo debe contener solo letras y numeros',
         },
       },
     },
@@ -71,8 +71,8 @@ const menu_acceso = sequelize.define(
       type: DataTypes.STRING(15),
       validate: {
         is: {
-          args: /^[a-z\d\-_\s]+$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
+          args: /^[a-z\d\-_\s]+$/i, // valida texto alfanumerico con espacios
+          msg: 'Campo debe contener solo letras y numeros',
         },
       },
     },
@@ -82,12 +82,12 @@ const menu_acceso = sequelize.define(
   },
 );
 
-menu_acceso.removeAttribute("id");
+menu_acceso.removeAttribute('id');
 menu_acceso.associate = function (models) {
   menu_acceso.belongsToMany(models.perfil, {
     through: models.lista_menu,
-    foreignKey: "menu_codigo",
-    otherKey: "perfil_codigo",
+    foreignKey: 'menu_codigo',
+    otherKey: 'perfil_codigo',
   });
 };
 

@@ -4,7 +4,7 @@
 
 Si se desea ejecutar el servidor, se debe realizar los siguientes pasos:
 
-1. Primero tener instalado [Node.js](https://nodejs.org/es) >=16.10 y el gestor de paquetes [Yarn](https://yarnpkg.com/getting-started/install) >=3.0.
+1. Primero tener instalado [Node.js](https:// nodejs.org/es) >=16.10 y el gestor de paquetes [Yarn](https:// yarnpkg.com/getting-started/install) >=3.0.
 
 2. Seguido, se deberá instalar las dependecias del proyecto ejecutando `yarn install` en la terminal.
 

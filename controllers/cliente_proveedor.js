@@ -1,11 +1,11 @@
-const Sequelize = require("sequelize");
-const models = require("../models");
+const Sequelize = require('sequelize');
+const models = require('../models');
 const Op = Sequelize.Op;
-var filename = module.filename.split("/").slice(-1);
+var filename = module.filename.split('/').slice(-1);
 
 exports.crear = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.cliente_proveedor
     .create({
       id_cliente: req.body.id_cliente,
@@ -21,11 +21,11 @@ exports.crear = (req, res) => {
       correo: req.body.correo,
       direccion: req.body.direccion,
     })
-    .then(objeto => {
+    .then((objeto) => {
       res.json(objeto);
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
@@ -35,28 +35,28 @@ exports.crear = (req, res) => {
 };
 
 exports.buscar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.cliente_proveedor
     .findByPk(req.params.id_administrado, {
       attributes: [
-        "id_cliente",
-        "nombres",
-        "ap_paterno",
-        "ap_materno",
-        "razon_social",
-        "fecha_nacimiento",
-        "sexo",
+        'id_cliente',
+        'nombres',
+        'ap_paterno',
+        'ap_materno',
+        'razon_social',
+        'fecha_nacimiento',
+        'sexo',
       ],
     })
-    .then(objeto => {
+    .then((objeto) => {
       if (!objeto) {
-        res.status(404).json({ msg: "Administrado no encontrado" });
+        res.status(404).json({ msg: 'Administrado no encontrado' });
       }
       res.json(objeto);
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
@@ -68,8 +68,8 @@ exports.buscar = (req, res) => {
 };
 
 exports.buscarNombre = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.cliente_proveedor
     .findAll({
       where: {
@@ -86,38 +86,38 @@ exports.buscarNombre = (req, res) => {
       },
       limit: 20,
       attributes: [
-        "id_cliente",
-        "nombres",
-        "ap_paterno",
-        "ap_materno",
-        "razon_social",
-        "cliente_tipo_persona",
-        "sexo",
-        "fecha_nacimiento",
-        "nro_fijo",
-        "nro_movil",
-        "correo",
-        "direccion",
-        "createdAt",
+        'id_cliente',
+        'nombres',
+        'ap_paterno',
+        'ap_materno',
+        'razon_social',
+        'cliente_tipo_persona',
+        'sexo',
+        'fecha_nacimiento',
+        'nro_fijo',
+        'nro_movil',
+        'correo',
+        'direccion',
+        'createdAt',
         [
           Sequelize.fn(
-            "CONCAT",
-            Sequelize.col("nombres"),
-            " ",
-            Sequelize.col("ap_paterno"),
-            " ",
-            Sequelize.col("ap_materno"),
+            'CONCAT',
+            Sequelize.col('nombres'),
+            ' ',
+            Sequelize.col('ap_paterno'),
+            ' ',
+            Sequelize.col('ap_materno'),
           ),
-          "full_name",
+          'full_name',
         ],
       ],
-      order: [["razon_social", "ASC"]],
+      order: [['razon_social', 'ASC']],
     })
-    .then(respuesta => {
+    .then((respuesta) => {
       res.json(respuesta);
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
@@ -127,12 +127,12 @@ exports.buscarNombre = (req, res) => {
 };
 
 exports.actualizar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   let fecha_nacimiento = {};
   fecha_nacimiento = req.body.fecha_nacimiento
     ? {
-        fecha_nacimiento: req.body.fecha_nacimiento.split("T")[0],
+        fecha_nacimiento: req.body.fecha_nacimiento.split('T')[0],
       }
     : {};
   models.cliente_proveedor
@@ -156,13 +156,13 @@ exports.actualizar = (req, res) => {
         },
       },
     )
-    .then(filasAfectadas => {
+    .then((filasAfectadas) => {
       res.json({
         mensaje: filasAfectadas,
       });
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
@@ -173,46 +173,46 @@ exports.actualizar = (req, res) => {
     });
 };
 
-//TODO: Agregar paginación a endpoint listar
+// TODO: Agregar paginación a endpoint listar
 exports.listar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.cliente_proveedor
     .findAll({
       limit: 20,
       attributes: [
-        "id_cliente",
-        "nombres",
-        "ap_paterno",
-        "ap_materno",
-        "razon_social",
-        "cliente_tipo_persona",
-        "sexo",
-        "fecha_nacimiento",
-        "nro_fijo",
-        "nro_movil",
-        "correo",
-        "direccion",
-        "createdAt",
+        'id_cliente',
+        'nombres',
+        'ap_paterno',
+        'ap_materno',
+        'razon_social',
+        'cliente_tipo_persona',
+        'sexo',
+        'fecha_nacimiento',
+        'nro_fijo',
+        'nro_movil',
+        'correo',
+        'direccion',
+        'createdAt',
         [
           Sequelize.fn(
-            "CONCAT",
-            Sequelize.col("nombres"),
-            " ",
-            Sequelize.col("ap_paterno"),
-            " ",
-            Sequelize.col("ap_materno"),
+            'CONCAT',
+            Sequelize.col('nombres'),
+            ' ',
+            Sequelize.col('ap_paterno'),
+            ' ',
+            Sequelize.col('ap_materno'),
           ),
-          "full_name",
+          'full_name',
         ],
       ],
-      order: [["razon_social", "ASC"]],
+      order: [['razon_social', 'ASC']],
     })
-    .then(lista => {
+    .then((lista) => {
       res.json(lista);
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
@@ -222,21 +222,21 @@ exports.listar = (req, res) => {
 };
 
 exports.eliminar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  var logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.cliente_proveedor
     .destroy({
       where: {
         id_cliente: req.params.id_administrado,
       },
     })
-    .then(respuesta => {
+    .then((respuesta) => {
       res.json({
         mensaje: respuesta,
       });
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },

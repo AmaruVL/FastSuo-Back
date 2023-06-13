@@ -1,8 +1,8 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
 const configuracion = sequelize.define(
-  "configuracion",
+  'configuracion',
   {
     clave: {
       allowNull: false,
@@ -20,7 +20,7 @@ const configuracion = sequelize.define(
 );
 
 configuracion.associate = function (models) {
-  // associations can be defined here
+  //  associations can be defined here
 };
 
 module.exports = configuracion;

@@ -4,10 +4,10 @@
 -- This file should be generic and not depend on application roles or structures,
 -- as it's being listed here:
 --
---    https://wiki.postgresql.org/wiki/Audit_trigger_91plus    
+--    https:// wiki.postgresql.org/wiki/Audit_trigger_91plus    
 --
 -- This trigger was originally based on
---   http://wiki.postgresql.org/wiki/Audit_trigger
+--   http:// wiki.postgresql.org/wiki/Audit_trigger
 -- but has been completely rewritten.
 --
 -- Should really be converted into a relocatable EXTENSION, with control and upgrade files.
@@ -23,7 +23,7 @@ COMMENT ON SCHEMA audit IS 'Out-of-table audit/history logging tables and trigge
 -- Audited data. Lots of information is available, it's just a matter of how much
 -- you really want to record. See:
 --
---   http://www.postgresql.org/docs/9.1/static/functions-info.html
+--   http:// www.postgresql.org/docs/9.1/static/functions-info.html
 --
 -- Remember, every column you add takes up more audit table space and slows audit
 -- inserts.

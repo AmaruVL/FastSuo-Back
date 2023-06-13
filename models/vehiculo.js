@@ -1,9 +1,9 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
-const vehiculoPropietario = require("./vehiculo_propietario");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+const vehiculoPropietario = require('./vehiculo_propietario');
 
 const vehiculo = sequelize.define(
-  "vehiculo",
+  'vehiculo',
   {
     id_vehiculo: {
       primaryKey: true,
@@ -30,6 +30,6 @@ const vehiculo = sequelize.define(
   { freezeTableName: true },
 );
 
-// vehiculo.hasMany(vehiculoPropietario);
+//  vehiculo.hasMany(vehiculoPropietario);
 
 module.exports = vehiculo;

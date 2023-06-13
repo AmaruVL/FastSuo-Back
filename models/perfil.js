@@ -1,8 +1,8 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
 const perfil = sequelize.define(
-  "perfil",
+  'perfil',
   {
     perfil_codigo: {
       allowNull: false,
@@ -13,8 +13,8 @@ const perfil = sequelize.define(
       type: DataTypes.STRING(100),
       validate: {
         is: {
-          args: /^[a-z\d\-_\.ñÑáéíóúÁÉÍÓÚ\s]+|$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
+          args: /^[a-z\d\-_\.ñÑáéíóúÁÉÍÓÚ\s]+|$/i, // valida texto alfanumerico con espacios
+          msg: 'Campo debe contener solo letras y numeros',
         },
       },
     },
@@ -22,8 +22,8 @@ const perfil = sequelize.define(
       type: DataTypes.STRING(200),
       validate: {
         is: {
-          args: /^[a-z\d\-_\.ñÑáéíóúÁÉÍÓÚ\s]+|$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
+          args: /^[a-z\d\-_\.ñÑáéíóúÁÉÍÓÚ\s]+|$/i, // valida texto alfanumerico con espacios
+          msg: 'Campo debe contener solo letras y numeros',
         },
       },
     },
@@ -40,20 +40,20 @@ const perfil = sequelize.define(
   },
 );
 
-perfil.removeAttribute("id");
+perfil.removeAttribute('id');
 perfil.associate = function (models) {
   perfil.belongsToMany(models.menu_acceso, {
     through: models.lista_menu,
-    as: "ListaMenu",
-    foreignKey: "perfil_codigo",
-    otherKey: "menu_codigo",
+    as: 'ListaMenu',
+    foreignKey: 'perfil_codigo',
+    otherKey: 'menu_codigo',
   });
   perfil.hasMany(models.cuenta_usuario, {
-    foreignKey: "perfil_codigo",
-    sourceKey: "perfil_codigo",
+    foreignKey: 'perfil_codigo',
+    sourceKey: 'perfil_codigo',
   });
   perfil.hasMany(models.lista_menu, {
-    foreignKey: "perfil_codigo",
+    foreignKey: 'perfil_codigo',
   });
 };
 

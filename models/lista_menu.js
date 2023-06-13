@@ -1,16 +1,16 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
 const lista_menu = sequelize.define(
-  "lista_menu",
+  'lista_menu',
   {
     menu_codigo: {
       primaryKey: true,
       allowNull: false,
       type: DataTypes.STRING(6),
       reference: {
-        model: "menu_acceso",
-        key: "menu_codigo",
+        model: 'menu_acceso',
+        key: 'menu_codigo',
       },
     },
     perfil_codigo: {
@@ -18,8 +18,8 @@ const lista_menu = sequelize.define(
       allowNull: false,
       type: DataTypes.SMALLINT,
       reference: {
-        model: "perfil",
-        key: "perfil_codigo",
+        model: 'perfil',
+        key: 'perfil_codigo',
       },
     },
     nivel_acceso: {
@@ -27,9 +27,9 @@ const lista_menu = sequelize.define(
       type: DataTypes.SMALLINT,
       validate: {
         isInt: {
-          //valida que sea numero entero
+          // valida que sea numero entero
           args: true,
-          msg: "Campo debe contener solo numeros",
+          msg: 'Campo debe contener solo numeros',
         },
       },
     },
@@ -38,7 +38,7 @@ const lista_menu = sequelize.define(
     freezeTableName: true,
   },
 );
-lista_menu.removeAttribute("id");
+lista_menu.removeAttribute('id');
 
 lista_menu.associate = function (models) {};
 

@@ -6,6 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon env TZ='America/Lima' server.js",
+    "lint": "eslint . --ext js",
     "test": "mocha --timeout 10000"
   },
   "keywords": [],
@@ -22,7 +23,6 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "node-device-detector": "^2.0.14",
-    "nodemon": "^2.0.22",
     "path": "^0.12.7",
     "request-ip": "^3.3.0",
     "sequelize": "^6.32.0",
@@ -30,5 +30,14 @@
     "tedious": "^16.1.0",
     "winston": "^3.9.0",
     "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb-base": "latest",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.25.2",
+    "nodemon": "^2.0.22",
+    "prettier": "^2.8.8",
+    "sequelize-cli": "^6.6.1"
   }
 }

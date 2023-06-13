@@ -1,8 +1,8 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
 const cuenta_usuario = sequelize.define(
-  "cuenta_usuario",
+  'cuenta_usuario',
   {
     usuario: {
       primaryKey: true,
@@ -16,8 +16,8 @@ const cuenta_usuario = sequelize.define(
       type: DataTypes.STRING(45),
       validate: {
         is: {
-          args: /^[a-z\d\-_\.ñÑáéíóúÁÉÍÓÚ\s]+|$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
+          args: /^[a-z\d\-_\.ñÑáéíóúÁÉÍÓÚ\s]+|$/i, // valida texto alfanumerico con espacios
+          msg: 'Campo debe contener solo letras y numeros',
         },
       },
     },
@@ -25,8 +25,8 @@ const cuenta_usuario = sequelize.define(
       type: DataTypes.STRING(60),
       validate: {
         is: {
-          args: /^[a-z\d\-_\.ñÑáéíóúÁÉÍÓÚ\s]+|$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
+          args: /^[a-z\d\-_\.ñÑáéíóúÁÉÍÓÚ\s]+|$/i, // valida texto alfanumerico con espacios
+          msg: 'Campo debe contener solo letras y numeros',
         },
       },
     },
@@ -34,8 +34,8 @@ const cuenta_usuario = sequelize.define(
       type: DataTypes.STRING(60),
       validate: {
         is: {
-          args: /^[a-z\d\-_\.ñÑáéíóúÁÉÍÓÚ\s]+|$/i, //valida texto alfanumerico con espacios
-          msg: "Campo debe contener solo letras y numeros",
+          args: /^[a-z\d\-_\.ñÑáéíóúÁÉÍÓÚ\s]+|$/i, // valida texto alfanumerico con espacios
+          msg: 'Campo debe contener solo letras y numeros',
         },
       },
     },
@@ -52,14 +52,14 @@ const cuenta_usuario = sequelize.define(
     perfil_codigo: {
       type: DataTypes.SMALLINT,
       references: {
-        model: "perfil",
-        key: "perfil_codigo",
+        model: 'perfil',
+        key: 'perfil_codigo',
       },
       validate: {
         isInt: {
-          //valida que sea numero entero
+          // valida que sea numero entero
           args: true,
-          msg: "Campo debe contener solo numeros",
+          msg: 'Campo debe contener solo numeros',
         },
       },
     },
@@ -80,11 +80,11 @@ const cuenta_usuario = sequelize.define(
   },
 );
 
-cuenta_usuario.removeAttribute("id");
+cuenta_usuario.removeAttribute('id');
 cuenta_usuario.associate = function (models) {
   cuenta_usuario.belongsTo(models.perfil, {
-    foreignKey: "perfil_codigo",
-    targetKey: "perfil_codigo",
+    foreignKey: 'perfil_codigo',
+    targetKey: 'perfil_codigo',
   });
 };
 
