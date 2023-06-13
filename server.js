@@ -9,11 +9,47 @@ const winston = require("./config/winston");
 const cuenta_usuario = require("./controllers/cuenta_usuario");
 const autenticacion = require("./middleware/autenticacion");
 const requestIp = require("request-ip");
+const swaggerjsdoc = require("swagger-jsdoc");
+const swaggerui = require("swagger-ui-express");
 require("tls").DEFAULT_MIN_VERSION = "TLSv1";
-const env = process.env.NODE_ENV || "development";
 
+const env = process.env.NODE_ENV || "development";
 const rutas = require("./routes");
 const app = express();
+
+// Swagger
+const specs = swaggerjsdoc({
+  swaggerDefinition: {
+    openapi: "3.1.0",
+    info: {
+      title: "API",
+      version: "1.0.0",
+      description: "Documentación de la API",
+    },
+    components: {
+      schemas: {},
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          name: "Authorization",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          in: "header",
+        },
+      },
+    },
+    servers: [
+      {
+        url: `http://localhost:${process.env.PORT || 8000}`,
+        description: "Local server",
+      },
+    ],
+  },
+
+  apis: ["./routes/Menu/**/*.js"],
+});
+
+app.use("/api-docs", swaggerui.serve, swaggerui.setup(specs));
 
 // Configuracion de CORS
 app.use(cors());
