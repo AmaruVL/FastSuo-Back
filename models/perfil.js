@@ -1,4 +1,5 @@
 const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class perfil extends Model {
     /**
@@ -9,6 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       perfil.hasMany(models.cuenta_usuario);
+      perfil.belongsToMany(models.menu_acceso, {
+        through: models.lista_menu,
+        // foreignKey: 'menu_codigo',
+        // otherKey: 'perfil_codigo',
+      });
     }
   }
   perfil.init(

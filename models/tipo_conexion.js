@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       tipo_conexion.belongsTo(models.cuenta_usuario, {
         foreignKey: 'usuario',
-        targetKey: 'usuario',
+        // targetKey: 'usuario',
       });
     }
   }
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(10),
         validate: {
           is: {
-            args: /^[a-z\d\-_\s]+$/i, //valida texto alfanumerico con espacios
+            args: /^[a-z\d\-_\s]+$/i, // valida texto alfanumerico con espacios
             msg: 'Campo debe contener solo letras y numeros',
           },
         },

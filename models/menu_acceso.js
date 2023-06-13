@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       //  define association here
       menu_acceso.belongsToMany(models.perfil, {
         through: models.lista_menu,
-        foreignKey: 'menu_codigo',
-        otherKey: 'perfil_codigo',
+        // foreignKey: 'menu_codigo',
+        // otherKey: 'perfil_codigo',
       });
     }
   }

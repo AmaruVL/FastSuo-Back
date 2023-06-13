@@ -1,15 +1,18 @@
-const models = require('../models');
+/* eslint-disable no-console */
 const DeviceDetector = require('node-device-detector');
 const DEVICE_TYPE = require('node-device-detector/parser/const/device-type');
-var bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const models = require('../models');
 const key = require('../config/key');
 const utils = require('../helpers/utils');
 const cache = require('../config/cache');
-var filename = module.filename.split('/').slice(-1);
+require('dotenv').config();
+
+const filename = module.filename.split('/').slice(-1);
 
 exports.crear = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.cuenta_usuario
     .create({
@@ -22,7 +25,6 @@ exports.crear = (req, res) => {
       estado_registro: req.body.estado_registro,
       empresa_codigo: req.body.empresa_codigo,
       pc_sn: req.body.pc_sn,
-      //  caja_codigo: req.body.caja_codigo,
       perfil_codigo: req.body.perfil_codigo,
       puede_editar_DT: req.body.puede_editar_DT,
       modo_conexion: req.body.modo_conexion,
@@ -34,7 +36,7 @@ exports.crear = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(412).send(err);
@@ -62,11 +64,12 @@ exports.validar = (req, res) => {
   }
 
   models.cuenta_usuario
-    .findOne({
-      where: {
-        usuario: req.body.usuario,
-      },
-    })
+    .findByPk(req.body.usuario)
+    // .findOne({
+    //   where: {
+    //     usuario: req.body.usuario,
+    //   },
+    // })
     .then(async (usuario) => {
       if (usuario) {
         if (usuario.estado_registro === false) {
@@ -78,244 +81,235 @@ exports.validar = (req, res) => {
             .status(400)
             .send('Usuario bloqueado, contacte con el administrador del sistema');
           return;
-        } else {
-          // SI EL MODO EL WEB
-          console.log('MODO CONEXION', usuario.modo_conexion);
-          console.log('NUMERO DE SERIE', usuario.pc_sn);
-          console.log('N/S', token[0]);
-          // SOLO WEB
-          if (usuario.modo_conexion === 1) {
-            if (usuario.pc_sn && usuario.pc_sn.length > 0) {
-              if (usuario.pc_sn !== token[0]) {
-                logger.log('warn', {
-                  ubicacion: filename,
-                  message: 'No se puede ingresar al sistema - 01',
-                });
-                res.status(400).send('No se puede ingresar al sistema - 01');
-                return;
-              }
-            } else {
-              if (token[0]) {
-                await models.cuenta_usuario.update(
-                  {
-                    pc_sn: token[0],
-                  },
-                  {
-                    where: {
-                      usuario: req.body.usuario,
-                    },
-                  },
-                );
-                usuario['pc_sn'] = token[0];
-              } else {
-                logger.log('warn', {
-                  ubicacion: filename,
-                  message: 'No se puede ingresar al sistema - 02',
-                });
-                res.status(400).send('No se puede ingresar al sistema - 02');
-                return;
-              }
+        }
+        // SI EL MODO EL WEB
+        console.log('MODO CONEXION', usuario.modo_conexion);
+        console.log('NUMERO DE SERIE', usuario.pc_sn);
+        console.log('N/S', token[0]);
+        // SOLO WEB
+        if (usuario.modo_conexion === 1) {
+          if (usuario.pc_sn && usuario.pc_sn.length > 0) {
+            if (usuario.pc_sn !== token[0]) {
+              logger.log('warn', {
+                ubicacion: filename,
+                message: 'No se puede ingresar al sistema - 01',
+              });
+              res.status(400).send('No se puede ingresar al sistema - 01');
+              return;
             }
-          }
-          // WEB + WEB MOBIL
-          else if (usuario.modo_conexion === 2) {
-            if (usuario.pc_sn === null || usuario.pc_sn === '') {
-              if (token[0] !== 'nt' && token[0] !== null && token[0].length > 10) {
-                await models.cuenta_usuario.update(
-                  {
-                    pc_sn: token[0],
-                  },
-                  {
-                    where: {
-                      usuario: req.body.usuario,
-                    },
-                  },
-                );
-                usuario['pc_sn'] = token[0];
-              }
-            } else {
-              if (token[0] === 'nt' || usuario.pc_sn === token[0]) {
-                console.log('logueado');
-              } else {
-                logger.log('warn', {
-                  ubicacion: filename,
-                  message: 'No se puede ingresar al sistema - 03',
-                });
-                res.status(400).send('No se puede ingresar al sistema - 03');
-                return;
-              }
-            }
-          }
-          // APP ANDROID
-          else if (usuario.modo_conexion === 3) {
-            if (usuario.pc_sn === null || usuario.pc_sn === '') {
-              if (token[0] === 'app') {
-                await models.cuenta_usuario.update(
-                  {
-                    pc_sn: token[1],
-                  },
-                  {
-                    where: {
-                      usuario: req.body.usuario,
-                    },
-                  },
-                );
-                usuario['pc_sn'] = token[1];
-              } else {
-                logger.log('warn', {
-                  ubicacion: filename,
-                  message: 'No se puede ingresar al sistema - 04',
-                });
-                res.status(400).send('No se puede ingresar al sistema - 04');
-                return;
-              }
-            } else {
-              if (token[0] === 'app') {
-                if (usuario.pc_sn === token[1]) {
-                  console.log('app log');
-                } else {
-                  logger.log('warn', {
-                    ubicacion: filename,
-                    message: 'Dispositivo no reconocido - 05',
-                  });
-                  res.status(400).send('Dispositivo no reconocido - 05');
-                  return;
-                }
-              } else {
-                logger.log('warn', {
-                  ubicacion: filename,
-                  message: 'No se puede ingresar al sistema - 06',
-                });
-                res.status(400).send('No se puede ingresar al sistema - 06');
-                return;
-              }
-            }
-          } else if (usuario.modo_conexion !== 4) {
+          } else if (token[0]) {
+            await models.cuenta_usuario.update(
+              {
+                pc_sn: token[0],
+              },
+              {
+                where: {
+                  usuario: req.body.usuario,
+                },
+              },
+            );
+            usuario.pc_sn = token[0];
+          } else {
             logger.log('warn', {
               ubicacion: filename,
-              message: 'No se puede ingresar al sistema - 07',
+              message: 'No se puede ingresar al sistema - 02',
             });
-            res.status(400).send('No se puede ingresar al sistema - 07');
+            res.status(400).send('No se puede ingresar al sistema - 02');
             return;
           }
-
-          bcrypt.compare(
-            req.body.contrasena,
-            usuario.contrasena,
-            async (err, respuesta) => {
-              if (respuesta) {
-                var inicio = Date.now();
-                var end = new Date();
-                const fin = end.setHours(23, 59, 59, 999);
-                const total = Math.trunc((fin - inicio) / 1000);
-                const token = jwt.sign(
-                  {
-                    id: usuario.usuario,
-                    n: usuario.usuario_nombre,
-                  },
-                  key.tokenKey,
-                  {
-                    expiresIn: total,
-                  },
-                );
-                // obtener perfil de usuario
-                const perfil = await models.perfil.findOne({
-                  where: {
-                    perfil_codigo: usuario.perfil_codigo,
-                  },
-                  include: ['ListaMenu'],
-                });
-                // guardar usuario en CACHE
-                let usuarioCache = cache.getValue(usuario.usuario);
-                usuarioCache = JSON.parse(usuarioCache);
-                if (usuarioCache !== null && typeof usuarioCache == 'object') {
-                  if (esMobil) {
-                    usuarioCache['token_mobil'] = token;
-                    socket.emit(usuario.usuario + 'mobil', result.device);
-                  } else {
-                    usuarioCache['token'] = token;
-                  }
-                  cache.setValue(usuario.usuario, JSON.stringify(usuarioCache), total);
-                } else {
-                  if (esMobil) {
-                    cache.setValue(
-                      usuario.usuario,
-                      JSON.stringify({
-                        token_mobil: token,
-                        perfil_codigo: usuario.perfil_codigo,
-                        caja_codigo: usuario.caja_codigo,
-                        estado_registro: usuario.estado_registro,
-                        modo_conexion: usuario.modo_conexion,
-                        pc_sn: usuario.pc_sn,
-                      }),
-                      total,
-                    );
-                  } else {
-                    cache.setValue(
-                      usuario.usuario,
-                      JSON.stringify({
-                        token: token,
-                        perfil_codigo: usuario.perfil_codigo,
-                        caja_codigo: usuario.caja_codigo,
-                        estado_registro: usuario.estado_registro,
-                        modo_conexion: usuario.modo_conexion,
-                        pc_sn: usuario.pc_sn,
-                      }),
-                      total,
-                    );
-                  }
-                }
-
-                // guardar perfil en cache
-                cache.setValue(
-                  'perfil-' + usuario.perfil_codigo,
-                  JSON.stringify({
-                    ListaMenu: perfil.ListaMenu,
-                  }),
-                );
-
-                res.json({
-                  token: token,
-                  _p: perfil.ListaMenu,
-                });
-              } else {
-                let val = cache.incrValue(req.body.usuario);
-                if (!val) {
-                  // si no existe val
-                  cache.setValue(req.body.usuario, 1);
-                  val = 1;
-                }
-                if (val >= 3) {
-                  // bloquear usuario
-                  logger.log('warn', {
-                    ubicacion: filename,
-                    message: `Usuario ${req.body.usuario} bloqueado, contacte con su supervisor.`,
-                  });
-                  res.status(400).send('Usuario bloqueado, contacte con su supervisor.');
-                  models.cuenta_usuario.update(
-                    {
-                      estado_registro: false,
-                    },
-                    {
-                      where: {
-                        usuario: req.body.usuario,
-                      },
-                    },
-                  );
-                } else {
-                  let total = 3 - parseInt(val);
-                  logger.log('warn', {
-                    ubicacion: filename,
-                    message: `Usuario ${req.body.usuario} o contraseña inválida, intentos restantes: ${total}`,
-                  });
-                  res
-                    .status(400)
-                    .send(`Usuario o contraseña inválida, intentos restantes: ${total}`);
-                }
-              }
-            },
-          );
         }
+        // WEB + WEB MOBIL
+        else if (usuario.modo_conexion === 2) {
+          if (usuario.pc_sn === null || usuario.pc_sn === '') {
+            if (token[0] !== 'nt' && token[0] !== null && token[0].length > 10) {
+              await models.cuenta_usuario.update(
+                {
+                  pc_sn: token[0],
+                },
+                {
+                  where: {
+                    usuario: req.body.usuario,
+                  },
+                },
+              );
+              usuario['pc_sn'] = token[0];
+            }
+          } else if (token[0] === 'nt' || usuario.pc_sn === token[0]) {
+            console.log('logueado');
+          } else {
+            logger.log('warn', {
+              ubicacion: filename,
+              message: 'No se puede ingresar al sistema - 03',
+            });
+            res.status(400).send('No se puede ingresar al sistema - 03');
+            return;
+          }
+        }
+        // APP ANDROID
+        else if (usuario.modo_conexion === 3) {
+          if (usuario.pc_sn === null || usuario.pc_sn === '') {
+            if (token[0] === 'app') {
+              await models.cuenta_usuario.update(
+                {
+                  pc_sn: token[1],
+                },
+                {
+                  where: {
+                    usuario: req.body.usuario,
+                  },
+                },
+              );
+              usuario['pc_sn'] = token[1];
+            } else {
+              logger.log('warn', {
+                ubicacion: filename,
+                message: 'No se puede ingresar al sistema - 04',
+              });
+              res.status(400).send('No se puede ingresar al sistema - 04');
+              return;
+            }
+          } else if (token[0] === 'app') {
+            if (usuario.pc_sn === token[1]) {
+              console.log('app log');
+            } else {
+              logger.log('warn', {
+                ubicacion: filename,
+                message: 'Dispositivo no reconocido - 05',
+              });
+              res.status(400).send('Dispositivo no reconocido - 05');
+              return;
+            }
+          } else {
+            logger.log('warn', {
+              ubicacion: filename,
+              message: 'No se puede ingresar al sistema - 06',
+            });
+            res.status(400).send('No se puede ingresar al sistema - 06');
+            return;
+          }
+        } else if (usuario.modo_conexion !== 4) {
+          logger.log('warn', {
+            ubicacion: filename,
+            message: 'No se puede ingresar al sistema - 07',
+          });
+          res.status(400).send('No se puede ingresar al sistema - 07');
+          return;
+        }
+
+        bcrypt.compare(
+          req.body.contrasena,
+          usuario.contrasena,
+          async (err, respuesta) => {
+            if (respuesta) {
+              var inicio = Date.now();
+              var end = new Date();
+              const fin = end.setHours(23, 59, 59, 999);
+              const total = Math.trunc((fin - inicio) / 1000);
+              const token = jwt.sign(
+                {
+                  id: usuario.usuario,
+                  n: usuario.usuario_nombre,
+                },
+                key.tokenKey,
+                {
+                  expiresIn: total,
+                },
+              );
+              // obtener perfil de usuario
+              const perfil = await models.perfil.findOne({
+                where: {
+                  perfil_codigo: usuario.perfil_codigo,
+                },
+                include: ['ListaMenu'],
+              });
+              // guardar usuario en CACHE
+              let usuarioCache = cache.getValue(usuario.usuario);
+              usuarioCache = JSON.parse(usuarioCache);
+              if (usuarioCache !== null && typeof usuarioCache == 'object') {
+                if (esMobil) {
+                  usuarioCache['token_mobil'] = token;
+                  socket.emit(usuario.usuario + 'mobil', result.device);
+                } else {
+                  usuarioCache['token'] = token;
+                }
+                cache.setValue(usuario.usuario, JSON.stringify(usuarioCache), total);
+              } else if (esMobil) {
+                cache.setValue(
+                  usuario.usuario,
+                  JSON.stringify({
+                    token_mobil: token,
+                    perfil_codigo: usuario.perfil_codigo,
+                    caja_codigo: usuario.caja_codigo,
+                    estado_registro: usuario.estado_registro,
+                    modo_conexion: usuario.modo_conexion,
+                    pc_sn: usuario.pc_sn,
+                  }),
+                  total,
+                );
+              } else {
+                cache.setValue(
+                  usuario.usuario,
+                  JSON.stringify({
+                    token,
+                    perfil_codigo: usuario.perfil_codigo,
+                    caja_codigo: usuario.caja_codigo,
+                    estado_registro: usuario.estado_registro,
+                    modo_conexion: usuario.modo_conexion,
+                    pc_sn: usuario.pc_sn,
+                  }),
+                  total,
+                );
+              }
+
+              // guardar perfil en cache
+              cache.setValue(
+                `perfil-${usuario.perfil_codigo}`,
+                JSON.stringify({
+                  ListaMenu: perfil.ListaMenu,
+                }),
+              );
+
+              res.json({
+                token: token,
+                _p: perfil.ListaMenu,
+              });
+            } else {
+              let val = cache.incrValue(req.body.usuario);
+              if (!val) {
+                // si no existe val
+                cache.setValue(req.body.usuario, 1);
+                val = 1;
+              }
+              if (val >= 3) {
+                // bloquear usuario
+                logger.log('warn', {
+                  ubicacion: filename,
+                  message: `Usuario ${req.body.usuario} bloqueado, contacte con su supervisor.`,
+                });
+                res.status(400).send('Usuario bloqueado, contacte con su supervisor.');
+                models.cuenta_usuario.update(
+                  {
+                    estado_registro: false,
+                  },
+                  {
+                    where: {
+                      usuario: req.body.usuario,
+                    },
+                  },
+                );
+              } else {
+                let total = 3 - parseInt(val);
+                logger.log('warn', {
+                  ubicacion: filename,
+                  message: `Usuario ${req.body.usuario} o contraseña inválida, intentos restantes: ${total}`,
+                });
+                res
+                  .status(400)
+                  .send(`Usuario o contraseña inválida, intentos restantes: ${total}`);
+              }
+            }
+          },
+        );
       } else {
         logger.log('warn', {
           ubicacion: filename,
@@ -327,7 +321,7 @@ exports.validar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(400).send('Usuario no existe');
@@ -335,7 +329,7 @@ exports.validar = (req, res) => {
 };
 
 exports.buscar = (req, res) => {
-  var logger = req.app.get('winston');
+  const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.cuenta_usuario
     .findByPk(req.params.usuario)
@@ -345,7 +339,7 @@ exports.buscar = (req, res) => {
     .catch((err) => {
       logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.json({

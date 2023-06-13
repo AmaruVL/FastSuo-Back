@@ -9,8 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      cuenta_usuario.belongsTo(models.perfil, { foreignKey: 'perfil_codigo' });
       cuenta_usuario.hasMany(models.tipo_conexion);
+      cuenta_usuario.belongsTo(models.perfil, {
+        foreignKey: 'perfil_codigo',
+      });
     }
   }
   cuenta_usuario.init(
