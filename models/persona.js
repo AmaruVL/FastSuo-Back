@@ -19,17 +19,39 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING(12),
       },
-      tipo_persona: DataTypes.STRING,
-      nombres: DataTypes.STRING,
-      ap_paterno: DataTypes.STRING,
-      ap_materno: DataTypes.STRING,
-      razon_social: DataTypes.STRING,
-      sexo: DataTypes.BOOLEAN,
-      fecha_nacimiento: DataTypes.DATEONLY,
-      nro_fijo: DataTypes.STRING,
-      nro_movil: DataTypes.STRING,
-      correo: DataTypes.STRING,
-      direccion: DataTypes.STRING,
+      tipo_persona: {
+        type: DataTypes.STRING(9),
+      },
+      nombres: {
+        type: DataTypes.STRING(35),
+      },
+      ap_paterno: {
+        type: DataTypes.STRING(30),
+      },
+      ap_materno: {
+        type: DataTypes.STRING(30),
+      },
+      razon_social: {
+        type: DataTypes.STRING(100),
+      },
+      sexo: {
+        type: DataTypes.BOOLEAN,
+      },
+      fecha_nacimiento: {
+        type: DataTypes.DATEONLY,
+      },
+      nro_fijo: {
+        type: DataTypes.STRING(12),
+      },
+      nro_movil: {
+        type: DataTypes.STRING(12),
+      },
+      correo: {
+        type: DataTypes.STRING(40),
+      },
+      direccion: {
+        type: DataTypes.STRING(50),
+      },
     },
     {
       sequelize,

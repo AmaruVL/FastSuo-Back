@@ -17,7 +17,10 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.STRING(50),
       },
-      valor: DataTypes.STRING,
+      valor: {
+        allowNull: false,
+        type: DataTypes.STRING(200),
+      },
     },
     {
       sequelize,

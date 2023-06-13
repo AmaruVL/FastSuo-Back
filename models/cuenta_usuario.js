@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      cuenta_usuario.hasMany(models.tipo_conexion);
+      // cuenta_usuario.hasMany(models.tipo_conexion);
       cuenta_usuario.belongsTo(models.perfil, {
         foreignKey: 'perfil_codigo',
       });
@@ -93,5 +93,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'cuenta_usuario',
     },
   );
+  cuenta_usuario.removeAttribute('id');
   return cuenta_usuario;
 };

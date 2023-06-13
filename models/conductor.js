@@ -16,13 +16,24 @@ module.exports = (sequelize, DataTypes) => {
     {
       nro_brevete: {
         primaryKey: true,
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
       },
-      nro_licencia_correlativo: DataTypes.STRING,
-      estado: DataTypes.STRING,
-      fecha_expedicion: DataTypes.DATE,
-      fecha_revalidacion: DataTypes.DATE,
-      restricciones: DataTypes.STRING,
+      nro_licencia_correlativo: {
+        type: DataTypes.STRING(100),
+      },
+      estado: {
+        type: DataTypes.STRING(100),
+      },
+      fecha_expedicion: {
+        type: DataTypes.DATE,
+      },
+      fecha_revalidacion: {
+        type: DataTypes.DATE,
+      },
+      restricciones: {
+        allowNull: true,
+        type: DataTypes.STRING(100),
+      },
     },
     {
       sequelize,
