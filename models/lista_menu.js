@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      lista_menu.belongsTo(models.perfil, {
+        foreignKey: 'perfil_codigo',
+      });
     }
   }
   lista_menu.init(

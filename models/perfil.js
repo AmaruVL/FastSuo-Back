@@ -9,11 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      perfil.hasMany(models.cuenta_usuario);
+      perfil.hasMany(models.cuenta_usuario, { foreignKey: 'perfil_codigo' });
       perfil.belongsToMany(models.menu_acceso, {
         through: models.lista_menu,
-        // foreignKey: 'menu_codigo',
-        // otherKey: 'perfil_codigo',
+        as: 'ListaMenu',
+        foreignKey: 'perfil_codigo',
+        otherKey: 'menu_codigo',
+      });
+      perfil.hasMany(models.lista_menu, {
+        foreignKey: 'perfil_codigo',
       });
     }
   }

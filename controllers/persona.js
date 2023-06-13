@@ -1,15 +1,16 @@
 const Sequelize = require('sequelize');
 const models = require('../models');
-const Op = Sequelize.Op;
-var filename = module.filename.split('/').slice(-1);
+
+const { Op } = Sequelize;
+const filename = module.filename.split('/').slice(-1);
 
 exports.crear = (req, res) => {
   var logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
-  models.cliente_proveedor
+  models.persona
     .create({
-      id_cliente: req.body.id_cliente,
-      cliente_tipo_persona: req.body.cliente_tipo_persona,
+      id_persona: req.body.id_cliente,
+      tipo_persona: req.body.cliente_tipo_persona,
       nombres: req.body.nombres,
       ap_paterno: req.body.ap_paterno,
       ap_materno: req.body.ap_materno,
@@ -37,10 +38,10 @@ exports.crear = (req, res) => {
 exports.buscar = (req, res) => {
   var logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
-  models.cliente_proveedor
+  models.persona
     .findByPk(req.params.id_administrado, {
       attributes: [
-        'id_cliente',
+        'id_persona',
         'nombres',
         'ap_paterno',
         'ap_materno',
@@ -70,7 +71,7 @@ exports.buscar = (req, res) => {
 exports.buscarNombre = (req, res) => {
   var logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
-  models.cliente_proveedor
+  models.persona
     .findAll({
       where: {
         [Op.or]: [
@@ -80,13 +81,13 @@ exports.buscarNombre = (req, res) => {
             },
           },
           {
-            id_cliente: req.params.nombre,
+            id_persona: req.params.nombre,
           },
         ],
       },
       limit: 20,
       attributes: [
-        'id_cliente',
+        'id_persona',
         'nombres',
         'ap_paterno',
         'ap_materno',
@@ -135,10 +136,10 @@ exports.actualizar = (req, res) => {
         fecha_nacimiento: req.body.fecha_nacimiento.split('T')[0],
       }
     : {};
-  models.cliente_proveedor
+  models.persona
     .update(
       {
-        cliente_tipo_persona: req.body.cliente_tipo_persona,
+        tipo_persona: req.body.cliente_tipo_persona,
         nombres: req.body.nombres,
         ap_paterno: req.body.ap_paterno,
         ap_materno: req.body.ap_materno,
@@ -152,7 +153,7 @@ exports.actualizar = (req, res) => {
       },
       {
         where: {
-          id_cliente: req.params.id_administrado,
+          id_persona: req.params.id_administrado,
         },
       },
     )
@@ -177,11 +178,11 @@ exports.actualizar = (req, res) => {
 exports.listar = (req, res) => {
   var logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
-  models.cliente_proveedor
+  models.persona
     .findAll({
       limit: 20,
       attributes: [
-        'id_cliente',
+        'id_persona',
         'nombres',
         'ap_paterno',
         'ap_materno',
@@ -224,10 +225,10 @@ exports.listar = (req, res) => {
 exports.eliminar = (req, res) => {
   var logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
-  models.cliente_proveedor
+  models.persona
     .destroy({
       where: {
-        id_cliente: req.params.id_administrado,
+        id_persona: req.params.id_administrado,
       },
     })
     .then((respuesta) => {

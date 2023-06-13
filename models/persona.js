@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   persona.init(
     {
-      dni: {
+      id_persona: {
         primaryKey: true,
         allowNull: false,
         type: DataTypes.STRING(12),

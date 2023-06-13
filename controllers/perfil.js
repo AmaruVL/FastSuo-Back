@@ -80,7 +80,7 @@ exports.buscar = (req, res) => {
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
-      res.json(err);
+      res.status(404).json(err);
     });
 };
 
@@ -179,7 +179,7 @@ exports.desactivar = (req, res) => {
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
-      res.json({
+      res.status(400).json({
         error: err.errors,
       });
     });
@@ -219,7 +219,7 @@ exports.listar = (req, res) => {
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
-      res.json({
+      res.status(400).json({
         error: err.errors,
       });
     });
@@ -248,7 +248,7 @@ exports.eliminar = (req, res) => {
         token: token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
-      res.json({
+      res.status(400).json({
         error: err.errors,
       });
     });
