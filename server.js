@@ -6,11 +6,11 @@ const cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const requestIp = require('request-ip');
+const swaggerjsdoc = require('swagger-jsdoc');
+const swaggerui = require('swagger-ui-express');
 const winston = require('./config/winston');
 const cuenta_usuario = require('./controllers/cuenta_usuario');
 const autenticacion = require('./middleware/autenticacion');
-const swaggerjsdoc = require('swagger-jsdoc');
-const swaggerui = require('swagger-ui-express');
 require('tls').DEFAULT_MIN_VERSION = 'TLSv1';
 const rutas = require('./routes');
 
@@ -86,7 +86,7 @@ if (JSON.stringify(env) === JSON.stringify('development')) {
 }
 
 //  app.use(express.static(path.join(__dirname, "public")));
-app.get('/robots.txt', (req, res) => {
+app.get('/robots.txt', (_req, res) => {
   res.type('text/plain');
   res.send('User-agent: *\nDisallow: /');
 });
@@ -115,7 +115,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {});
 });
 
-app.use((err, req, res) => {
+app.use((err, _req, res, _next) => {
   winston.log('error', { message: { mensaje: err.message, tracestack: err.stack } });
   res.status(500).send({ Error: 'Error' });
 });
