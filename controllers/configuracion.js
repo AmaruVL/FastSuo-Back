@@ -1,23 +1,23 @@
-const Sequelize = require("sequelize");
-const models = require("../models");
-const cache = require("../config/cache");
-var filename = module.filename.split("/").slice(-1);
+const models = require('../models');
+const cache = require('../config/cache');
+
+const filename = module.filename.split('/').slice(-1);
 
 exports.crear = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.configuracion
     .create({
       clave: req.body.clave,
       valor: req.body.valor,
     })
-    .then(objeto => {
+    .then((objeto) => {
       res.json(objeto);
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(412).send(err);
@@ -25,17 +25,17 @@ exports.crear = (req, res) => {
 };
 
 exports.buscar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.configuracion
     .findByPk(req.params.clave)
-    .then(objeto => {
+    .then((objeto) => {
       res.json(objeto);
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(412).send(err);
@@ -43,8 +43,8 @@ exports.buscar = (req, res) => {
 };
 
 exports.actualizar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.configuracion
     .update(
       {
@@ -56,16 +56,16 @@ exports.actualizar = (req, res) => {
         },
       },
     )
-    .then(filasAfectadas => {
+    .then((filasAfectadas) => {
       cache.delValue(req.params.clave);
       res.json({
         mensaje: filasAfectadas,
       });
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(412).send(err);
@@ -73,17 +73,17 @@ exports.actualizar = (req, res) => {
 };
 
 exports.listar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.configuracion
     .findAll({})
-    .then(lista => {
+    .then((lista) => {
       res.json(lista);
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(412).send(err);
@@ -91,19 +91,19 @@ exports.listar = (req, res) => {
 };
 
 exports.listarConf = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.configuracion
     .findAll({
-      attributes: ["clave", "valor"],
+      attributes: ['clave', 'valor'],
     })
-    .then(lista => {
+    .then((lista) => {
       res.json(lista);
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(412).send(err);
@@ -111,23 +111,23 @@ exports.listarConf = (req, res) => {
 };
 
 exports.eliminar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.configuracion
     .destroy({
       where: {
         clave: req.params.clave,
       },
     })
-    .then(respuesta => {
+    .then((respuesta) => {
       res.json({
         mensaje: respuesta,
       });
     })
-    .catch(err => {
-      logger.log("error", {
+    .catch((err) => {
+      logger.log('error', {
         ubicacion: filename,
-        token: token,
+        token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
       res.status(409).send(err);

@@ -1,22 +1,21 @@
-const Sequalize = require("sequelize");
-const models = require("../models");
+const models = require('../models');
 
-var filename = module.filename.split("/").slice(-1);
+const filename = module.filename.split('/').slice(-1);
 
 exports.listar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
 
   models.vehiculo
     .findAll({
-      order: [["placa", "ASC"]],
-      attributes: ["id_vehiculo", "placa", "marca", "clase", "modelo", "color"],
+      order: [['placa', 'ASC']],
+      attributes: ['id_vehiculo', 'placa', 'marca', 'clase', 'modelo', 'color'],
     })
-    .then(lista => {
+    .then((lista) => {
       res.json(lista);
     })
-    .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: err.message });
+    .catch((err) => {
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.json({
         error: err.errors,
       });
@@ -24,16 +23,16 @@ exports.listar = (req, res) => {
 };
 
 exports.buscar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
 
   models.vehiculo
     .findByPk(req.params.id_vehiculo)
-    .then(objeto => {
+    .then((objeto) => {
       res.json(objeto);
     })
-    .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: err.message });
+    .catch((err) => {
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.status(400).json({
         error: err.errors,
       });
@@ -41,8 +40,8 @@ exports.buscar = (req, res) => {
 };
 
 exports.crear = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
 
   models.vehiculo
     .create({
@@ -52,13 +51,13 @@ exports.crear = (req, res) => {
       modelo: req.body.modelo,
       color: req.body.color,
     })
-    .then(objeto => {
+    .then((objeto) => {
       res.json({
         mensaje: objeto,
       });
     })
-    .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: err.message });
+    .catch((err) => {
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.status(400).json({
         error: err.errors,
       });
@@ -66,8 +65,8 @@ exports.crear = (req, res) => {
 };
 
 exports.actualizar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
 
   models.vehiculo
     .update(
@@ -84,13 +83,13 @@ exports.actualizar = (req, res) => {
         },
       },
     )
-    .then(objeto => {
+    .then(() => {
       res.json({
-        mensaje: "Actualizado",
+        mensaje: 'Actualizado',
       });
     })
-    .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: err.message });
+    .catch((err) => {
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.status(400).json({
         error: err.errors,
       });
@@ -98,8 +97,8 @@ exports.actualizar = (req, res) => {
 };
 
 exports.eliminar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
 
   models.vehiculo
     .destroy({
@@ -107,13 +106,13 @@ exports.eliminar = (req, res) => {
         id_vehiculo: req.params.id_vehiculo,
       },
     })
-    .then(objeto => {
+    .then(() => {
       res.json({
-        mensaje: "Eliminado",
+        mensaje: 'Eliminado',
       });
     })
-    .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message: err.message });
+    .catch((err) => {
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.status(400).json({
         error: err.errors,
       });

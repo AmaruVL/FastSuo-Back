@@ -4,7 +4,7 @@
 
 Si se desea ejecutar el servidor, se debe realizar los siguientes pasos:
 
-1. Primero tener instalado [Node.js](https://nodejs.org/es) >=16.10 y el gestor de paquetes [Yarn](https://yarnpkg.com/getting-started/install) >=3.0.
+1. Primero tener instalado [Node.js](https:// nodejs.org/es) >=16.10 y el gestor de paquetes [Yarn](https:// yarnpkg.com/getting-started/install) >=3.0.
 
 2. Seguido, se deberá instalar las dependecias del proyecto ejecutando `yarn install` en la terminal.
 
@@ -14,7 +14,7 @@ Si se desea ejecutar el servidor, se debe realizar los siguientes pasos:
 - `DB_PASSWORD`: Contraseña de la base de datos
 - `DB_DATABASE`: Nombre de la base de datos
 - `DB_HOST`: Dominio en donde se encuentra la base de datos
-- `DB_DIALECT`: Nombre del gestor de base de datos
+- `DB_DIALECT`: Nombre del motor de base de datos
 - `DB_LOGGING`: Opcion si se desea mostrar por consola los logs de la base de datos
 - `PORT`: Puerto en el que se ejecutará el servidor
 

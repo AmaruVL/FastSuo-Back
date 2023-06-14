@@ -1,45 +1,54 @@
-const Sequelize = require("sequelize");
-const models = require("../models");
-var filename = module.filename.split("/").slice(-1);
+const models = require('../models');
+
+const filename = module.filename.split('/').slice(-1);
 
 exports.listar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.menu_acceso
     .findAll({
-      order: [["modulo"], ["nivel"]],
-      attributes: ["menu_codigo", "menu_etiqueta", "descripcion", "nivel", "modulo", "tipo_modulo", "imagen", "ambito_acceso"]
+      order: [['modulo'], ['nivel']],
+      attributes: [
+        'menu_codigo',
+        'menu_etiqueta',
+        'descripcion',
+        'nivel',
+        'modulo',
+        'tipo_modulo',
+        'imagen',
+        'ambito_acceso',
+      ],
     })
-    .then(lista => {
+    .then((lista) => {
       res.json(lista);
     })
-    .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message : err.message });
+    .catch((err) => {
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.json({
-        error: err.errors
+        error: err.errors,
       });
     });
 };
 
 exports.buscar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.menu_acceso
     .findByPk(req.params.menu_codigo)
-    .then(objeto => {
+    .then((objeto) => {
       res.json(objeto);
     })
-    .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message : err.message });
+    .catch((err) => {
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.status(400).json({
-        error: err.errors
+        error: err.errors,
       });
     });
 };
 
 exports.crear = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.menu_acceso
     .create({
       menu_codigo: req.body.menu_codigo,
@@ -49,24 +58,24 @@ exports.crear = (req, res) => {
       modulo: req.body.modulo,
       tipo_modulo: req.body.tipo_modulo,
       imagen: req.body.imagen,
-      ambito_acceso: req.body.ambito_acceso
+      ambito_acceso: req.body.ambito_acceso,
     })
-    .then(objeto => {
+    .then((objeto) => {
       res.json({
-        mensaje: objeto
+        mensaje: objeto,
       });
     })
-    .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message : err.message });
+    .catch((err) => {
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.status(400).json({
-        error: err.errors
+        error: err.errors,
       });
     });
 };
 
 exports.actualizar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.menu_acceso
     .update(
       {
@@ -76,45 +85,45 @@ exports.actualizar = (req, res) => {
         modulo: req.body.modulo,
         tipo_modulo: req.body.tipo_modulo,
         imagen: req.body.imagen,
-        ambito_acceso: req.body.ambito_acceso
+        ambito_acceso: req.body.ambito_acceso,
       },
       {
         where: {
-          menu_codigo: req.params.menu_codigo
-        }
-      }
+          menu_codigo: req.params.menu_codigo,
+        },
+      },
     )
     .then(() => {
       res.json({
-        mensaje: "exito"
+        mensaje: 'exito',
       });
     })
-    .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message : err.message });
+    .catch((err) => {
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.status(400).json({
-        error: err.errors
+        error: err.errors,
       });
     });
 };
 
 exports.eliminar = (req, res) => {
-  var logger = req.app.get("winston");
-  const token = req.header("Authorization").split(" ")[1];
+  const logger = req.app.get('winston');
+  const token = req.header('Authorization').split(' ')[1];
   models.menu_acceso
     .destroy({
       where: {
-        menu_codigo: req.params.menu_codigo
-      }
+        menu_codigo: req.params.menu_codigo,
+      },
     })
     .then(() => {
       res.json({
-        mensaje: "eliminado"
+        mensaje: 'eliminado',
       });
     })
-    .catch(err => {
-      logger.log("error", { ubicacion: filename, token: token, message : err.message });
+    .catch((err) => {
+      logger.log('error', { ubicacion: filename, token, message: err.message });
       res.status(400).json({
-        error: err.errors
+        error: err.errors,
       });
     });
 };
