@@ -29,7 +29,7 @@ exports.crear = (req, res) => {
         .bulkCreate(nueva_lista, {
           returning: true,
         })
-        .then((respuesta) => {
+        .then(() => {
           res.json(perfil);
         })
         .catch((err) => {
@@ -108,7 +108,7 @@ exports.actualizar = (req, res) => {
             perfil_codigo: req.params.perfil_codigo,
           },
         })
-        .then((respuesta) => {
+        .then(() => {
           const lista_menu = req.body.lista_menus;
           const nueva_lista = [];
           lista_menu.forEach(({ menu_codigo, nivel_acceso }) => {
@@ -121,8 +121,8 @@ exports.actualizar = (req, res) => {
 
           models.lista_menu
             .bulkCreate(nueva_lista)
-            .then((respuesta) => {
-              cache.delValue(`perfil-${  req.params.perfil_codigo}`);
+            .then(() => {
+              cache.delValue(`perfil-${req.params.perfil_codigo}`);
               res.json(perfil);
             })
             .catch((err) => {
@@ -161,7 +161,7 @@ exports.desactivar = (req, res) => {
     )
     .then((filasAfectadas) => {
       try {
-        cache.delValue(`perfil-${  req.params.perfil_codigo}`);
+        cache.delValue(`perfil-${req.params.perfil_codigo}`);
         res.json({
           mensaje: filasAfectadas,
         });
@@ -229,7 +229,6 @@ exports.listar = (req, res) => {
 exports.eliminar = (req, res) => {
   const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
-  console.log({ perfil_codigo: req.params.perfil_codigo });
   models.perfil
     .destroy({
       where: {
@@ -237,8 +236,7 @@ exports.eliminar = (req, res) => {
       },
     })
     .then((respuesta) => {
-      console.log('llego aqui');
-      cache.delValue(`perfil-${  req.params.perfil_codigo}`);
+      cache.delValue(`perfil-${req.params.perfil_codigo}`);
       res.json({
         mensaje: respuesta,
       });

@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const models = require('../models');
 
 const filename = module.filename.split('/').slice(-1);

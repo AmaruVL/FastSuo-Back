@@ -115,7 +115,8 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {});
 });
 
-app.use((err, _req, res, _next) => {
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
   winston.log('error', { message: { mensaje: err.message, tracestack: err.stack } });
   res.status(500).send({ Error: 'Error' });
 });

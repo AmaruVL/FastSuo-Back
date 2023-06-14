@@ -1,4 +1,3 @@
- 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -7,55 +6,55 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       usuario: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       contrasena: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       usuario_nombre: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       pregunta_secreta: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       respuesta: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       contrasena_old: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       pc_sn: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       estado_registro: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
       },
       perfil_codigo: {
-        type: Sequelize.SMALLINT
+        type: Sequelize.SMALLINT,
       },
       puede_editar_DT: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
       },
       modo_conexion: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       tipo_arqueo: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('cuenta_usuarios');
-  }
+  },
 };

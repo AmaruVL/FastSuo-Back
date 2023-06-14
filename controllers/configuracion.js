@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const models = require('../models');
 const cache = require('../config/cache');
 

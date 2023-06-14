@@ -8,7 +8,8 @@ const formato = printf(
     `${info.timestamp} [${info.level}]: ${info.label} - ${info.message} - ${info.err}`,
 );
 
-const timezoned = () => new Date().toLocaleString('es-ES', {
+const timezoned = () =>
+  new Date().toLocaleString('es-ES', {
     timeZone: 'America/Lima',
   });
 
@@ -43,7 +44,7 @@ const options = {
 };
 
 //  instantiate a new Winston Logger with the settings defined above
-const logger = new winston.createLogger({
+const logger = winston.createLogger({
   transports: [
     // new winston.transports.Console(options.console),
     new winston.transports.DailyRotateFile(options.info),

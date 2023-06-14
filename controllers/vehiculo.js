@@ -1,4 +1,3 @@
-const Sequalize = require('sequelize');
 const models = require('../models');
 
 const filename = module.filename.split('/').slice(-1);
@@ -84,7 +83,7 @@ exports.actualizar = (req, res) => {
         },
       },
     )
-    .then((objeto) => {
+    .then(() => {
       res.json({
         mensaje: 'Actualizado',
       });
@@ -107,7 +106,7 @@ exports.eliminar = (req, res) => {
         id_vehiculo: req.params.id_vehiculo,
       },
     })
-    .then((objeto) => {
+    .then(() => {
       res.json({
         mensaje: 'Eliminado',
       });

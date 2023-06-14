@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-console */
 const DeviceDetector = require('node-device-detector');
 const DEVICE_TYPE = require('node-device-detector/parser/const/device-type');
@@ -205,7 +207,7 @@ exports.validar = (req, res) => {
               const end = new Date();
               const fin = end.setHours(23, 59, 59, 999);
               const total = Math.trunc((fin - inicio) / 1000);
-              const token = jwt.sign(
+              const initToken = jwt.sign(
                 {
                   id: usuario.usuario,
                   n: usuario.usuario_nombre,
@@ -227,17 +229,17 @@ exports.validar = (req, res) => {
               usuarioCache = JSON.parse(usuarioCache);
               if (usuarioCache !== null && typeof usuarioCache === 'object') {
                 if (esMobil) {
-                  usuarioCache.token_mobil = token;
-                  socket.emit(`${usuario.usuario  }mobil`, result.device);
+                  usuarioCache.token_mobil = initToken;
+                  socket.emit(`${usuario.usuario}mobil`, result.device);
                 } else {
-                  usuarioCache.token = token;
+                  usuarioCache.token = initToken;
                 }
                 cache.setValue(usuario.usuario, JSON.stringify(usuarioCache), total);
               } else if (esMobil) {
                 cache.setValue(
                   usuario.usuario,
                   JSON.stringify({
-                    token_mobil: token,
+                    token_mobil: initToken,
                     perfil_codigo: usuario.perfil_codigo,
                     caja_codigo: usuario.caja_codigo,
                     estado_registro: usuario.estado_registro,
@@ -250,7 +252,7 @@ exports.validar = (req, res) => {
                 cache.setValue(
                   usuario.usuario,
                   JSON.stringify({
-                    token,
+                    token: initToken,
                     perfil_codigo: usuario.perfil_codigo,
                     caja_codigo: usuario.caja_codigo,
                     estado_registro: usuario.estado_registro,
@@ -270,7 +272,7 @@ exports.validar = (req, res) => {
               );
 
               res.json({
-                token,
+                token: initToken,
                 _p: perfil.ListaMenu,
               });
             } else {
@@ -298,7 +300,7 @@ exports.validar = (req, res) => {
                   },
                 );
               } else {
-                const total = 3 - parseInt(val);
+                const total = 3 - val;
                 logger.log('warn', {
                   ubicacion: filename,
                   message: `Usuario ${req.body.usuario} o contraseña inválida, intentos restantes: ${total}`,
@@ -352,11 +354,9 @@ exports.actualizar = (req, res) => {
   const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   let obj = {};
-  req.body.contrasena
-    ? (obj = {
-        contrasena: bcrypt.hashSync(req.body.contrasena, 8),
-      })
-    : null;
+  if (req.body.contrasena) {
+    obj = { contrasena: bcrypt.hashSync(req.body.contrasena, 8) };
+  }
   models.cuenta_usuario
     .update(
       {
@@ -380,7 +380,7 @@ exports.actualizar = (req, res) => {
       },
     )
     .then((filasAfectadas) => {
-      const {usuario} = req.params;
+      const { usuario } = req.params;
       let usuarioXeliminar = cache.getValue(usuario);
       usuarioXeliminar = JSON.parse(usuarioXeliminar);
       if (usuarioXeliminar !== null) {
@@ -388,7 +388,7 @@ exports.actualizar = (req, res) => {
         // ELIMINAR DATOS DEL USUARIO DE CACHE
         cache.delValue(usuario);
         // ELIMINAR CAJA SI EXISTIERA
-        cajaUsuario ? cache.delValue(cajaUsuario) : null;
+        if (cajaUsuario) cache.delValue(cajaUsuario);
         res.json(filasAfectadas);
       } else {
         res.json(filasAfectadas);
@@ -419,7 +419,7 @@ exports.desactivar = (req, res) => {
       },
     )
     .then((filasAfectadas) => {
-      const {usuario} = req.params;
+      const { usuario } = req.params;
       let usuarioXeliminar = cache.getValue(usuario);
       usuarioXeliminar = JSON.parse(usuarioXeliminar);
       if (usuarioXeliminar !== null) {
@@ -427,7 +427,7 @@ exports.desactivar = (req, res) => {
         // ELIMINAR DATOS DEL USUARIO DE CACHE
         cache.delValue(usuario);
         // ELIMINAR CAJA SI EXISTIERA
-        cajaUsuario ? cache.delValue(cajaUsuario) : null;
+        if (cajaUsuario) cache.delValue(cajaUsuario);
         res.json(filasAfectadas);
       } else {
         res.json(filasAfectadas);
@@ -480,15 +480,15 @@ exports.cambiarContrasena = (req, res) => {
                     // ELIMINAR DATOS DEL USUARIO DE CACHE
                     cache.delValue(tokenDecodificado.id);
                     // ELIMINAR CAJA SI EXISTIERA
-                    cajaUsuario ? cache.delValue(cajaUsuario) : null;
+                    if (cajaUsuario) cache.delValue(cajaUsuario);
                     res.json(filasAfectadas);
                   }
                 })
-                .catch((err) => {
+                .catch((error) => {
                   logger.log('error', {
                     ubicacion: filename,
                     token,
-                    message: { mensaje: err.message, tracestack: err.stack },
+                    message: { mensaje: error.message, tracestack: error.stack },
                   });
                   res.status(412).send('No se pudo cambiar la contraseña de usuario');
                 });

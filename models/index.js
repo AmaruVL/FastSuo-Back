@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable import/newline-after-import */
 /* eslint-disable global-require */
 /* eslint-disable import/no-dynamic-require */
@@ -7,18 +8,32 @@ const Sequelize = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(`${__dirname}/../config/config.json`)[env];
+const config = require(`${__dirname}/../config/config.js`)[env];
 const db = {};
 
 let sequelize;
+const logging = config.logging !== 'false' ? console.log : false;
+
+// Conexion con la BD
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, {
     ...config,
+    logging,
     define: { freezeTableName: true },
   });
 }
+
+// Verificando conexion
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Conectado a la base de datos');
+  })
+  .catch((err) => {
+    console.error('No se pudo conectar a la base de datos\n', err);
+  });
 
 fs.readdirSync(__dirname)
   .filter(
