@@ -85,7 +85,6 @@ if (JSON.stringify(env) === JSON.stringify('development')) {
   app.use(morgan('combined'));
 }
 
-//  app.use(express.static(path.join(__dirname, "public")));
 app.get('/robots.txt', (_req, res) => {
   res.type('text/plain');
   res.send('User-agent: *\nDisallow: /');
@@ -122,10 +121,10 @@ app.use((err, req, res, next) => {
 });
 
 server.listen(process.env.PORT || 8000, () => {
-  const host = server.address().address;
+  const host = process.env.DB_HOST;
   const { port } = server.address();
   // eslint-disable-next-line no-console
-  console.log(`API en: https:// ${host}:${port}`);
+  console.log(`API en: https://${host}:${port}`);
 });
 
 app.set('socketio', io);
