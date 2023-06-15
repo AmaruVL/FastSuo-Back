@@ -99,7 +99,7 @@ exports.buscarNombre = (req, res) => {
         'nro_movil',
         'correo',
         'direccion',
-        'createdAt',
+        'created_at',
         [
           Sequelize.fn(
             'CONCAT',
@@ -194,7 +194,7 @@ exports.listar = (req, res) => {
         'nro_movil',
         'correo',
         'direccion',
-        'createdAt',
+        'created_at',
         [
           Sequelize.fn(
             'CONCAT',

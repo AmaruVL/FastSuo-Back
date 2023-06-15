@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const express = require('express');
 require('dotenv').config();
 const http = require('http');
@@ -121,10 +122,9 @@ app.use((err, req, res, next) => {
 });
 
 server.listen(process.env.PORT || 8000, () => {
-  const host = process.env.DB_HOST;
   const { port } = server.address();
-  // eslint-disable-next-line no-console
-  console.log(`API en: https://${host}:${port}`);
+  console.log(`Servidor establecido en el puerto ${port}`);
+  console.log(`Ejecución en modo ${env}`);
 });
 
 app.set('socketio', io);

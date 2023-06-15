@@ -21,7 +21,7 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, {
     ...config,
     logging,
-    define: { freezeTableName: true },
+    define: { freezeTableName: true, underscored: true },
   });
 }
 
@@ -34,6 +34,10 @@ sequelize
   .catch((err) => {
     console.error('No se pudo conectar a la base de datos\n', err);
   });
+
+// sequelize.sync({ force: true, logging: false }).then(() => {
+//   console.log('BD sincronizada');
+// });
 
 fs.readdirSync(__dirname)
   .filter(

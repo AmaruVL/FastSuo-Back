@@ -517,7 +517,7 @@ exports.listar = (req, res) => {
         'estado_registro',
         'perfil_codigo',
         'pregunta_secreta',
-        'createdAt',
+        'created_at',
         'puede_editar_DT',
         'pc_sn',
         'modo_conexion',

@@ -1,7 +1,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('tipo_conexions', {
+    await queryInterface.createTable('tipo_conexion', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -35,17 +35,17 @@ module.exports = {
       pc_movil_modelo: {
         type: Sequelize.STRING,
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('tipo_conexions');
+    await queryInterface.dropTable('tipo_conexion');
   },
 };

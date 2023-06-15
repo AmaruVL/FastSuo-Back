@@ -1,7 +1,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('lista_menus', {
+    await queryInterface.createTable('lista_menu', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -17,17 +17,17 @@ module.exports = {
       nivel_acceso: {
         type: Sequelize.SMALLINT,
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('lista_menus');
+    await queryInterface.dropTable('lista_menu');
   },
 };

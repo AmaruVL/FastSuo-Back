@@ -1,7 +1,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('cuenta_usuarios', {
+    await queryInterface.createTable('cuenta_usuario', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -44,17 +44,17 @@ module.exports = {
       tipo_arqueo: {
         type: Sequelize.STRING,
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('cuenta_usuarios');
+    await queryInterface.dropTable('cuenta_usuario');
   },
 };

@@ -1,7 +1,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('perfils', {
+    await queryInterface.createTable('perfil', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -23,17 +23,17 @@ module.exports = {
       estado_registro: {
         type: Sequelize.BOOLEAN,
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('perfils');
+    await queryInterface.dropTable('perfil');
   },
 };

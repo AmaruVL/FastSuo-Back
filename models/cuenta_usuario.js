@@ -2,16 +2,15 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class cuenta_usuario extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       // define association here
-      cuenta_usuario.hasMany(models.tipo_conexion);
+      cuenta_usuario.hasMany(models.tipo_conexion, {
+        foreignKey: 'id_cuenta_usuario',
+        sourceKey: 'usuario',
+      });
       cuenta_usuario.belongsTo(models.perfil, {
         foreignKey: 'perfil_codigo',
+        target: 'perfil_codigo',
       });
     }
   }
