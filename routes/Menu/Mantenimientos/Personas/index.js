@@ -4,7 +4,7 @@ const verificarPerfil = require('../../../../middleware/verificarPerfil');
 
 rutas_administrados.get('/listar', [verificarPerfil(1)], administrados.listar);
 rutas_administrados.get(
-  '/buscar/:id_administrado',
+  '/buscar/:id_persona',
   [verificarPerfil(2)],
   administrados.buscar,
 );
@@ -16,12 +16,12 @@ rutas_administrados.get(
 
 rutas_administrados.post('/', [verificarPerfil(3)], administrados.crear);
 rutas_administrados.put(
-  '/actualizar/:id_administrado',
+  '/actualizar/:id_persona',
   [verificarPerfil(4)],
   administrados.actualizar,
 );
 rutas_administrados.delete(
-  '/eliminar/:id_administrado',
+  '/eliminar/:id_persona',
   [verificarPerfil(6)],
   administrados.eliminar,
 );

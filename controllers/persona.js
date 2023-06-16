@@ -39,7 +39,7 @@ exports.buscar = (req, res) => {
   const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
   models.persona
-    .findByPk(req.params.id_administrado, {
+    .findByPk(req.params.id_persona, {
       attributes: [
         'id_persona',
         'nombres',
@@ -153,7 +153,7 @@ exports.actualizar = (req, res) => {
       },
       {
         where: {
-          id_persona: req.params.id_administrado,
+          id_persona: req.params.id_persona,
         },
       },
     )
@@ -223,7 +223,7 @@ exports.eliminar = (req, res) => {
   models.persona
     .destroy({
       where: {
-        id_persona: req.params.id_administrado,
+        id_persona: req.params.id_persona,
       },
     })
     .then((respuesta) => {
