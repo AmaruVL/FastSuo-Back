@@ -2,13 +2,9 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class menu_acceso extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       //  define association here
+      // TODO: Eliminar relacion belongsToMany
       menu_acceso.belongsToMany(models.perfil, {
         through: models.lista_menu,
         foreignKey: 'menu_codigo',
@@ -25,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       menu_etiqueta: {
         allowNull: false,
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(60),
         validate: {
           is: {
             args: /^[a-z\d\-_\s]+$/i, // valida texto alfanumerico con espacios
@@ -35,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       descripcion: {
         allowNull: false,
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(60),
         validate: {
           is: {
             args: /^[a-z\d\-_\s]+$/i, // valida texto alfanumerico con espacios
@@ -73,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       imagen: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(60),
         validate: {
           is: {
             args: /^[a-z\d\-_./\s]+$/i, // valida texto alfanumerico con espacios

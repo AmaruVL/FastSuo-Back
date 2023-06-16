@@ -1,21 +1,17 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('conductors', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
+    await queryInterface.createTable('conductor', {
       nro_brevete: {
-        type: Sequelize.STRING,
+        primaryKey: true,
+        allowNull: false,
+        type: Sequelize.STRING(10),
       },
       nro_licencia_correlativo: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(100),
       },
       estado: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(100),
       },
       fecha_expedicion: {
         type: Sequelize.DATE,
@@ -24,19 +20,20 @@ module.exports = {
         type: Sequelize.DATE,
       },
       restricciones: {
-        type: Sequelize.STRING,
+        allowNull: true,
+        type: Sequelize.STRING(100),
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('conductors');
+    await queryInterface.dropTable('conductor');
   },
 };

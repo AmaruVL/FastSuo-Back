@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon env TZ='America/Lima' server.js",
-    "debug": "node server.js",
+    "deploy": "node server.js",
     "lint": "eslint . --ext js",
     "test": "mocha --timeout 10000"
   },

@@ -1,6 +1,6 @@
 const rutas = require('express').Router();
 const logBody = require('../../../middleware/logBody');
-const administrados = require('./Administrados');
+const personas = require('./Personas');
 const perfiles = require('./Perfiles');
 const usuarios = require('./Usuarios');
 const configuracion = require('./Configuracion');
@@ -11,7 +11,7 @@ const vehiculos = require('./Vehiculos');
 // SUBRUTAS
 rutas.use(logBody());
 rutas.use('/usuarios', usuarios);
-rutas.use('/administrados', administrados);
+rutas.use('/personas', personas);
 rutas.use('/menuaccesos', menuAccesos);
 rutas.use('/perfiles', perfiles);
 rutas.use('/vehiculos', vehiculos);

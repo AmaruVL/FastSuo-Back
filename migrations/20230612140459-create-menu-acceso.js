@@ -1,48 +1,47 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('menu_accesos', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
+    await queryInterface.createTable('menu_acceso', {
       menu_codigo: {
-        type: Sequelize.STRING,
+        allowNull: false,
+        type: Sequelize.STRING(6),
+        primaryKey: true,
       },
       menu_etiqueta: {
-        type: Sequelize.STRING,
+        allowNull: false,
+        type: Sequelize.STRING(60),
       },
       descripcion: {
-        type: Sequelize.STRING,
+        allowNull: false,
+        type: Sequelize.STRING(60),
       },
       nivel: {
+        allowNull: false,
         type: Sequelize.SMALLINT,
       },
       modulo: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(20),
       },
       tipo_modulo: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(20),
       },
       imagen: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(60),
       },
       ambito_acceso: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(15),
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('menu_accesos');
+    await queryInterface.dropTable('menu_acceso');
   },
 };

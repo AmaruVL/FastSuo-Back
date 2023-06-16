@@ -2,14 +2,11 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class perfil extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
-      perfil.hasMany(models.cuenta_usuario, { foreignKey: 'perfil_codigo' });
+      perfil.hasMany(models.cuenta_usuario, {
+        foreignKey: 'perfil_codigo',
+        sourceKey: 'perfil_codigo',
+      });
       perfil.belongsToMany(models.menu_acceso, {
         through: models.lista_menu,
         as: 'ListaMenu',
@@ -18,11 +15,14 @@ module.exports = (sequelize, DataTypes) => {
       });
       perfil.hasMany(models.lista_menu, {
         foreignKey: 'perfil_codigo',
+        sourceKey: 'perfil_codigo',
+        onDelete: 'CASCADE',
       });
     }
   }
   perfil.init(
     {
+      // TODO: Cambiar codigo a autoIncrement
       perfil_codigo: {
         allowNull: false,
         type: DataTypes.SMALLINT,

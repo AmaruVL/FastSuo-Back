@@ -11,6 +11,7 @@ exports.listar = (req, res) => {
       order: [['nro_brevete', 'ASC']],
       attributes: [
         'nro_brevete',
+        'id_persona',
         'nro_licencia_correlativo',
         'estado',
         'fecha_expedicion',
@@ -50,9 +51,12 @@ exports.crear = (req, res) => {
   const logger = req.app.get('winston');
   const token = req.header('Authorization').split(' ')[1];
 
+  // TODO: Verificar si persona existe antes de crear
+
   models.conductor
     .create({
       nro_brevete: req.body.nro_brevete,
+      id_persona: req.body.id_persona,
       nro_licencia_correlativo: req.body.nro_licencia_correlativo,
       estado: req.body.estado,
       fecha_expedicion: req.body.fecha_expedicion,

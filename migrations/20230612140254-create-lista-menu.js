@@ -1,33 +1,32 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('lista_menus', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
+    await queryInterface.createTable('lista_menu', {
       menu_codigo: {
-        type: Sequelize.STRING,
+        primaryKey: true,
+        allowNull: false,
+        type: Sequelize.STRING(6),
       },
       perfil_codigo: {
+        primaryKey: true,
+        allowNull: false,
         type: Sequelize.SMALLINT,
       },
       nivel_acceso: {
+        allowNull: false,
         type: Sequelize.SMALLINT,
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('lista_menus');
+    await queryInterface.dropTable('lista_menu');
   },
 };

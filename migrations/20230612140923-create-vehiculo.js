@@ -1,42 +1,40 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('vehiculos', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
+    await queryInterface.createTable('vehiculo', {
       id_vehiculo: {
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
         type: Sequelize.INTEGER,
       },
       placa: {
-        type: Sequelize.STRING,
+        allowNull: false,
+        type: Sequelize.STRING(10),
       },
       marca: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(10),
       },
       clase: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(10),
       },
       modelo: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(10),
       },
       color: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(10),
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('vehiculos');
+    await queryInterface.dropTable('vehiculo');
   },
 };

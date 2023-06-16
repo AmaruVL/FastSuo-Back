@@ -2,14 +2,16 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class persona extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      persona.hasOne(models.conductor);
-      persona.belongsToMany(models.vehiculo, { through: 'vehiculo_propietario' });
+      persona.hasOne(models.conductor, {
+        foreignKey: 'id_persona',
+        sourceKey: 'id_persona',
+      });
+      persona.belongsToMany(models.vehiculo, {
+        through: 'vehiculo_propietario',
+        foreignKey: 'id_persona',
+        otherKey: 'id_vehiculo',
+      });
     }
   }
   persona.init(
@@ -17,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
       id_persona: {
         primaryKey: true,
         allowNull: false,
-        type: DataTypes.STRING(12),
+        // autoIncrement: true,
+        type: DataTypes.INTEGER,
       },
       tipo_persona: {
         type: DataTypes.STRING(9),

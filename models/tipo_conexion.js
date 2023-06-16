@@ -2,16 +2,10 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class tipo_conexion extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
       tipo_conexion.belongsTo(models.cuenta_usuario, {
-        foreignKey: 'usuario',
-        // targetKey: 'usuario',
+        foreignKey: 'id_cuenta_usuario',
+        target: 'usuario',
       });
     }
   }
@@ -21,10 +15,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
         type: DataTypes.STRING(20),
-        references: {
-          model: 'cuenta_usuario',
-          key: 'usuario',
-        },
       },
       fecha_trabajo: {
         allowNull: false,
