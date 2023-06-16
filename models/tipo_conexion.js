@@ -3,7 +3,6 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class tipo_conexion extends Model {
     static associate(models) {
-      // define association here
       tipo_conexion.belongsTo(models.cuenta_usuario, {
         foreignKey: 'id_cuenta_usuario',
         target: 'usuario',

@@ -3,12 +3,7 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class perfil extends Model {
     static associate(models) {
-      // define association here
       perfil.hasMany(models.cuenta_usuario, {
-        foreignKey: 'perfil_codigo',
-        sourceKey: 'perfil_codigo',
-      });
-      perfil.hasMany(models.lista_menu, {
         foreignKey: 'perfil_codigo',
         sourceKey: 'perfil_codigo',
       });

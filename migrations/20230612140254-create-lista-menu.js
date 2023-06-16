@@ -2,19 +2,18 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('lista_menu', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
       menu_codigo: {
-        type: Sequelize.STRING,
+        primaryKey: true,
+        allowNull: false,
+        type: Sequelize.STRING(6),
       },
       perfil_codigo: {
+        primaryKey: true,
+        allowNull: false,
         type: Sequelize.SMALLINT,
       },
       nivel_acceso: {
+        allowNull: false,
         type: Sequelize.SMALLINT,
       },
       created_at: {

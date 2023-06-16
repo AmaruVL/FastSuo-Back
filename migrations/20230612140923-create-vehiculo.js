@@ -2,29 +2,27 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('vehiculo', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
       id_vehiculo: {
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
         type: Sequelize.INTEGER,
       },
       placa: {
-        type: Sequelize.STRING,
+        allowNull: false,
+        type: Sequelize.STRING(10),
       },
       marca: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(10),
       },
       clase: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(10),
       },
       modelo: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(10),
       },
       color: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(10),
       },
       created_at: {
         allowNull: false,

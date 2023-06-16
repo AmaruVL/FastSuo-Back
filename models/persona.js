@@ -7,7 +7,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'id_persona',
         sourceKey: 'id_persona',
       });
-      persona.belongsToMany(models.vehiculo, { through: 'vehiculo_propietario' });
+      persona.belongsToMany(models.vehiculo, {
+        through: 'vehiculo_propietario',
+        foreignKey: 'id_persona',
+        otherKey: 'id_vehiculo',
+      });
     }
   }
   persona.init(
@@ -15,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
       id_persona: {
         primaryKey: true,
         allowNull: false,
-        type: DataTypes.STRING(12),
+        autoIncrement: true,
+        type: DataTypes.INTEGER,
       },
       tipo_persona: {
         type: DataTypes.STRING(9),

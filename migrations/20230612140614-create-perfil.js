@@ -2,26 +2,23 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('perfil', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
       perfil_codigo: {
+        allowNull: false,
         type: Sequelize.SMALLINT,
+        primaryKey: true,
       },
       perfil_nombre: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(100),
       },
       descripcion: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(200),
       },
       icono: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(20),
       },
       estado_registro: {
         type: Sequelize.BOOLEAN,
+        defaultValue: true,
       },
       created_at: {
         allowNull: false,

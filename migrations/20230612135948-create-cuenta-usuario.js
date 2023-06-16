@@ -2,47 +2,43 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('cuenta_usuario', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
       usuario: {
-        type: Sequelize.STRING,
+        primaryKey: true,
+        allowNull: false,
+        type: Sequelize.STRING(20),
       },
       contrasena: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(128),
       },
       usuario_nombre: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(45),
       },
       pregunta_secreta: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(60),
       },
       respuesta: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(60),
       },
       contrasena_old: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(128),
       },
       pc_sn: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(50),
       },
       estado_registro: {
         type: Sequelize.BOOLEAN,
-      },
-      perfil_codigo: {
-        type: Sequelize.SMALLINT,
+        defaultValue: true,
       },
       puede_editar_DT: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       modo_conexion: {
         type: Sequelize.INTEGER,
+        defaultValue: 1,
       },
       tipo_arqueo: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(30),
       },
       created_at: {
         allowNull: false,

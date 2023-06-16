@@ -2,35 +2,34 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('menu_acceso', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
       menu_codigo: {
-        type: Sequelize.STRING,
+        allowNull: false,
+        type: Sequelize.STRING(6),
+        primaryKey: true,
       },
       menu_etiqueta: {
-        type: Sequelize.STRING,
+        allowNull: false,
+        type: Sequelize.STRING(20),
       },
       descripcion: {
-        type: Sequelize.STRING,
+        allowNull: false,
+        type: Sequelize.STRING(20),
       },
       nivel: {
+        allowNull: false,
         type: Sequelize.SMALLINT,
       },
       modulo: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(20),
       },
       tipo_modulo: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(20),
       },
       imagen: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(30),
       },
       ambito_acceso: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(15),
       },
       created_at: {
         allowNull: false,

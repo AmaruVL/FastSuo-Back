@@ -2,20 +2,15 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('conductor', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
+      nro_brevete: {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      nro_brevete: {
-        type: Sequelize.STRING,
-      },
       nro_licencia_correlativo: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(100),
       },
       estado: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(100),
       },
       fecha_expedicion: {
         type: Sequelize.DATE,
@@ -24,7 +19,8 @@ module.exports = {
         type: Sequelize.DATE,
       },
       restricciones: {
-        type: Sequelize.STRING,
+        allowNull: true,
+        type: Sequelize.STRING(100),
       },
       created_at: {
         allowNull: false,

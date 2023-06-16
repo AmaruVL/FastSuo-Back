@@ -3,7 +3,6 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class conductor extends Model {
     static associate(models) {
-      // define association here
       conductor.belongsTo(models.persona, {
         foreignKey: 'id_persona',
         target: 'id_persona',
