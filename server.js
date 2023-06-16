@@ -16,6 +16,7 @@ require('tls').DEFAULT_MIN_VERSION = 'TLSv1';
 const rutas = require('./routes');
 
 const env = process.env.NODE_ENV || 'development';
+const port = process.env.PORT || 8000;
 const app = express();
 
 // Swagger
@@ -41,7 +42,7 @@ const specs = swaggerjsdoc({
     },
     servers: [
       {
-        url: `http://localhost:${process.env.PORT || 8000}`,
+        url: `http://localhost:${port}`,
         description: 'Local server',
       },
     ],
@@ -121,8 +122,7 @@ app.use((err, req, res, next) => {
   res.status(500).send({ Error: 'Error' });
 });
 
-server.listen(process.env.PORT || 8000, () => {
-  const { port } = server.address();
+server.listen(port, () => {
   console.log(`Servidor establecido en el puerto ${port}`);
   console.log(`Ejecución en modo ${env}`);
 });

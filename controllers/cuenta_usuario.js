@@ -28,7 +28,7 @@ exports.crear = (req, res) => {
       empresa_codigo: req.body.empresa_codigo,
       pc_sn: req.body.pc_sn,
       perfil_codigo: req.body.perfil_codigo,
-      puede_editar_DT: req.body.puede_editar_DT,
+      puede_editar_dt: req.body.puede_editar_dt,
       modo_conexion: req.body.modo_conexion,
       tipo_arqueo: req.body.tipo_arqueo,
     })
@@ -344,7 +344,7 @@ exports.buscar = (req, res) => {
         token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
-      res.json({
+      res.status(404).json({
         error: err.errors,
       });
     });
@@ -368,7 +368,7 @@ exports.actualizar = (req, res) => {
         empresa_codigo: req.body.empresa_codigo,
         caja_codigo: req.body.caja_codigo,
         perfil_codigo: req.body.perfil_codigo,
-        puede_editar_DT: req.body.puede_editar_DT,
+        puede_editar_dt: req.body.puede_editar_dt,
         pc_sn: req.body.pc_sn,
         modo_conexion: req.body.modo_conexion,
         tipo_arqueo: req.body.tipo_arqueo,
@@ -430,7 +430,7 @@ exports.desactivar = (req, res) => {
         if (cajaUsuario) cache.delValue(cajaUsuario);
         res.json(filasAfectadas);
       } else {
-        res.json(filasAfectadas);
+        res.status(400).json(filasAfectadas);
       }
     })
     .catch((err) => {
@@ -518,7 +518,7 @@ exports.listar = (req, res) => {
         'perfil_codigo',
         'pregunta_secreta',
         'created_at',
-        'puede_editar_DT',
+        'puede_editar_dt',
         'pc_sn',
         'modo_conexion',
         'tipo_arqueo',

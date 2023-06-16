@@ -4,7 +4,8 @@ module.exports = {
     await queryInterface.createTable('conductor', {
       nro_brevete: {
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        allowNull: false,
+        type: Sequelize.STRING(10),
       },
       nro_licencia_correlativo: {
         type: Sequelize.STRING(100),

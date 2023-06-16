@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'perfil_codigo',
         otherKey: 'menu_codigo',
       });
+      perfil.hasMany(models.lista_menu, {
+        foreignKey: 'perfil_codigo',
+        sourceKey: 'perfil_codigo',
+        onDelete: 'CASCADE',
+      });
     }
   }
   perfil.init(

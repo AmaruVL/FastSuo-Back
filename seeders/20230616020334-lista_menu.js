@@ -93,6 +93,20 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
+      {
+        menu_codigo: 'mt14',
+        perfil_codigo: 1,
+        nivel_acceso: 6,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        menu_codigo: 'mt15',
+        perfil_codigo: 1,
+        nivel_acceso: 6,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
     ]);
   },
 

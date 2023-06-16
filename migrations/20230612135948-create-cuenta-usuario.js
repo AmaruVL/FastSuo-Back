@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
       },
-      puede_editar_DT: {
+      puede_editar_dt: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },

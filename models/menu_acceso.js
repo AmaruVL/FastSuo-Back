@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class menu_acceso extends Model {
     static associate(models) {
       //  define association here
+      // TODO: Eliminar relacion belongsToMany
       menu_acceso.belongsToMany(models.perfil, {
         through: models.lista_menu,
         foreignKey: 'menu_codigo',

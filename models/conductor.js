@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       nro_brevete: {
         primaryKey: true,
-        type: DataTypes.INTEGER,
+        allowNull: false,
+        type: DataTypes.STRING(10),
       },
       nro_licencia_correlativo: {
         type: DataTypes.STRING(100),

@@ -43,6 +43,7 @@ module.exports = {
         key: 'id_vehiculo',
       },
     });
+    // TODO: ADD constraint, remove BelongToMany
     await queryInterface.changeColumn('lista_menu', 'menu_codigo', {
       primaryKey: true,
       allowNull: false,

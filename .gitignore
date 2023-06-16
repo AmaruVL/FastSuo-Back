@@ -10,6 +10,8 @@ logs/*
 .log
 dist
 dist/*
+temp
+temp/*
 
 # Yarn 3 files
 .pnp.*

@@ -9,8 +9,8 @@ exports.crear = (req, res) => {
   const token = req.header('Authorization').split(' ')[1];
   models.persona
     .create({
-      id_persona: req.body.id_cliente,
-      tipo_persona: req.body.cliente_tipo_persona,
+      id_persona: req.body.id_persona,
+      tipo_persona: req.body.tipo_persona,
       nombres: req.body.nombres,
       ap_paterno: req.body.ap_paterno,
       ap_materno: req.body.ap_materno,
@@ -92,14 +92,13 @@ exports.buscarNombre = (req, res) => {
         'ap_paterno',
         'ap_materno',
         'razon_social',
-        'cliente_tipo_persona',
+        'tipo_persona',
         'sexo',
         'fecha_nacimiento',
         'nro_fijo',
         'nro_movil',
         'correo',
         'direccion',
-        'created_at',
         [
           Sequelize.fn(
             'CONCAT',
@@ -123,6 +122,7 @@ exports.buscarNombre = (req, res) => {
         token,
         message: { mensaje: err.message, tracestack: err.stack },
       });
+      console.log(err);
       res.status(409).send(err);
     });
 };
@@ -139,7 +139,7 @@ exports.actualizar = (req, res) => {
   models.persona
     .update(
       {
-        tipo_persona: req.body.cliente_tipo_persona,
+        tipo_persona: req.body.tipo_persona,
         nombres: req.body.nombres,
         ap_paterno: req.body.ap_paterno,
         ap_materno: req.body.ap_materno,
@@ -187,14 +187,9 @@ exports.listar = (req, res) => {
         'ap_paterno',
         'ap_materno',
         'razon_social',
-        'cliente_tipo_persona',
+        'tipo_persona',
         'sexo',
         'fecha_nacimiento',
-        'nro_fijo',
-        'nro_movil',
-        'correo',
-        'direccion',
-        'created_at',
         [
           Sequelize.fn(
             'CONCAT',

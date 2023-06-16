@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
-      puede_editar_DT: {
+      puede_editar_dt: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
