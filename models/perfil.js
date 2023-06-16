@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   perfil.init(
     {
+      // TODO: Cambiar codigo a autoIncrement
       perfil_codigo: {
         allowNull: false,
         type: DataTypes.SMALLINT,

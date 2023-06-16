@@ -35,6 +35,7 @@ sequelize
     console.error('No se pudo conectar a la base de datos\n', err);
   });
 
+// Sincronizar tablas de BD
 // sequelize.sync({ force: true, logging: false }).then(() => {
 //   console.log('BD sincronizada');
 // });

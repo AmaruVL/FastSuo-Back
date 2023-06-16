@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       menu_etiqueta: {
         allowNull: false,
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(60),
         validate: {
           is: {
             args: /^[a-z\d\-_\s]+$/i, // valida texto alfanumerico con espacios
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       descripcion: {
         allowNull: false,
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(60),
         validate: {
           is: {
             args: /^[a-z\d\-_\s]+$/i, // valida texto alfanumerico con espacios
@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       imagen: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(60),
         validate: {
           is: {
             args: /^[a-z\d\-_./\s]+$/i, // valida texto alfanumerico con espacios
